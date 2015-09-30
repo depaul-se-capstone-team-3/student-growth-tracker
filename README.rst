@@ -24,7 +24,7 @@ Authors
 
 * Lawrence Graves
 * Allen Guan
-* Bryan Patzke
+* `Bryan Patzke <https://github.com/bpatzke>`_
 * Joeseph Richard
 
 .. _web2py: https://web2py.com
