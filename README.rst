@@ -14,7 +14,7 @@ to track and monitor students' progress with respect to the Common Core standard
 About
 =====
 
-Student Growth Tracker is a [web2py]_ application.
+Student Growth Tracker is a `web2py`_ application.
 
 
 Authors
@@ -27,4 +27,4 @@ Authors
 * Bryan Patzke
 * Joeseph Richard
 
-.. [web2py] https://web2py.com
+.. _web2py: https://web2py.com
