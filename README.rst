@@ -1,9 +1,6 @@
 .. This is the README file for the github project. It should also be included in
    the documentation.
 
-See if I can make a video (screen cast) of the tutorial.
-sign up for trello
-
 
 ========================
  Student Growth Tracker
