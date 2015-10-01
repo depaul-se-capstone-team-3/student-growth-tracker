@@ -14,8 +14,10 @@ A robust gradebook program tied to the Common Core standards.
 Things I need to do
 ===================
 
-#. Set up git repository
+#. Set up git repository (done)
+
    - Separate repository for the project
+
 #. Requirements
 #. Find out what common core data is available
 #. Javascript graphing libraries
@@ -23,6 +25,7 @@ Things I need to do
 #. Post links to web2py, python, etc. to group
 #. http://umlet.com/
 #. Hosting
+
    - pythonanywhere.com
 
 
