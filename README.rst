@@ -33,8 +33,8 @@ Authors
 Environment Setup Tutorial
 ==========================
 
-Write up a brief tutorial on how to set up the environment to work on web2py.
-(Can I make this a video?) It should include the following:
+This is a brief tutorial on how to set up your environment to work on the
+Student Growth Tracker project.
 
 - git (if you don't have it) Make sure it has the command-line tools.
 - git flow (On Mac you can install with MacPorts, or another package
@@ -295,11 +295,20 @@ If you start web2py, the application should be ready for use. You'll have to go
 to the admin interface, or go to ``http://127.0.0.1:8000/student-growth-tracker``.
 
 
-------------
- Next Steps
-------------
+------------------
+ Git and Git Flow
+------------------
 
-That should get you going. I'll add more as I think of it.
+Git
+---
+
+
+Git Flow
+--------
+
+
+Clone the repository
+--------------------
 
 
 .. rubric:: Footnotes
