@@ -278,7 +278,7 @@ to the ``web2py/applications`` directory. Then, type::
 
   (capstone) $ git clone https://github.com/<username>/student-growth-tracker.git
 
-Where ``<username`` is your Github user name. You should see something like::
+Where ``<username>`` is your Github user name. You should see something like::
 
   Cloning into 'student-growth-tracker'...
   remote: Counting objects: 115, done.
@@ -535,10 +535,8 @@ Now it's just a question of waiting for your pull request to be merged into the
 master repository.
 
 
-Syncing your fork with the upstream master repository
------------------------------------------------------
-
-.. rubric:: Coming soon.
+`Syncing your fork with the upstream master repository <https://help.github.com/articles/syncing-a-fork/>`_
+-----------------------------------------------------------------------------------------------------------
 
 
 .. rubric:: Footnotes
