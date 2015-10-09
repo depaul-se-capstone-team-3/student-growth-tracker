@@ -23,7 +23,7 @@ Authors
 
 
 * Lawrence Graves
-* Allen Guan
+* `Allan Guan <https://github.com/forevaufo>`_
 * `Bryan Patzke <https://github.com/bpatzke>`_
 * Joesph Richard
 
