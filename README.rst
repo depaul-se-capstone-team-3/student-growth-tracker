@@ -22,7 +22,7 @@ Authors
 =======
 
 
-* Lawrence Graves
+* Lawrence Graves <http://github.com/Larry-Graves>
 * Allen Guan
 * `Bryan Patzke <https://github.com/bpatzke>`_
 * Joesph Richard
