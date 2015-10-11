@@ -22,8 +22,9 @@ Authors
 =======
 
 
-* Lawrence Graves
+* Lawrence Graves <http://github.com/Larry-Graves>
 * `Allan Guan <https://github.com/forevaufo>`_
+>>>>>>> upstream/master
 * `Bryan Patzke <https://github.com/bpatzke>`_
 * Joesph Richard
 
