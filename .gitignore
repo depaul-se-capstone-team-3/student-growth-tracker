@@ -1,0 +1,22 @@
+# The files under these directories are volatile
+# and should not be tracked.
+cache/
+databases/
+docs/_build
+errors/
+sessions/
+static/docs/
+static/fonts/
+uploads/
+
+*.bak
+
+# Do not track local logs.
+progress.log
+
+# Ignore unneeded python files
+**/*.pyc
+.pythonhistory
+
+# Ignore temp files.
+**/#*
