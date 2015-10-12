@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-
-
 db.define_table(
-    'class_',
+    'classes',
     Field('name', required=True, requires=IS_NOT_EMPTY()),
     Field('gradeLevel', 'integer', required=True, requires=IS_NOT_EMPTY()),
     Field('startDate', 'integer', required=True, requires=IS_NOT_EMPTY()),
@@ -19,4 +17,4 @@ db.define_table(
     Field('content_area'),
     format = '%(name)s')
 
-db.class_.id.readable = db.class_.id.writable = False
+db.classes.id.readable = db.classes.id.writable = False
