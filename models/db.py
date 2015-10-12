@@ -111,35 +111,3 @@ db.define_table(
     format = '%(name)s')
 
 db.classList.id.readable = db.classList.id.writable = False
-
-# db.define_table(
-#     'classList',
-#     Field('name'),
-#     Field('gradeLevel', 'integer'),
-#     Field('startDate', 'integer'),
-#     Field('endDate', 'integer'),
-#     # studentList Obj
-#     Field('studentList'),
-#     # grade Obj
-#     Field('grade'),
-#     # content area Obj
-#     Field('content_area'),
-#     format = '%(name)s')
-
-# db.classList.name.requires = IS_NOT_EMPTY()
-# db.classList.gradeLevel.requires = IS_NOT_EMPTY()
-# db.classList.startDate.requires = IS_NOT_EMPTY()
-# db.classList.endDate.requires = IS_NOT_EMPTY()
-# db.classList.id.readable = db.classList.id.writable = False
-
-
-# db.define_table(
-#     'standards',
-#     Field('refNum'),
-#     Field('shortName'),
-#     Field('description'),
-#     format = '%(shortName)s')
-
-# db.standards.refNum.requires = IS_NOT_EMPTY()
-# db.standards.shortName.requires = IS_NOT_EMPTY()
-# db.standards.description.requires = IS_NOT_EMPTY()
