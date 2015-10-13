@@ -58,7 +58,9 @@ service = Service()
 plugins = PluginManager()
 
 ## create all tables needed by auth if not custom tables
-auth.define_tables(username=False, signature=False)
+auth.define_tables(username=True, signature=False)
+
+auth.login_email_validate = False
 
 ## configure email
 mail = auth.settings.mailer
@@ -90,3 +92,22 @@ auth.settings.reset_password_requires_verification = True
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+
+db.define_table(
+    'classList',
+    Field('name', required=True, requires=IS_NOT_EMPTY()),
+    Field('gradeLevel', 'integer', required=True, requires=IS_NOT_EMPTY()),
+    Field('startDate', 'integer', required=True, requires=IS_NOT_EMPTY()),
+    Field('endDate', 'integer', required=True, requires=IS_NOT_EMPTY()),
+    # studentList Obj
+    #Field('studentList', 'reference student'),
+    Field('studentList'),
+    # grade Obj
+    #Field('grade', 'reference grade'),
+    Field('grade'),
+    # content area Obj
+    #Field('content_area', 'reference contentarea'),
+    Field('content_area'),
+    format = '%(name)s')
+
+db.classList.id.readable = db.classList.id.writable = False

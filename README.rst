@@ -22,8 +22,9 @@ Authors
 =======
 
 
-* Lawrence Graves
-* Allen Guan
+* Lawrence Graves <http://github.com/Larry-Graves>
+* `Allan Guan <https://github.com/forevaufo>`_
+>>>>>>> upstream/master
 * `Bryan Patzke <https://github.com/bpatzke>`_
 * Joesph Richard
 
@@ -33,8 +34,8 @@ Authors
 Environment Setup Tutorial
 ==========================
 
-Write up a brief tutorial on how to set up the environment to work on web2py.
-(Can I make this a video?) It should include the following:
+This is a brief tutorial on how to set up your environment to work on the
+Student Growth Tracker project.
 
 - git (if you don't have it) Make sure it has the command-line tools.
 - git flow (On Mac you can install with MacPorts, or another package
@@ -278,7 +279,7 @@ to the ``web2py/applications`` directory. Then, type::
 
   (capstone) $ git clone https://github.com/<username>/student-growth-tracker.git
 
-Where ``<username`` is your Github user name. You should see something like::
+Where ``<username>`` is your Github user name. You should see something like::
 
   Cloning into 'student-growth-tracker'...
   remote: Counting objects: 115, done.
@@ -295,11 +296,248 @@ If you start web2py, the application should be ready for use. You'll have to go
 to the admin interface, or go to ``http://127.0.0.1:8000/student-growth-tracker``.
 
 
-------------
- Next Steps
-------------
+------------------
+ Git and Git Flow
+------------------
 
-That should get you going. I'll add more as I think of it.
+Git
+---
+
+You all have this installed. Ping me if you have any questions.
+
+
+Fork the master repository
+--------------------------
+
+#. Log into your Github account.
+#. Navigate to the `master repository`_
+#. In the upper right-hand corner of the screen, click the "Fork" button.
+#. Wait while Github copies the repository to your account.
+
+You should now have a copy of the master repository in your Github account.
+
+
+.. _l_clone_to_local:
+
+Clone your Github repository to your local machine
+--------------------------------------------------
+
+I'll give you the command-line version. If you're using a graphical tool, the
+documentation should tell you how to clone a repository.
+
+#. Navigate to the applications directory in your web2py directory. For example,
+   my web2py directory is in ``/Users/bpatzke/school/capstone/student-growth-tracker/``.
+   so I would go to ``/Users/bpatzke/school/capstone/student-growth-tracker/web2py/applications/``.
+#. The command to clone your repository is::
+
+     $ git clone https://github.com/<github-user-name>/student-growth-tracker.git
+     Cloning into './student-growth-tracker'...
+     remote: Counting objects: 131, done.
+     remote: Compressing objects: 100% (106/106), done.
+     Receiving objects:  84% (111/131)
+     Receiving objects: 100% (131/131), 1003.71 KiB | 0 bytes/s, done.
+     Resolving deltas: 100% (25/25), done.
+     Checking connectivity... done.
+
+   where ``<github-user-name>`` is your Github user name.
+
+.. rubric:: Et, voilà! You have your own working copy of the project!
+
+
+Git Flow
+--------
+
+I need to say a bit about branching. Git makes branching very easy. That's why I
+prefer it. Branching is important because it allows you to experiment without
+worrying about whether you're going to screw up your code base. If you want to
+try something, create a branch and start coding. If things go horribly wrong,
+just delete the branch. No harm done.
+
+You have to have at least one branch, traditionally called ``master`` in git.
+Your ``master`` branch is the one you really want to be careful with. Just like
+the ``master`` repository, your ``master`` branch is where you'll merge your
+local changes when you're ready to submit your changes to the ``master``
+repository.
+
+To make managing branches easier, we're going to use `git-flow`_. I suggest you
+read the `brief introduction <https://github.com/nvie/gitflow#initialization>`_
+on the git-flow Github page. That should give you enough information to get
+started.
+
+To install git-flow on Windows, I suggest the `GitHub for Windows
+<https://github.com/nvie/gitflow/wiki/Windows#github-for-windows>`_
+option.
+
+To install git-flow on OS X, I suggest the
+`MacPorts <https://github.com/nvie/gitflow/wiki/Mac-OS-X#macports>`_ option.
+
+
+Exercise 1
+''''''''''
+
+Now for some practice using git and git-flow. If you haven't already, you should
+:ref:`l_clone_to_local`.
+
+Initializing git-flow is very simple.
+
+#. Open a command/terminal window and navigate to your project directory.
+#. Type the following, and just accept all of the defaults::
+
+     $ git flow init
+
+     Which branch should be used for bringing forth production releases?
+        - master
+     Branch name for production releases: [master]
+     Branch name for "next release" development: [develop]
+
+     How to name your supporting branch prefixes?
+     Feature branches? [feature/]
+     Release branches? [release/]
+     Hotfix branches? [hotfix/]
+     Support branches? [support/]
+     Version tag prefix? []
+
+     $ _
+
+If you use the ``git status`` command, you'll see that you're now on the
+``develop`` branch. I tend to do all of my work in ``feature`` branches, and then
+merge those into the ``develop`` branch. I use the ``develop`` branch as a second
+``master`` branch, of sorts. An example should help clarifiy things.
+
+Create a ``feature`` branch so you can update the README.rst file with a link to
+your Github account.::
+
+  $ git flow feature start update-readme
+  Switched to a new branch 'feature/update-readme'
+
+  Summary of actions:
+  - A new branch 'feature/update-readme' was created, based on 'develop'
+  - You are now on branch 'feature/update-readme'
+
+  Now, start committing on your feature. When done, use:
+
+       git flow feature finish update-readme
+
+  $ _
+
+Git-flow always tells you what it's doing, and provides helpful hints to keep
+you on track.
+
+Using your favorite text editor/IDE, edit the Authors section of README.rst to
+create a link to your Github account. You can just copy what I did with my name.
+Save your changes and exit the application.
+
+Back in the command/terminal window, type ``git status``. You should see
+something like the following::
+
+  On branch feature/update-readme
+  Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   README.rst
+
+  no changes added to commit (use "git add" and/or "git commit -a")
+
+There are three states a modified file can be in: unstaged, staged and committed.
+Right now, we've updated README.rst, but haven't told git that we want to keep
+those changes. To stage the changes, use the ``git add`` command.::
+
+  $ git add README.rst
+
+``Git status`` now shows that the changes to README.rst are staged, and ready to
+be committed.::
+
+  On branch feature/update-readme
+  Changes to be committed:
+    (use "git reset HEAD <file>..." to unstage)
+
+        modified:   README.rst
+
+It even tells you how to remove your changes from staging.
+
+Now we commit the changes to write them to our local copy of the repository.::
+
+  $ git commit -m "Updating README.rst with a link to my Github account."  README.rst
+  [feature/update-readme 54cea0d] Updating README.rst with a link to my Github account.
+   1 file changed, 1 insertion(+), 1 deletion(-)
+
+Depending on the changes you made, the last line might be different.
+
+.. topic:: If you're like me, sometimes you forget what you've named things. To
+           see the names of all of the ``feature`` branches you have, use the
+           ``git flow feature`` command with no arguments.
+
+You'll realize by now, of course, that all of these steps for such a tiny change
+is overkill, but when we're done, you'll have done almost everything you'll need
+to do to use git for this project.
+
+Our changes are now committed to the ``feature/update-readme`` branch. Now we
+need to merge them back into the other branches.::
+
+  $ git flow feature finish update-readme
+  Switched to branch 'develop'
+  Your branch is up-to-date with 'origin/develop'.
+  Updating fc5f1c4..54cea0d
+  Fast-forward
+   README.rst | 2 +-
+   1 file changed, 1 insertion(+), 1 deletion(-)
+  Deleted branch feature/update-readme (was 54cea0d).
+
+  Summary of actions:
+  - The feature branch 'feature/update-readme' was merged into 'develop'
+  - Feature branch 'feature/update-readme' has been removed
+  - You are now on branch 'develop'
+
+As usual, ``git-flow`` tells you exactly what it's done, and where you've ended
+up.
+
+On really nice thing about ``git-flow`` is that it doesn't interfere with any of
+the standard git commands. This update doesn't warrant a full release, so we're
+going to practice using git without the aid of ``git-flow``.
+
+You should be on the ``develop`` branch now. To merge your updates into your
+``master`` branch, you need be **on** your ``master`` branch. Generally, merging
+is a straightforward process. Use the following commands to merge the ``develop``
+branch into the ``master`` branch.::
+
+  $ git checkout master
+  Switched to branch 'master'
+  Your branch is up-to-date with 'origin/master'.
+
+  $ git merge develop
+  Merge made by the 'recursive' strategy.
+   README.rst          |  2 +-
+   1 files changed, 2 insertions(+), 2 deletions(-)
+
+If you do a ``git status`` now, you'll see that your remote repository is out of
+date.::
+
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 1 commit.
+    (use "git push" to publish your local commits)
+  nothing to commit, working directory clean
+
+As the message says, you can push your changes to your remote repository with
+the ``git push`` command. It will prompt you for your username (actually, the
+email address you used to sign up for Github) and password. Then it will print
+a bunch of information to the screen. If it tells you the push was successful,
+you're good to go.
+
+.. rubric:: The home stretch
+
+To create a pull request, you'll need to long into your Github account. Go to
+your ``student-growth-tracker`` repository. You should see a button that says,
+"Create Pull Request" (or something similar). Click the button, and follow the
+directions to create the pull request.
+
+Now it's just a question of waiting for your pull request to be merged into the
+master repository.
+
+
+`Syncing your fork with the upstream master repository <https://help.github.com/articles/syncing-a-fork/>`_
+-----------------------------------------------------------------------------------------------------------
 
 
 .. rubric:: Footnotes
@@ -337,3 +575,4 @@ That should get you going. I'll add more as I think of it.
 .. _overview: http://web2py.com/books/default/chapter/29/03/overview
 .. _web2py documentation: http://web2py.com/book
 .. _project page: https://github.com/depaul-se-capstone-team-3/student-growth-tracker
+.. _master repository: https://github.com/depaul-se-capstone-team-3/student-growth-tracker
