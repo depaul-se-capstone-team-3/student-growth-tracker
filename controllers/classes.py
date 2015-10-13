@@ -2,10 +2,10 @@
 # try something like
 
 def index():
-    class_ = SQLFORM.smartgrid(db.class_)
+    classes = SQLFORM.smartgrid(db.classes)
     return locals()
 
 
 def create():
-    form = SQLFORM(db.class_).process(next=URL('index'))
+    form = SQLFORM(db.classes).process(next=URL('index'))
     return dict(form=form)
