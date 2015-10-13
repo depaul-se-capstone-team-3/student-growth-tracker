@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # try something like
-#def index(): return dict(message="hello from class.py")
-
 
 def index():
     class_ = SQLFORM.smartgrid(db.class_)
