@@ -11,3 +11,10 @@ db.define_table(
     Field('middleInitial','string'),
     format = '%(ID)s')
 db.classes.id.readable = db.classes.id.writable = False
+
+db.define_table(
+    'student_classes',
+    Field('student_id', 'reference student'),
+    Field('class_id', 'reference classes'))
+db.student_classes.student_id.readable = db.student_classes.student_id.writable = False
+db.student_classes.class_id.readable = db.student_classes.class_id.writable = False
