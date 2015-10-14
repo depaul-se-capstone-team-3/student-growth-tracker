@@ -22,7 +22,7 @@ import shlex
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../../student_growth_tracker'))
 
 # -- General configuration ------------------------------------------------
 
@@ -54,8 +54,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Student Growth Tracker'
-copyright = '2015, Team 3'
-author = 'Team 3'
+copyright = '2015, The Dread Crew of Capstone'
+author = 'The Dread Crew of Capstone'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
