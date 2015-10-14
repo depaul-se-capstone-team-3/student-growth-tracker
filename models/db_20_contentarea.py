@@ -3,5 +3,5 @@
 db.define_table(
     'contentarea',
     Field('name', required=True, requires=IS_NOT_EMPTY()),
-    #needs additional validator to check if in DB.
+    #removed reference to standard
     )
