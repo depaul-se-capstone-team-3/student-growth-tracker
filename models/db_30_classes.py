@@ -8,13 +8,10 @@ db.define_table(
     Field('endDate', 'integer', required=True, requires=IS_NOT_EMPTY),
     # studentList Obj
     #Field('studentList', 'reference student'),
-    Field('studentList'),
     # grade Obj
     #Field('grade', 'reference grade'),
-    Field('grade'),
     # content area Obj
-    #Field('content_area', 'reference contentarea'),
-    Field('content_area'),
+    Field('content_area', 'reference contentarea'),
     format = '%(name)s')
 
 db.classes.id.readable = db.classes.id.writable = False

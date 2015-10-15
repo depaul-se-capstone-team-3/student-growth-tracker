@@ -2,9 +2,10 @@
 
 db.define_table(
     'standard',
-    Field('refNum', required=True, requires=IS_NOT_EMPTY),
-    Field('shortName', required=True, requires=IS_NOT_EMPTY),
+    Field('reference_number', required=True, requires=IS_NOT_EMPTY),
+    Field('short_name', required=True, requires=IS_NOT_EMPTY),
     Field('description', required=True, requires=IS_NOT_EMPTY),
+    Field('content_area', 'reference contentarea'),
     format = '%(shortName)s')
 
 db.standard.id.readable = db.standard.id.writable = False
