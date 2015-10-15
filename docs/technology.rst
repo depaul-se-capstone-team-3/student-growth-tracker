@@ -14,27 +14,26 @@ Environment
 ===========
 
 **Languages**
-  - Python 2 (2.7.10)
-  - javascript
-  - html
-  - css
+
+- Python 2 (2.7.10)
+- javascript
+- html
+- css
 
 **Web Framework:**
-  web2py
+
+- web2py
 
 **Database**
-  Probably mysql, but maybe postgresql.
+
+- MySQL
 
 
 Hosting
 =======
 
-We haven't chosen a hosting service. Below is a list of options to investigate.
-
 - `pythonanywhere`_
-- OpenShift
-- Google App Engine
 
 
-.. _github: https://github.com
+.. _github: https://github.com/depaul-se-capstone-team-3/student-growth-tracker
 .. _pythonanywhere: http://pythonanywhere.com

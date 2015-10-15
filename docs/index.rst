@@ -10,11 +10,10 @@
 
 A robust gradebook program tied to the Common Core standards.
 
-
 Functionality
 =============
 
-- Persistnace
+- Persistance
 - Drill-down Reporting
 - Track student specifications
 

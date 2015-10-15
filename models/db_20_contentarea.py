@@ -2,6 +2,6 @@
 
 db.define_table(
     'contentarea',
-    Field('name', required=True, requires=IS_NOT_EMPTY()),
-    #removed reference to standard
-    )
+    Field('name', required=True, requires=IS_NOT_EMPTY),
+    Field('description'),
+    format = '%(name)s')
