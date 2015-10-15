@@ -7,4 +7,4 @@ db.define_table(
     Field('keywords'),
     Field('dueDate', 'integer', requires=IS_NOT_EMPTY()),
     format = '%(name)s')
-db.classes.id.readable = db.classes.id.writable = False
+db.grade.id.readable = db.grade.id.writable = False
