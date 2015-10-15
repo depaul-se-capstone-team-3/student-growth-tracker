@@ -29,7 +29,7 @@ response.menu = [
     (T('Grade Book'), False, URL('gradebook', 'index'), []),
     (T('Classes'), False, URL('classes', 'index'), []),
     (T('Content Area'), False, URL('contentarea', 'index'), []),
-    (T('Standards'), False, URL('stanadard', 'index'), [])
+    (T('Standards'), False, URL('standards', 'index'), [])
 ]
 
 DEVELOPMENT_MENU = True
