@@ -7,9 +7,9 @@ db.define_table(
     Field('startDate', 'integer', required=True, requires=IS_NOT_EMPTY()),
     Field('endDate', 'integer', required=True, requires=IS_NOT_EMPTY()),
     # studentList Obj
-    Field('studentList', 'reference student'),
+    #Field('studentList', 'reference student'),
     # grade Obj
-    Field('grade', 'reference grade'),
+    #Field('grade', 'reference grade'),
     # content area Obj
     Field('content_area', 'reference contentarea'),
     format = '%(name)s')
