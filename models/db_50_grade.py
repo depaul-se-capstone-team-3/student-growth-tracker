@@ -26,5 +26,5 @@ db.define_table(
     Field('standard_id', 'reference standard')
 )
 db.grade_standard.id.readable = db.grade_standard.id.writable = False
-db.grade_standard.grade_id.readable = db.grade_standard.grade_id.writable = False
-db.grade_standard.standard_id.readable = db.grade_standard.standard_id.writable = False
+# db.grade_standard.grade_id.readable = db.grade_standard.grade_id.writable = False
+# db.grade_standard.standard_id.readable = db.grade_standard.standard_id.writable = False
