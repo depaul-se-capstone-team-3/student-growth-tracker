@@ -6,6 +6,6 @@ db.define_table(
     Field('short_name', required=True),
     Field('description', required=True),
     Field('content_area', 'reference contentarea'),
-    format = '%(shortName)s')
+    format = '%(short_name)s')
 
 db.standard.id.readable = db.standard.id.writable = False

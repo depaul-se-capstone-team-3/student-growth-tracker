@@ -18,16 +18,22 @@ if db(db.auth_group).isempty():
 if db(db.auth_user).isempty():
     import datetime
     from gluon.contrib.populate import populate
-    teacher_id = db.auth_user.insert(first_name='Good',last_name='Teacher',
-                                     username='teacher1',
-                                     email='good.teacher@example.com',
+    teacher_id = db.auth_user.insert(first_name='Bob',last_name='Johnson',
+                                     username='bobjohnson',
+                                     email='bob.johnson@example.com',
+                                     password=CRYPT()('test')[0])
+    auth.add_membership(auth.id_group(TEACHER), teacher_id)
+    
+    teacher_id = db.auth_user.insert(first_name='Ted',last_name='Whitrock',
+                                     username='tedwhitrock',
+                                     email='ted.whitrock@example.com',
                                      password=CRYPT()('test')[0])
     auth.add_membership(auth.id_group(TEACHER), teacher_id)
 
     for s in range(NUM_STUDENTS):
-        st_id = db.auth_user.insert(first_name='Good',last_name='Student',
+        st_id = db.auth_user.insert(first_name='Stu',last_name='Dent{}'.format(s),
                                     username='student{}'.format(s),
-                                    email='good.student{}@example.com'.format(s),
+                                    email='student{}@example.com'.format(s),
                                     password=CRYPT()('test')[0])
         auth.add_membership(auth.id_group(STUDENT), st_id)
 
