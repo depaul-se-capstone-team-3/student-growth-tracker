@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # try something like
-
+@auth.requires_login()
 def index(): 
     grid = SQLFORM.smartgrid(db.gradebook)
     return dict(grid=grid)
