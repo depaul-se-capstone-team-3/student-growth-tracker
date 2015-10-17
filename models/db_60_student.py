@@ -13,3 +13,11 @@ db.define_table(
     Field('class_id', 'reference classes'))
 db.student_classes.student_id.readable = db.student_classes.student_id.writable = False
 db.student_classes.class_id.readable = db.student_classes.class_id.writable = False
+
+db.define_table(
+    'student_grade',
+    Field('student_id', 'reference student'),
+    Field('grade_id', 'reference grade'),
+    Field('student_score', 'double'))
+db.student_classes.student_id.readable = db.student_classes.student_id.writable = False
+db.student_classes.grade_id.readable = db.student_classes.grade_id.writable = False
