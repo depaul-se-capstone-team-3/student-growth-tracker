@@ -2,10 +2,11 @@
 
 db.define_table(
     'classes',
-    Field('name', required=True, requires=IS_NOT_EMPTY),
-    Field('gradeLevel', 'integer', required=True, requires=IS_NOT_EMPTY),
-    Field('startDate', 'integer', required=True, requires=IS_NOT_EMPTY),
-    Field('endDate', 'integer', required=True, requires=IS_NOT_EMPTY),
+    #removing "requires=IS_NOT_EMPTY" due to database complications.
+    Field('name', required=True),
+    Field('gradeLevel', 'integer', required=True),
+    Field('startDate', 'integer', required=True),
+    Field('endDate', 'integer', required=True),
     # studentList Obj
     #Field('studentList', 'reference student'),
     # grade Obj

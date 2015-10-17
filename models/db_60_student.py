@@ -2,8 +2,8 @@
 db.define_table(
     'student',
     Field('user_id', 'reference auth_user'),
-    Field('school_id_number','string', requires=IS_NOT_EMPTY),
-    Field('grade_level','integer', requires=IS_NOT_EMPTY),
+    Field('school_id_number','string', required=True),
+    Field('grade_level','integer', required=True),
     format = '%(ID)s')
 db.classes.id.readable = db.classes.id.writable = False
 

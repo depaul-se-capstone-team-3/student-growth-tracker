@@ -2,6 +2,7 @@
 
 db.define_table(
     'contentarea',
-    Field('name', required=True, requires=IS_NOT_EMPTY),
+    #requires=IS_NOT_EMPTY removed from name constraints due to bug.
+    Field('name', required=True),
     Field('description'),
     format = '%(name)s')

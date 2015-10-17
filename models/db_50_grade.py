@@ -2,20 +2,20 @@
 
 db.define_table(
     'grade_type',
-    Field('name', 'string', required=True, requires=IS_NOT_EMPTY),
-    Field('description', 'string')
-)
+    Field('name', 'string', required=True),
+    Field('description', 'string'))
 db.grade_type.id.readable = db.grade_type.id.writable = False
 
 db.define_table(
     'grade',
-    Field('name', 'string', requires=IS_NOT_EMPTY),
-    Field('display_date', 'datetime'),
-    Field('date_assigned', 'datetime'),
-    Field('due_date', 'datetime'),
+    Field('name', 'string', required=True),
+    Field('display_date', 'date'),
+    Field('date_assigned', 'date'),
+    Field('due_date', 'date'),
     Field('grade_type', 'reference grade_type'),
     Field('score', 'double'),
-    Field('isPassFail', 'boolean', requires=IS_NOT_EMPTY, default=False),
+    Field('isPassFail', 'boolean', default=False),
+    #Field('isPassFail', 'boolean', requires=IS_NOT_EMPTY, default=False),
     format = '%(name)s'
 )
 db.grade.id.readable = db.grade.id.writable = False
@@ -26,5 +26,6 @@ db.define_table(
     Field('standard_id', 'reference standard')
 )
 db.grade_standard.id.readable = db.grade_standard.id.writable = False
+
 # db.grade_standard.grade_id.readable = db.grade_standard.grade_id.writable = False
 # db.grade_standard.standard_id.readable = db.grade_standard.standard_id.writable = False
