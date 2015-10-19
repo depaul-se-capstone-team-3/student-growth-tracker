@@ -1,14 +1,8 @@
 language: python
 
-sudo: false
-
 python:
     - '2.6'
     - '2.7'
     - 'pypy'
 
-install:
-    - pip install -e .
-
-notifications:
-    email: false
+script: testing\test_test.py
