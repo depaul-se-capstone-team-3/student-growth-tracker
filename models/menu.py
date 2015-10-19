@@ -24,6 +24,7 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
+    (T('Manage User'), False, URL('manage_users', 'index'), []),
     (T('Grade Book'), False, URL('gradebook', 'index'), []),
     (T('Classes'), False, URL('classes', 'index'), []),
     (T('Content Area'), False, URL('contentarea', 'index'), []),
@@ -137,4 +138,4 @@ DEVELOPMENT_MENU = True
 #         ]
 # if DEVELOPMENT_MENU: _()
 
-if "auth" in locals(): auth.wikimenu() 
+if "auth" in locals(): auth.wikimenu()

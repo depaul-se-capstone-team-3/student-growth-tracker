@@ -4,7 +4,7 @@
 
 def index():
     standard = SQLFORM.smartgrid(db.standard)
-    return locals()
+    return dict(standard=standard)
 
 
 def create():
