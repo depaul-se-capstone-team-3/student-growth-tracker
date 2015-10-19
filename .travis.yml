@@ -5,4 +5,4 @@ python:
     - '2.7'
     - 'pypy'
 
-script: testing\test_test.py
+script: testing/test_test.py
