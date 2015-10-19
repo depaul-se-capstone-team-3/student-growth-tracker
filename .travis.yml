@@ -5,4 +5,8 @@ python:
     - '2.7'
     - 'pypy'
 
-script: testing/test_test.py
+install: true
+
+script:
+    - cd testing
+    - python test_test.py
