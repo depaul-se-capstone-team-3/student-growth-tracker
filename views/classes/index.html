@@ -1,3 +1,14 @@
 {{extend 'layout.html'}}
-<h1>Current classes</h1>
-{{=classes}}
+
+<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
+
+<table class="table">
+  {{for row in rows:}}
+  <tr>
+    <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
+    <td>{{=A(row.contentarea.name, _href=URL('contentarea', 'index', args=[row.contentarea.id]))}}</td>
+  </tr>
+  {{pass}}
+</table>
+
+{{#=rows}}

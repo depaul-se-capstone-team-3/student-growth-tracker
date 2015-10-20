@@ -7,7 +7,8 @@
 #    return dict(message='Class List - %(first_name)s' % auth.user,gradebook=gradebook)
 def index():
     constraints = db.gradebook.teacher == auth.user.id
-    grid = SQLFORM.smartgrid(db.gradebook,constraints={'gradebook':(db.gradebook.teacher==auth.user_id)},links_in_grid=False)
+    grid = SQLFORM.smartgrid(db.gradebook,
+                             constraints={'gradebook': (db.gradebook.teacher==auth.user_id)})
     return dict(message='Class List - %(first_name)s' % auth.user,grid=grid)
 
 def create():
