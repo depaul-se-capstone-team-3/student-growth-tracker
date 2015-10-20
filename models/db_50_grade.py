@@ -16,28 +16,17 @@ db.define_table(
     Field('score', 'double'),
     Field('isPassFail', 'boolean', default=False),
     #Field('isPassFail', 'boolean', requires=IS_NOT_EMPTY, default=False),
-    format = '%(name)s'
-)
+    format = '%(name)s')
 db.grade.id.readable = db.grade.id.writable = False
 
 db.define_table(
     'grade_standard',
     Field('grade_id', 'reference grade'),
-    Field('standard_id', 'reference standard')
-)
+    Field('standard_id', 'reference standard'))
 db.grade_standard.id.readable = db.grade_standard.id.writable = False
-
-db.define_table(
-'class_grade',
-Field('class_id', 'reference classes'),
-Field('grade_id', 'reference grade')
-)
-
-# db.grade_standard.grade_id.readable = db.grade_standard.grade_id.writable = False
-# db.grade_standard.standard_id.readable = db.grade_standard.standard_id.writable = False
 
 db.define_table(
     'class_grade',
     Field('class_id', 'reference classes'),
-    Field('grade_id', 'reference grade')
-)
+    Field('grade_id', 'reference grade'))
+db.class_grade.id.readable = db.class_grade.id.writable = False
