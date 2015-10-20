@@ -1,5 +1,5 @@
 {{extend 'layout.html'}}
 {{for row in grid:}}
 <h2>{{=row.auth_user.first_name}}</h2>
-<h3>{{=A(row.classes.name, _href=URL('classes', 'index', args=[1]))}}</h3>
+<h3>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</h3>
 {{pass}}
