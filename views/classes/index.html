@@ -2,13 +2,39 @@
 
 <h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
 
-<table class="table">
+<div class="container">
   {{for row in rows:}}
-  <tr>
-    <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
-    <td>{{=A(row.contentarea.name, _href=URL('contentarea', 'index', args=[row.contentarea.id]))}}</td>
-  </tr>
+  <div class="row">
+    <div class="col-sm-6">
+      {{=H3(A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id])))}}
+      {{=H4(A(row.contentarea.name, _href=URL('contentarea', 'index', args=[row.contentarea.id])))}}
+      {{for student in class_roster:}}
+      {{if student.student_classes.class_id == row.classes.id:}}
+      <div class="containter">
+        <div class="row">
+          <div class="col-sm-4">
+            <a href="{{=URL('student', 'index', args=[student.student.id])}}">
+              {{=student.auth_user.first_name}} {{=student.auth_user.last_name}}
+            </a>
+          </div>
+        </div>
+      </div>
+      {{pass}}
+      {{pass}}
+    </div>
+  </div>
   {{pass}}
+</div>
+
+<!--
+<table class="table">
+  {{#for row in rows:}}
+  <tr>
+    <td>{{#=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
+    <td>{{#=A(row.contentarea.name, _href=URL('contentarea', 'index', args=[row.contentarea.id]))}}</td>
+  </tr>
+  {{#pass}}
 </table>
+-->
 
 {{#=rows}}
