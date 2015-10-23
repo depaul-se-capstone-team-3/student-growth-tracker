@@ -1,3 +1,19 @@
 {{extend 'layout.html'}}
+<h1><b>Current Students</b></h1>
 
-{{=rows}}
+<table style="width:50%">
+<tr>
+    <td><h2>ID</h2></td>
+    <td><h2>User ID</h2></td>
+    <td><h2>School ID Number</h2></td>
+    <td><h2>Grade Level</h2></td>
+</tr>
+<tr>
+{{for row in student:}}
+    <td><h5>{{=row.id}}</h5></td>
+    <td><h5>{{=row.user_id}}</h5></td>
+    <td><h5><b>{{=A(row.school_id_number, _href=URL('students', 'query',  vars=dict(sid=row.id)))}}</b></h5></td>
+    <td><h5>{{=row.grade_level}}</h5></td>
+</tr>
+{{pass}}
+</table>

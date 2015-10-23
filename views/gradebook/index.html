@@ -1,9 +1,5 @@
 {{extend 'layout.html'}}
-<h1>{{=message}}</h1>
-<h2>
-    Current Classes
-</h2>
-
-{{=grid}}
-
-{{#=BEAUTIFY(response._vars)}}
+{{for row in grid:}}
+<h2>{{=row.auth_user.first_name}}</h2>
+<h3>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</h3>
+{{pass}}
