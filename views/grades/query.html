@@ -1,0 +1,24 @@
+{{extend 'layout.html'}}
+<h1>Grades for Assignment {{=request.vars['gname']}}</h1>
+
+
+<table style="width:30%">
+    <tr><td><h3>Student ID</h3></td>
+    <td><h3>First Name</h3></td>
+    <td><h3>Last Name</h3></td>
+    <td><h3>Score</h3></td>
+    </tr>
+    <tr>
+        {{ids = []
+        for row in grade_query:
+        }}
+        {{if row.auth_user.id not in ids:}}
+        <td><h5>{{=row.auth_user.id}}</h5></td>
+        <td><h5>{{=row.auth_user.first_name}}</h5></td>
+        <td><h5>{{=row.auth_user.last_name}}</h5></td>
+        <td><h5>{{=row.student_grade.student_score}}</h5></td>
+    </tr>
+    {{ids.append(row.auth_user.id)}}
+    {{pass}}
+    {{pass}}
+</table>

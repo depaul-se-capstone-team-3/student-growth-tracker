@@ -1,52 +1,26 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
-
-{{block header}}
-    <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
-    </header>
-{{end}}
-
-{{if 'message' in globals():}}
-<h2>{{=message}}</h2>
-<p class="lead">{{=T('How did you get here?')}}</p>
-<ol>
-  <li>{{=T('You are successfully running web2py')}}</li>
-  <li>{{=XML(T('You visited the url %s', A(request.env.path_info,_href=request.env.path_info)))}}</li>
-  <li>{{=XML(T('Which called the function %s located in the file %s',
-    (A(request.function+'()',_href='#'),
-    A('web2py/applications/%(application)s/controllers/%(controller)s.py' % request,
-    _href=URL('admin','default','peek', args=(request.application,'controllers',request.controller+'.py'))))))}}</li>
-  <li>{{=XML(T('The output of the file is a dictionary that was rendered by the view %s',
-    A('web2py/applications/%(application)s/views/%(controller)s/index.html' % request,
-    _href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))))}}</li>
-  <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
-</ol>
-{{elif 'content' in globals():}}
-{{=content}}
-{{else:}}
-{{=BEAUTIFY(response._vars)}}
-{{pass}}
-
-{{block right_sidebar}}
-<div class="panel panel-info">
-  <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
-      href="{{=URL('admin','default','index')}}">
-      <i class="glyphicon glyphicon-cog"></i>
-      {{=T("admin")}}
-    </a></h3></div>
-  <div class="panel-body">
-    {{=T("Don't know what to do?")}}
-  </div>
-  <ul class="list-group">
-    <li class="list-group-item">{{=A(T("Online examples"), _href=URL('examples','default','index'))}}</li>
-    <li class="list-group-item"><a href="http://web2py.com">web2py.com</a></li>
-    <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
-  </ul>
-</div>
-{{end}}
+<h1>Current Students</h1>
+<table style="width:90%">
+    <tr>
+        <td><h2>Grade ID</h2></td>
+        <td><h2>Assignment Name  </h2></td>
+        <td><h2>Display Date  </h2></td>
+        <td><h2>Date Assigned  </h2></td>
+        <td><h2>Due Date  </h2></td>
+        <td><h2>Grade Type   </h2></td>
+        <td><h2>Score   </h2></td>
+        <td><h2>isPassFail   </h2></td>
+    </tr>
+    <tr>
+        {{for row in grid:}}
+        <td><h5>{{=row.id}}</h5></td>
+        <td><h5><b>{{=A(row.name, _href=URL('grades','query',vars=dict(gname=row.id)))}}</b></h5></td>
+        <td><h5>{{=row.display_date}}</h5></td>
+        <td><h5>{{=row.date_assigned}}</h5></td>
+        <td><h5>{{=row.due_date}}</h5></td>
+        <td><h5>{{=row.grade_type}}</h5></td>
+        <td><h5>{{=row.score}}</h5></td>
+        <td><h5>{{=row.isPassFail}}</h5></td>
+    </tr>
+    {{pass}}
+</table>
