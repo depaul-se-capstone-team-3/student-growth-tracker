@@ -1,3 +1,29 @@
 {{extend 'layout.html'}}
-<h1>Current classes</h1>
-{{=classes}}
+
+<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
+
+<div class="container">
+  {{for row in rows:}}
+  <div class="row">
+    <div class="col-sm-12">
+      {{=H3(A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id])))}}
+      {{=H4(A(row.contentarea.name, _href=URL('contentarea', 'index', args=[row.contentarea.id])))}}
+      {{for student in class_roster:}}
+      <table class="table">
+        {{if student.student_classes.class_id == row.classes.id:}}
+        <tr>
+          <td>
+            <a href="{{=URL('student', 'index', args=[student.student.id])}}">
+              {{=student.auth_user.first_name}} {{=student.auth_user.last_name}}
+            </a>
+          </td>
+          <td>{{=student.student_grade.student_score}}</td>
+        <tr>
+        {{pass}}
+      </table>
+          
+      {{pass}}
+    </div>
+  </div>
+  {{pass}}
+</div>

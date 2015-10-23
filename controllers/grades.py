@@ -16,7 +16,6 @@ def create():
     form = SQLFORM(db.grade).process(next=URL('index'))
     return dict(form=form)
 
-
 def query():
     gname = request.vars['gname']
     assignment = db.student_grade.grade_id==gname
