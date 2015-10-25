@@ -21,13 +21,6 @@ def create():
 def query():
     gname = request.vars['gname']
     assignment = db.student_grade.grade_id==gname
-
-    c1 = ((db.student.user_id== db.auth_user.id) &
-          (db.grade.id == db.student_grade.grade_id))
-
-    grade_query = db(assignment).select(db.auth_user.id,
-                                        db.auth_user.first_name,
-                                        db.auth_user.last_name,
-                                        db.student_grade.student_score,
-                                        left=db.student_grade.on(c1))
+    c1 = (db.student.user_id== db.auth_user.id) & (db.grade.id == db.student_grade.grade_id)
+    grade_query = db(assignment).select(db.auth_user.id,db.auth_user.first_name,db.auth_user.last_name, db.student_grade.student_score, left=db.student_grade.on(c1))
     return dict(grade_query=grade_query)
