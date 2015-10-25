@@ -1,26 +1,22 @@
 {{extend 'layout.html'}}
-<h1>Current Students</h1>
-<table style="width:90%">
+<h1>Current Assignments</h1>
+<table class="table">
     <tr>
-        <td><h2>Grade ID</h2></td>
-        <td><h2>Assignment Name  </h2></td>
-        <td><h2>Display Date  </h2></td>
-        <td><h2>Date Assigned  </h2></td>
-        <td><h2>Due Date  </h2></td>
-        <td><h2>Grade Type   </h2></td>
-        <td><h2>Score   </h2></td>
-        <td><h2>isPassFail   </h2></td>
+        <td>Assignment Name </td>
+        <td>Date Assigned   </td>
+        <td>Due Date        </td>
+        <td>Grade Type      </td>
+        <td>Total Score     </td>
+        <td>Pass/Fail       </td>
     </tr>
     <tr>
         {{for row in grid:}}
-        <td><h5>{{=row.id}}</h5></td>
-        <td><h5><b>{{=A(row.name, _href=URL('grades','query',vars=dict(gname=row.id)))}}</b></h5></td>
-        <td><h5>{{=row.display_date}}</h5></td>
-        <td><h5>{{=row.date_assigned}}</h5></td>
-        <td><h5>{{=row.due_date}}</h5></td>
-        <td><h5>{{=row.grade_type}}</h5></td>
-        <td><h5>{{=row.score}}</h5></td>
-        <td><h5>{{=row.isPassFail}}</h5></td>
+        <td>{{=A(row.name, _href=URL('grades','query',vars=dict(gname=row.id)))}}</td>
+        <td>{{=row.date_assigned}}</td>
+        <td>{{=row.due_date}}</td>
+        <td>{{=row.grade_type}}</td>
+        <td>{{=row.score}}</td>
+        <td>{{=row.isPassFail}}</td>
     </tr>
     {{pass}}
 </table>
