@@ -8,7 +8,9 @@ def index():
 
     #grid = db(db.grade.name).select(join=db.grade.on((db.grade.name==db.student_grade.grade_id)))
     
-    grid = db().select(db.grade.id, db.grade.name, db.grade.display_date, db.grade.date_assigned, db.grade.due_date,db.grade.grade_type,db.grade.score, db.grade.isPassFail)
+    grid = db().select(db.grade.id, db.grade.name, db.grade.display_date,
+                       db.grade.date_assigned, db.grade.due_date,
+                       db.grade.grade_type,db.grade.score, db.grade.isPassFail)
     return dict(grid=grid)
 
 
