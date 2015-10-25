@@ -4,6 +4,8 @@ db.define_table(
     Field('user_id', 'reference auth_user'),
     Field('school_id_number','string', required=True),
     Field('grade_level','integer', required=True),
+    Field('home_address','string'),
+    Field('parent_email','string'),
     format = '%(user_id)s')
 db.classes.id.readable = db.classes.id.writable = False
 
