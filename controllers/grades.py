@@ -27,11 +27,9 @@ def create():
     try:
         class_id = request.args[0]
     except:
-        #Doing Nothing, need to handle.
-        #redirect(URL("default","index"))
-        class_id = 2
+        #Doing Nothing, redirecting to main page.
+        redirect(URL("default","index"))
 
-    #db.grade_type.name.requires = IS_IN_DB(db, 'grade_type.name', '%(name)s', zero=T('Choose Type'))
     gradeT = Field('grade_type', requires=IS_IN_DB(db, 'grade_type.id', '%(name)s',zero=T('Choose Grade Type')))
     form = SQLFORM.factory(db.grade.name,
                            db.grade.display_date,
@@ -39,21 +37,8 @@ def create():
                            db.grade.due_date, gradeT,
                            db.grade.score,
                            db.grade.isPassFail)
-
-    #form = SQLFORM.smartgrid(db.grade, linked_tables=[db.grade_type]).process()
     if form.process().accepted:
         id = db.grade.insert(**db.grade._filter_fields(form.vars))
-
-        #insert into class_grade db.
         db.class_grade.insert(class_id = class_id,grade_id = id)
 
     return dict(form=form)
-
-
-def enter_grade():
-    try:
-        class_id = request.args[0]
-    except:
-        #Doing Nothing, need to handle.
-        redirect(URL("default","index"))
-    return locals()
