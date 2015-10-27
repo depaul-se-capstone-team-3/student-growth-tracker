@@ -21,26 +21,61 @@ def query():
     return dict(grade_query=grade_query)
 
 
-#    form = SQLFORM.smartgrid(db.auth_user, linked_tables=[db.auth_membership,db.auth_group])
-#    return dict(form=form)
-
 
 def create():
+    '''Generating form for creating a new assignment'''
+    #If there is an argument class id, check to see if db.classes contains that class.
     try:
         class_id = request.args[0]
-    except:
-        #Doing Nothing, redirecting to main page.
-        redirect(URL("default","index"))
+        exist = db.classes(class_id)
 
+        #If class does not exist, redirects.
+        if (exist == None):
+            response.flash = T("Class Does Not Exist")
+
+            #Redirect to previous link if via link, else redirec to main page.
+            if (request.env.http_referer==None):
+                redirect(URL("default","index"))
+            else:
+                redirect(request.env.http_referer)
+
+    #If no argument given, throws Invalid class and redirect.
+    except:
+        response.flash = T("Invalid Class")
+
+        #If class does not exist, redirects.
+        if (request.env.http_referer==None):
+            redirect(URL("default","index"))
+
+        #Redirect to previous link if via link, else redirec to main page.
+        else:
+            redirect(request.env.http_referer)
+
+    #Creating the drop down menu
     gradeT = Field('grade_type', requires=IS_IN_DB(db, 'grade_type.id', '%(name)s',zero=T('Choose Grade Type')))
+
+    #Creating the form.
     form = SQLFORM.factory(db.grade.name,
                            db.grade.display_date,
                            db.grade.date_assigned,
                            db.grade.due_date, gradeT,
                            db.grade.score,
                            db.grade.isPassFail)
+
+    #Processing the form
     if form.process().accepted:
+
+        #inserting the new grade into db.grade
         id = db.grade.insert(**db.grade._filter_fields(form.vars))
+
+        #creating the link between class and grade.
         db.class_grade.insert(class_id = class_id,grade_id = id)
+        response.flash = T("New assignment sucssfully created")
+
+    #Form error handling.
+    elif form.errors:
+        response.flash = T("Form Has Errors")
+    else:
+        response.flash = T("Please Fill Out The Form")
 
     return dict(form=form)
