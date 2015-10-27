@@ -11,19 +11,18 @@
         <div class="col-sm-12">
             <table class="table">
                 <tr>
-                    <td>First Name</td>
-                    <td>Last Name</td>
-                    <td>Assignment Name</td>
-                    <td>Grade</td>
+                    {{if args:}}
+                    {{else:}}                    
+                    <td><b>Name</b></td>
+                    {{pass}}
+                    <td><b>Assignment Name</b></td>
+                    <td><b>Grade</b></td>
                 </tr>
                 {{for row in student_query:}}
                 <tr>
                     {{if args:}}
-                    <td>{{=row.auth_user.first_name}}</td>
-                    <td>{{=row.auth_user.last_name}}</td>
                     {{else:}}
-                    <td>{{=A(row.auth_user.first_name,  _href=URL('students', 'index', args=[row.student.id]))}}</td>
-                    <td>{{=A(row.auth_user.last_name,  _href=URL('students', 'index', args=[row.student.id]))}}</td>
+                    <td>{{=A(row.auth_user.first_name,  _href=URL('students', 'index', args=[row.student.id]))}} {{=A(row.auth_user.last_name,  _href=URL('students', 'index', args=[row.student.id]))}}</td>
                     {{pass}}
                     <td>{{=row.grade.name}}</td>
                     <td>{{=row.student_grade.student_score}}</td>
