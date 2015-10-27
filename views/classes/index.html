@@ -2,8 +2,10 @@
 
 <h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
 
-<h6>Found {{=len(assignments)}} grades.</h6>
+<!-- The number of rows in ``class_assignments`` is the number of assignments.  -->
+<h6>Found {{=len(class_assignments)}} grades.</h6>
 
+<!-- This allows us to show multiple classes on one page. -->
 {{for class_ in class_list:}}
 <div class="row">
   <div class="col-md-12">
@@ -24,6 +26,12 @@
             {{=student.auth_user.first_name}} {{=student.auth_user.last_name}}
           </a>
         </td>
+        <!-- Get the list of grades associated with ``student`` via lookup 
+             in the ``assignments`` dictionary. Then loop over the list and
+             create a column for each grade.
+
+             This needs some sort of error detection/handling.
+          -->
         {{for grade in assignments[student.student.id]:}}
         <td>{{=grade}}</td>
         {{pass}}
