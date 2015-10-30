@@ -24,3 +24,12 @@ def query():
     c1 = (db.student.user_id== db.auth_user.id)& (db.student.id == db.student_grade.student_id)
     grade_query = db(assignment).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.student_grade.student_score, left=db.student_grade.on(c1))
     return dict(grade_query=grade_query)
+
+def edit():
+    try:
+        record = request.vars[0]
+        form = SQLFORM(db.student_grade, record)
+    except:
+        record = 0
+        form = SQLFORM(db.student_grade, record)
+    return dict(form=form)

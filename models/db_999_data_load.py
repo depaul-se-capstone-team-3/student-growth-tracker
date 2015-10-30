@@ -35,7 +35,7 @@ if db(db.auth_user).isempty():
                                      email='bob.johnson@example.com',
                                      password=CRYPT()('test')[0])
     auth.add_membership(auth.id_group(TEACHER), teacher_id)
-    
+
     teacher_id = db.auth_user.insert(first_name='Ted',last_name='Whitrock',
                                      username='tedwhitrock',
                                      email='ted.whitrock@example.com',
@@ -95,6 +95,10 @@ try:
     if db(db.student_classes).isempty():
         path = DATA_PATH_PATTERN % (61, 'student_classes')
         db.student_classes.import_from_csv_file(open(path, 'r'))
+
+    if db(db.student_grade).isempty():
+        path = DATA_PATH_PATTERN % (12, 'student_grade')
+        db.student_grade.import_from_csv_file(open(path, 'r'))
 
 except Exception, e:
     response.flash = '%s: loading %s' % (e, path)
