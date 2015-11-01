@@ -59,6 +59,7 @@ if db(db.grade_type).isempty():
 # Load the rest of the test data.
 path = None
 
+# This should be updated to use actual paths.
 try:
     if db(db.contentarea).isempty():
         path = DATA_PATH_PATTERN % (20, 'contentarea')
@@ -94,6 +95,10 @@ try:
 
     if db(db.student_classes).isempty():
         path = DATA_PATH_PATTERN % (61, 'student_classes')
+        db.student_classes.import_from_csv_file(open(path, 'r'))
+
+    if db(db.student_classes).isempty():
+        path = DATA_PATH_PATTERN % (62, 'student_grade')
         db.student_classes.import_from_csv_file(open(path, 'r'))
 
 except Exception, e:
