@@ -32,8 +32,8 @@
 
              This needs some sort of error detection/handling.
           -->
-        {{for grade in assignments[student.student.id]:}}
-        <td>{{=grade}}</td>
+        {{for grade, id in assignments[student.student.id]:}}
+        <td>{{=A(grade, _href = URL('grades','edit', args=[id]))}}</td>
         {{pass}}
       </tr>
       {{pass}}

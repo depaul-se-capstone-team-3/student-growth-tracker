@@ -1,3 +1,4 @@
 classes.id,classes.name,classes.grade_level,classes.start_date,classes.end_date,classes.content_area
-1,Class 1,7,2015-09-01 00:00:00,2015-12-20 00:00:00,1
-2,Class 2,7,2015-09-01 00:00:00,2015-12-20 00:00:00,2
+1,Class 1,7,,,1
+2,Class 2,7,,,2
+3,PreAlgebra - 702,7,,,2

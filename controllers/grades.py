@@ -21,7 +21,6 @@ def query():
     return dict(grade_query=grade_query)
 
 
-
 def create():
     '''Generating form for creating a new assignment'''
     #If there is an argument class id, check to see if db.classes contains that class.
@@ -83,4 +82,12 @@ def create():
         response.flash = T("Please Fill Out The Form")
         session.flash = T("Please Fill Out The Form")
 
+
+def edit():
+    try:
+        record = request.vars[0]
+        form = SQLFORM(db.student_grade, record)
+    except:
+        record = 0
+        form = SQLFORM(db.student_grade, record)
     return dict(form=form)
