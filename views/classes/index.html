@@ -8,25 +8,25 @@
 
 <h1>Current Classes</h1>
 
-<div id="class_roster"></div>
-
-{{for a in assignments:}}
-<!-- <p>{{#=BEAUTIFY(a)}}</p> -->
-<p>{{=a}}</p>
-{{pass}}
-
-{{#=BEAUTIFY(assignments)}}
+<div id="student_grades"></div>
 
 {{block page_js}}
 <script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
 <script type="text/javascript">
- var data = {{=assignments}}
- var container = document.getElementById("class_roster");
+ var data = {{=XML(assignments)}};
+ var container = document.getElementById("student_grades");
  var class_roster_table = new Handsontable(container, {
      data: data,
-     minSpareRows: 1,
-     colHeaders: true,
-     contextMenu:true
+     minSpareRows: 0,
+     colHeaders: false,
+     rowHeaders: false,
+     contextMenu:true,
+     columns: [
+       {{for i in range(1, len(assignments[0])):}}
+       {data: {{=i}}},
+       {{pass}}
+     ]
  });
 </script>
 {{end}}
+
