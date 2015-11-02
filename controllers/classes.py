@@ -3,6 +3,45 @@
 
 @auth.requires_login()
 def index():
+    teacher_id = auth.user_id
+
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+
+    teachers_classes = ((db.gradebook.teacher==teacher_id) &
+                        (db.gradebook.classes==db.classes.id))
+
+    if class_id:
+        teachers_classes &= (db.gradebook.classes==class_id)
+
+    assignment_query = (teachers_classes &
+                        (db.classes.content_area==db.contentarea.id))
+    assignment_query &= (db.classes.id==db.student_classes.class_id)   # Add the students
+    assignment_query &= (db.student_classes.student_id==db.student.id) # via the mapping table.
+    assignment_query &= (db.student.user_id==db.auth_user.id)          # Get details from auth_user.
+    assignment_query &= (db.student.id==db.student_grade.student_id)   # Find the grades for each student
+    assignment_query &= (db.student_grade.grade_id==db.grade.id)       # via the mapping table.
+
+    assignment_results = db(assignment_query).select(db.student.id,
+                                                     db.auth_user.first_name,
+                                                     db.auth_user.last_name,
+                                                     db.grade.name,
+                                                     db.student_grade.student_score,
+                                                     db.student_grade.id,
+                                                     orderby=[db.student.id,
+                                                              db.grade.due_date])
+
+    # assignments = []
+
+    # for a in assignment_results:
+    #     if a.student.id in assignments:
+    #         assignments[a.student.id].append(a.student_grade.student_score)
+    #     else:
+    #         assignments[a.student.id] = [a.student_grade.student_score]
+
+    return dict(assignments=assignment_results.as_list())
+
+
+def old_index():
     """
     Display the list of classes associated with the logged in user.
 
