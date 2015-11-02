@@ -1,11 +1,41 @@
 grade.id,grade.name,grade.display_date,grade.date_assigned,grade.due_date,grade.grade_type,grade.score,grade.isPassFail
-1,Assignment 1,2015-10-16,2015-10-16,2015-10-17,<NULL>,<NULL>,FALSE
-2,Assignment 2,2015-10-17,2015-10-17,2015-10-18,<NULL>,<NULL>,FALSE
-3,Assignment 3,2015-10-18,2015-10-18,2015-10-19,<NULL>,<NULL>,FALSE
-4,Assignment 4,2015-10-19,2015-10-19,2015-10-20,<NULL>,<NULL>,FALSE
-5,Assignment 5,2015-10-20,2015-10-20,2015-10-21,<NULL>,<NULL>,FALSE
-6,Assignment 6,2015-10-21,2015-10-21,2015-10-22,<NULL>,<NULL>,FALSE
-7,Assignment 7,2015-10-22,2015-10-22,2015-10-23,<NULL>,<NULL>,FALSE
-8,Assignment 8,2015-10-23,2015-10-23,2015-10-24,<NULL>,<NULL>,FALSE
-9,Assignment 9,2015-10-24,2015-10-24,2015-10-25,<NULL>,<NULL>,FALSE
-10,Assignment 10,2015-10-25,2015-10-25,2015-10-26,<NULL>,<NULL>,FALSE
+1,Assignment 1,,,,1,100,FALSE
+2,Assignment 2,,,,1,100,FALSE
+3,Assignment 3,,,,1,100,FALSE
+4,Assignment 4,,,,1,100,FALSE
+5,Assignment 5,,,,1,100,FALSE
+6,Assignment 6,,,,1,100,FALSE
+7,Assignment 7,,,,1,100,FALSE
+8,Assignment 8,,,,1,100,FALSE
+9,Assignment 9,,,,1,100,FALSE
+10,Assignment 10,,,,1,100,FALSE
+11,Graphing Picture,,,,1,2,FALSE
+12,Integer/Absolute Value W.S.,,,,1,2,FALSE
+13,Integer Basics Quiz,,,,2,22,FALSE
+14,Zero Pairs W.S.,,,,1,2,FALSE
+15,Adding with Counters W.S.,,,,1,2,FALSE
+16,Adding Integers Quiz,,,,2,18,FALSE
+17,Bellwork 1 and 2,,,,1,5,FALSE
+18,Subtracting with Counters W.S.,,,,1,2,FALSE
+19,Captain Kirk Subtracting W.S.,,,,1,2,FALSE
+20,Subtracting Quiz,,,,2,17,FALSE
+21,Integers all Operations W.S.,,,,1,2,FALSE
+22,Word Problems W.S.,,,,1,2,FALSE
+23,Order of Operations W.S.,,,,1,2,FALSE
+24,Word Problems and Order of Operations Quiz,,,,2,25,FALSE
+25,Bellwork 3 and 4,,,,1,5,FALSE
+26,A Study Guide,,,,1,2,FALSE
+27,Journal Check,,,,1,14,FALSE
+28,Outcome (A) Test,,,,2,45,FALSE
+29,Discovery Goal,,,,1,5,FALSE
+30,Place Value W.S.,,,,1,2,FALSE
+31,Comparing W.S.,,,,1,2,FALSE
+32,Adding/Subtracting Decimals W.S.,,,,1,2,FALSE
+33,Test (A) Corrections,,,,1,8,FALSE
+34,Test (A) Reflections,,,,1,5,FALSE
+35,Basic Decimals and Adding/Subtracting Quiz,,,,2,24,FALSE
+36,Bellwork 5 and 6,,,,1,5,FALSE
+37,Multiplying Decimals W.S.,,,,1,2,FALSE
+38,Long Division W.S.,,,,1,2,FALSE
+39,Dividing Decimals W.S.,,,,1,2,FALSE
+40,Decimal Word Problem W.S.,,,,1,2,FALSE

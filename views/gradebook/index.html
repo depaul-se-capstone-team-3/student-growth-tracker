@@ -6,12 +6,12 @@
     <h2>Current Classes</h2>
         <div class="row">
         <div class="col-sm-12">
-    {{for row in grid:}}
-        <tr>
+            {{for row in grid:}}
+            <tr>
             <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
             <td>{{=row.classes.content_area.name}}</td>
-        </tr>
-    {{pass}}
+            </tr>
+            {{pass}}
             </div>
         </div>
     </table>

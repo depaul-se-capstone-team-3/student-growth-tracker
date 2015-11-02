@@ -113,6 +113,7 @@ def index():
     assignment_results = db(assignment_query).select(db.student.id,
                                                      db.grade.name,
                                                      db.student_grade.student_score,
+                                                     db.student_grade.id,
                                                      orderby=db.grade.due_date)
 
     # This will need to be made more robust once we account for
@@ -134,13 +135,18 @@ def index():
         # Check if we've already added this ``student.id`` to the dictionary.
         # If so, we just append another score to the list.
         if a.student.id in assignments:
-            assignments[a.student.id].append(a.student_grade.student_score)
+            #declare a tuple of student_score and id to faciliate editing grades
+            b = (a.student_grade.student_score, a.student_grade.id)
+            #pass tuple into assignments list
+            assignments[a.student.id].append(b)
+            #assignments[a.student.id].append(a.student_grade.student_score, a.student_grade.id)
         # If not, we need to initialize the list of grades for this
         # ``student.id``.
         # See the Python documentation on ``dict`` and ``list`` to see
         # the details on why this particular syntax works.
         else:
-            assignments[a.student.id] = [a.student_grade.student_score]
+            #Placeholder for errors.  We will need to update eventually.
+            assignments[a.student.id] = [(a.student_grade.student_score, a.student_grade.id)]
 
     # Now we send all of the parts to the view. The logic in the view will
     # lay evrything out the way we want.
