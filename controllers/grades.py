@@ -32,6 +32,7 @@ def create():
         #If class does not exist, redirects.
         if (exist == None):
             response.flash = T("Class Does Not Exist")
+            session.flash = T("Class does not exist.")
 
             #Redirect to previous link if via link, else redirec to main page.
             if (request.env.http_referer==None):
@@ -42,6 +43,7 @@ def create():
     #If no argument given, throws Invalid class and redirect.
     except:
         response.flash = T("Invalid Class")
+        session.flash = T("Invalid Class")
 
         #If class does not exist, redirects.
         if (request.env.http_referer==None):
@@ -71,11 +73,14 @@ def create():
         #creating the link between class and grade.
         db.class_grade.insert(class_id = class_id,grade_id = id)
         response.flash = T("New assignment sucssfully created")
+        session.flash = T("New assignment sucssfully created")
 
     #Form error handling.
     elif form.errors:
         response.flash = T("Form Has Errors")
+        session.flash = T("Form Has Errors")
     else:
         response.flash = T("Please Fill Out The Form")
+        session.flash = T("Please Fill Out The Form")
 
     return dict(form=form)
