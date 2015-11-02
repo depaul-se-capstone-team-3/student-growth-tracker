@@ -154,11 +154,3 @@ def index():
                 class_roster=class_roster,
                 class_assignments=class_assignments,
                 assignments=assignments)
-
-# @auth.requires_login()
-# def create():
-#     form = SQLFORM(db.classes, submit_button='Create',
-#                    labels = {'gradeLevel': 'Grade Level',
-#                              'startDate': 'Start Date',
-#                              'endDate': 'End Date'} ).process(next=URL('index'))
-#     return dict(form=form)
