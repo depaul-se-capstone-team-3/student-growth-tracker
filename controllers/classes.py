@@ -30,6 +30,13 @@ def index():
                                                      orderby=[db.student.id,
                                                               db.grade.due_date])
 
+    # Get a list of student_ids.
+    # Loop over them
+    # Pull assignment records for student_id
+    #   from assignment_results using Rows.find(lambda).
+    # Pack everything into a list of lists with the following format:
+    #   [name, a1_score, a2_score ...]
+
     # assignments = []
 
     # for a in assignment_results:
@@ -38,7 +45,7 @@ def index():
     #     else:
     #         assignments[a.student.id] = [a.student_grade.student_score]
 
-    return dict(assignments=assignment_results.as_list())
+    return dict(assignments=assignment_results)
 
 
 def old_index():
