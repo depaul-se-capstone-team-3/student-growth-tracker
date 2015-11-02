@@ -1,6 +1,18 @@
 {{extend 'layout.html'}}
-<h1>{{=message}}</h1>
-<h2>
-    Current Classes
-</h2>
-{{=BEAUTIFY(response._vars)}}
+<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s Gradebook</h1>
+
+<div class="container">
+    <table class="table">
+    <h2>Current Classes</h2>
+        <div class="row">
+        <div class="col-sm-12">
+            {{for row in grid:}}
+            <tr>
+            <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
+            <td>{{=row.classes.content_area.name}}</td>
+            </tr>
+            {{pass}}
+            </div>
+        </div>
+    </table>
+</div>
