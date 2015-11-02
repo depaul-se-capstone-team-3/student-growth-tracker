@@ -1,5 +1,6 @@
 # The files under these directories are volatile
 # and should not be tracked.
+bower_components/
 cache/
 databases/
 docs/_build
