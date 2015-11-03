@@ -1,74 +1,10 @@
-# -*- coding: utf-8 -*-
-# try something like
+"""
+The classes controller.
+
+Everything concerning classes goes here. Sort of. We'll clarify as we go on.
+"""
 
 @auth.requires_login()
-# def index():
-#     teacher_id = auth.user_id
-
-#     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
-
-#     teachers_classes = ((db.gradebook.teacher==teacher_id) &
-#                         (db.gradebook.classes==db.classes.id))
-
-#     if class_id:
-#         teachers_classes &= (db.gradebook.classes==class_id)
-
-#     class_roster_query = (teachers_classes &
-#                           (db.classes.id==db.student_classes.class_id) &
-#                           (db.student_classes.student_id==db.student.id) &
-#                           (db.student.user_id==db.auth_user.id))
-
-#     cr_results = db(class_roster_query).select(db.student.id,
-#                                                db.auth_user.first_name,
-#                                                db.auth_user.last_name)
-
-#     class_roster = []
-#     for s in cr_results:
-#         class_roster.append([int(s.student.id), s.auth_user.first_name + ' ' + s.auth_user.last_name])
-
-#     class_assignments_query = (class_query &
-#                                (db.classes.id==db.class_grade.class_id) &
-#                                (db.class_grade.grade_id==db.grade.id))
-#     class_assignments = db(class_assignments_query).select(db.grade.name,
-#                                                            orderby=db.grade.due_date)
-    
-
-#     assignment_query = (teachers_classes &
-#                         (db.classes.content_area==db.contentarea.id))
-#     assignment_query &= (db.classes.id==db.student_classes.class_id)   # Add the students
-#     assignment_query &= (db.student_classes.student_id==db.student.id) # via the mapping table.
-#     assignment_query &= (db.student.user_id==db.auth_user.id)          # Get details from auth_user.
-#     assignment_query &= (db.student.id==db.student_grade.student_id)   # Find the grades for each student
-#     assignment_query &= (db.student_grade.grade_id==db.grade.id)       # via the mapping table.
-
-#     assignment_results = db(assignment_query).select(db.student.id,
-#                                                      db.auth_user.first_name,
-#                                                      db.auth_user.last_name,
-#                                                      db.grade.name,
-#                                                      db.student_grade.student_score,
-#                                                      db.student_grade.id,
-#                                                      orderby=[db.student.id,
-#                                                               db.grade.due_date])
-
-#     assignments = []
-
-#     for student in class_roster:
-#         grades = assignment_results.find(lambda s: s.student.id==student[0])
-#         for grade in grades:
-#             student.append(grade.student_grade.student_score)
-#         assignments.append(student)
-
-#     # for a in assignment_results:
-#     #     if a.student.id in assignments:
-#     #         assignments[a.student.id].append(a.student_grade.student_score)
-#     #     else:
-#     #         assignments[a.student.id] = [a.student_grade.student_score]
-
-#     return dict(class_roster=class_roster,
-#                 class_assignments=class_assignments,
-#                 assignments=assignments)
-
-
 def index():
     """
     Display the list of classes associated with the logged in user.
@@ -97,48 +33,23 @@ def index():
     # Note to self: Find the link to the explanation and add it here.
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
 
-    # Create a ``Query`` object that represents the set of classes
-    # associated with the teacher currently logged in.
-    # The ``teacher_classes`` Query object is never used directly to query
-    # the database. It is used as the base upon which other queries are built.
-    teachers_classes = ((db.gradebook.teacher==teacher_id) &
-                        (db.gradebook.classes==db.classes.id))
-
-    # If we were given a class id, update the query to
-    # only include that class.
-    if class_id:
-        teachers_classes &= db.gradebook.classes==class_id
-
-    # To display the name of the content area for the class,
-    # we need to add the information from the ``db.contentarea`` table.
-    class_query = (teachers_classes &
-                   (db.classes.content_area==db.contentarea.id))
-
-    # We use the ``class_query`` Query object to get the ``Set``
-    # of records we'll display in the view.
-    class_list = db(class_query).select(db.classes.id, db.classes.name,
-                                        db.contentarea.id, db.contentarea.name)
-
-    # To get the list of students in the class, we need to add
-    # information from the student tables. We start with the
-    # ``teachers_classes`` query, which restricts the students
-    # to the members of the class.
-    class_roster_query = (teachers_classes &
-                          (db.classes.id==db.student_classes.class_id) &
-                          (db.student_classes.student_id==db.student.id) &
-                          (db.student.user_id==db.auth_user.id))
+    tcq = teacher_classes_query(teacher_id, class_id)
+    cq = class_query(teacher_id, class_id)
+    class_list = get_class_list(teacher_id, class_id)
+    crq = class_roster_query(teacher_id, class_id)
 
     # ``class_roster`` now holds the ``Set`` of students in the class.
     # An empty select returns all fields from all tables in the query.
     # By listing just the fields I want in the ``select`` method,
     # I can restrict the information returned in the ``Set`` to
     # only what I need.
-    # class_roster = db(class_roster_query).select(db.student.id,
+    # class_roster = db(crq).select(db.student.id,
     #                                              db.auth_user.first_name,
     #                                              db.auth_user.last_name)
-    cr_results = db(class_roster_query).select(db.student.id,
-                                               db.auth_user.first_name,
-                                               db.auth_user.last_name)
+    # cr_results = db(crq).select(db.student.id,
+    #                             db.auth_user.first_name,
+    #                             db.auth_user.last_name)
+    cr_results = get_class_roster(teacher_id, class_id)
 
     class_roster = []
     for s in cr_results:
@@ -161,7 +72,7 @@ def index():
     # 
     # To ensure that the headers and student grades match up, we use
     # ``orderby`` on the same field in both queries to sort the results.
-    class_assignments_query = (class_query &
+    class_assignments_query = (cq &
                                (db.classes.id==db.class_grade.class_id) &
                                (db.class_grade.grade_id==db.grade.id))
     class_assignments = db(class_assignments_query).select(db.grade.name,
@@ -173,8 +84,8 @@ def index():
     # if class_id:
     #     assignment_query &= (db.classes.id==class_id)
 
-    # We start with ``class_query``.
-    assignment_query = class_query
+    # We start with ``cq``.
+    assignment_query = cq
     assignment_query &= (db.classes.id==db.student_classes.class_id)   # Add the students
     assignment_query &= (db.student_classes.student_id==db.student.id) # via the mapping table.
     assignment_query &= (db.student.user_id==db.auth_user.id)          # Get details from auth_user.
