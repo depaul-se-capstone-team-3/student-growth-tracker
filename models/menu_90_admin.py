@@ -5,3 +5,6 @@ response.menu += [
         (T('Standards'), False, URL('manage', 'standards'), [])
     ])
 ]
+
+if __name__ == '__main__':
+    pass

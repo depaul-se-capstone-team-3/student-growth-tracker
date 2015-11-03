@@ -16,13 +16,15 @@
 import sys
 import os
 import shlex
-# import sphinx_bootstrap_theme
+import sphinx_bootstrap_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../../student_growth_tracker'))
+sys.path.insert(0, os.path.abspath('..'))
+
+# from student_growth_tracker import models
 
 # -- General configuration ------------------------------------------------
 
@@ -92,7 +94,7 @@ exclude_patterns = ['_build']
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
@@ -115,15 +117,23 @@ todo_include_todos = True
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
+html_theme = 'bootstrap'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
+html_theme_options = {
+    'navbar_title': 'Student Growth Tracker',
+    'navbar_sidebarrel': False,
+    'navbar_class': 'navbar navbar-inverse',
+    'source_link_position': 'footer',
+}
+
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -290,7 +300,13 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
+# -- Options for autodoc --------------------------------------------------
+
+autodoc_member_order = 'bysource'
+
+# -- Options for Intersphinx mapping --------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/2.7', None),
+                       'pydal': ('http://pydal.readthedocs.org/en/latest/', None),
                        'web2py': ('http://web2py.readthedocs.org/en/latest/', None)}

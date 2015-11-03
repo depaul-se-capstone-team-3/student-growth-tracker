@@ -6,3 +6,6 @@ db.define_table(
     Field('name', required=True),
     Field('description'),
     format = '%(name)s')
+
+if __name__ == '__main__':
+    pass

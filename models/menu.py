@@ -139,3 +139,6 @@ DEVELOPMENT_MENU = True
 # if DEVELOPMENT_MENU: _()
 
 if "auth" in locals(): auth.wikimenu()
+
+if __name__ == '__main__':
+    pass
