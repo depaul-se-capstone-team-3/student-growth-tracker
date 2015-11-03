@@ -24,11 +24,11 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
-    (T('Manage User'), False, URL('manage_users', 'index'), []),
-    (T('Grade Book'), False, URL('gradebook', 'index'), []),
-    (T('Classes'), False, URL('classes', 'index'), []),
-    (T('Content Area'), False, URL('contentarea', 'index'), []),
-    (T('Standards'), False, URL('standards', 'index'), [])
+    # (T('Manage User'), False, URL('manage_users', 'index'), []),
+    # (T('Grade Book'), False, URL('gradebook', 'index'), []),
+    # (T('Classes'), False, URL('classes', 'index'), []),
+    # (T('Content Area'), False, URL('contentarea', 'index'), []),
+    # (T('Standards'), False, URL('standards', 'index'), [])
 ]
 
 DEVELOPMENT_MENU = True

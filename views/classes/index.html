@@ -1,44 +1,32 @@
 {{extend 'layout.html'}}
 
-<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
+{{block head}}
+<!-- Anything in this block will be added
+     to the html head section of the page. -->
+<link rel="stylesheet" media="screen" href="{{=URL('static', 'js/dist/handsontable.full.css')}}">
+{{end}}
 
-<!-- The number of rows in ``class_assignments`` is the number of assignments.  -->
-<h6>Found {{=len(class_assignments)}} grades.</h6>
+<h1>Current Classes</h1>
 
-<!-- This allows us to show multiple classes on one page. -->
-{{for class_ in class_list:}}
-<div class="row">
-  <div class="col-md-12">
-    <h2>{{=A(class_.classes.name, _href=URL('classes', 'index', args=[class_.classes.id]))}}</h2>
-    <h3>{{=A(class_.contentarea.name, _href=URL('contentarea', 'index', args=[class_.contentarea.id]))}}</h3>
+<div id="student_grades"></div>
 
-    <table class="table">
-      <tr>
-        <th>Student Name</th>
-        {{for a in class_assignments:}}
-        <th>{{=a.name}}</th>
-        {{pass}}
-      </tr>
-      {{for student in class_roster:}}
-      <tr>
-        <td>
-          <a href="{{=URL('students', 'index', args=[student.student.id])}}">
-            {{=student.auth_user.first_name}} {{=student.auth_user.last_name}}
-          </a>
-        </td>
-        <!-- Get the list of grades associated with ``student`` via lookup 
-             in the ``assignments`` dictionary. Then loop over the list and
-             create a column for each grade.
+{{block page_js}}
+<script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
+<script type="text/javascript">
+ var data = {{=XML(assignments)}};
+ var container = document.getElementById("student_grades");
+ var class_roster_table = new Handsontable(container, {
+     data: data,
+     minSpareRows: 0,
+     colHeaders: false,
+     rowHeaders: false,
+     contextMenu:true,
+     columns: [
+       {{for i in range(1, len(assignments[0])):}}
+       {data: {{=i}}},
+       {{pass}}
+     ]
+ });
+</script>
+{{end}}
 
-             This needs some sort of error detection/handling.
-          -->
-        {{for grade, id in assignments[student.student.id]:}}
-        <td>{{=A(grade, _href = URL('grades','edit', args=[id]))}}</td>
-        {{pass}}
-      </tr>
-      {{pass}}
-    </table>
-
-  </div>
-</div>
-{{pass}}

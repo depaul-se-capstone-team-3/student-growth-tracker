@@ -10,6 +10,8 @@ def index():
     # response.flash = 'Class List - %(first_name)s' % auth.user
     return dict(grid=grid)
 
+# This should go under manage - assuming this is a school/district maanged tool,
+# teachers won't add classes to their gradebooks.
 def create():
     """generate form for new gradebook entry, redirect to index"""
     form = SQLFORM(db.gradebook).process(next=URL('index'))
