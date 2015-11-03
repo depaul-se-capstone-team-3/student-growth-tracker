@@ -3,17 +3,14 @@ from gluon.globals import Request, Session, Storage, Response
 from gluon import current
 
 
-
-#execfile("applications/student_growth_tracker/controllers/grades.py", globals())
-
 class GradesController(unittest.TestCase):
     def setUp(self):
         self.request = current.request
         self.controller = execfile("applications/student_growth_tracker/controllers/grades.py", globals())
         
-        
+
+    #Not fully working example
     def test_create(self):
-        #self.assertEqual('boo'.upper(), 'BOO')
         request.args=[2]
         resp = create()
         self.request.function = 'create'
@@ -28,7 +25,6 @@ class GradesController(unittest.TestCase):
             '_formname': resp['form'].formname
             })
         
-        #print(type(resp))
         try:
             
             create()
