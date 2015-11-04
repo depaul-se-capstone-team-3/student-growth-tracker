@@ -114,11 +114,11 @@ def get_student_assignments(teacher_id, class_id):
                                orderby=[db.student.id,
                                         db.grade.due_date])
 
-    anames = ['', '']
-    for a in get_class_assignments(teacher_id, class_id):
-        anames.append(a.name)
+    # anames = ['', '']
+    # for a in get_class_assignments(teacher_id, class_id):
+    #     anames.append(a.name)
 
-    assignments = [anames]
+    assignments = [] # [anames]
 
     for student in get_class_roster(teacher_id, class_id):
         grades = results.find(lambda s: s.student.id==student[0])
@@ -127,6 +127,15 @@ def get_student_assignments(teacher_id, class_id):
         assignments.append(student)
 
     return assignments
+
+def get_standards_for_class(class_id):
+    query = ((db.classes.id==class_id) &
+             (db.classes.content_area==db.standard.content_area))
+
+    results = db(query).select(db.standard.id, db.standard.short_name,
+                               orderby=db.standard.short_name)
+
+    return results
 
 if __name__ == '__main__':
     pass

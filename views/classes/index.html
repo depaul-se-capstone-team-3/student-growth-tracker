@@ -8,6 +8,14 @@
 
 <h1>Current Classes</h1>
 
+<form>
+    <select>
+        {{for standard in standards:}}
+        <option>{{=standard.short_name}}</option>
+        {{pass}}
+    </select>
+</form>
+
 <div id="student_grades"></div>
 
 {{block page_js}}
@@ -16,9 +24,14 @@
  var data = {{=XML(assignments)}};
  var container = document.getElementById("student_grades");
  var class_roster_table = new Handsontable(container, {
-     data: data,
+     data: data, // {{=XML(URL('classes', 'student_grades.json'))}},
      minSpareRows: 0,
-     colHeaders: false,
+     colHeaders: [
+         "Student Name",
+         {{for i in range(len(class_assignments)):}}
+         "{{=class_assignments[i].name}}",
+         {{pass}}
+     ],
      rowHeaders: false,
      contextMenu:true,
      columns: [
@@ -30,3 +43,4 @@
 </script>
 {{end}}
 
+<!-- http://stackoverflow.com/questions/26222718/handsontable-get-data-via-ajax-and-set-autocomplete-on-one-column -->
