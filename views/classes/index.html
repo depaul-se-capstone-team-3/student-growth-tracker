@@ -37,58 +37,60 @@
 <script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
 <script type="text/javascript">
 
- $(document).ready(function() {
-     var first_load = true;
-     $("#student_grades").handsontable({
-         minSpareRows: 0,
-         colHeaders: [
-             "Student",
-             {{for i in range(len(class_assignments)):}}
-             "{{=class_assignments[i].name}}",
-             {{pass}}
-         ],
-         rowHeaders: false,
-         contextMenu: true,
-         columns: [
-             {{for i in range(1, len(assignments[0])):}}
-             {data: {{=i}}},
-             {{pass}}
-         ],
-         onChange: function(change) {
-             if(first_load) {
-                 first_load = false;
-                 return;
-             }
-             $.ajax({
-                 url: "{{=URL('classes', 'student_grades', extension='json', args=[3])}}",
-                 dataType: "json",
-                 type: "POST",
-                 data: {"data": $("#student_grades").handsontable('getData')},
-                 success: function(data) {
-                     // Pop up an alert.
-                 },
-                 error: function(data) {
-                     // Pop up an alert.
-                 }
-             });
+ $("#student_grades").handsontable({
+     minSpareRows: 0,
+     colHeaders: [
+         "Student",
+         {{for i in range(len(class_assignments)):}}
+         "{{=class_assignments[i].name}}",
+         {{pass}}
+     ],
+     rowHeaders: false,
+     contextMenu: true,
+     columns: [
+         {{for i in range(1, len(assignments[0])):}}
+         {data: {{=i}}},
+         {{pass}}
+     ],
+     afterChange: function(change) {
+         if(first_load) {
+             first_load = false;
+             alert("First Load");
+             return;
          }
-     });
- 
+         else {
+             alert("Saving data")
+                 $.ajax({
+                     url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
+                     dataType: "json",
+                     type: "POST",
+                     data: {"data": $("#student_grades").handsontable('getData')},
+                     success: function(data) {
+                         // Pop up an alert.
+                     },
+                     error: function(data) {
+                         // Pop up an alert.
+                     }
+                 });
+         }
+     }
+ });
+     
+ $().ready(function() {
+     var first_load = true;
      $.ajax({
-         url: "{{=URL('student_grades', extension='json', args=[3])}}",
+         url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
          dataType: "json",
          type: "GET",
-         success: function(res) {
-             $("#student_grades").handsontable("loadData", res.data);
-             alert("loaded");
+         success: function(data) {
+             $("#student_grades").handsontable("loadData", data);
+             alert(data);
          },
          error: function(jqxhr, status, error) {
-             alert("{{=URL('student_grades', extension='json', args=[3])}}");
+             alert(error);
          }
      });
-
-});
-
+ });
 </script>
 
 {{end}}

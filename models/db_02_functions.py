@@ -114,11 +114,7 @@ def get_student_assignments(teacher_id, class_id):
                                orderby=[db.student.id,
                                         db.grade.due_date])
 
-    # anames = ['', '']
-    # for a in get_class_assignments(teacher_id, class_id):
-    #     anames.append(a.name)
-
-    assignments = [] # [anames]
+    assignments = []
 
     for student in get_class_roster(teacher_id, class_id):
         grades = results.find(lambda s: s.student.id==student[0])

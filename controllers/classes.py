@@ -4,7 +4,7 @@ The classes controller.
 Everything concerning classes goes here. Sort of. We'll clarify as we go on.
 """
 
-from gluon.contrib import simplejson as json
+from gluon.contrib.simplejson import dumps, loads
 
 @auth.requires_login()
 def index():
@@ -49,7 +49,8 @@ def index():
     assignments = get_student_assignments(teacher_id, class_id)
     standards = get_standards_for_class(class_id)
     
-    return dict(class_name=class_name,
+    return dict(class_id=class_id,
+                class_name=class_name,
                 class_list=class_list,
                 class_roster=class_roster,
                 class_assignments=class_assignments,
@@ -60,5 +61,18 @@ def index():
 def student_grades():
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    vargs = request.vars
 
-    return get_student_assignments(teacher_id, class_id)
+    if vargs:
+        print 'save_student_grades called'
+
+    return dumps(get_student_assignments(teacher_id, class_id))
+
+@auth.requires_login()
+def save_student_grades():
+    vargs = request.vars
+
+    if vargs:
+        print 'save_student_grades called'
+
+    return dict()
