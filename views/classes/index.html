@@ -36,6 +36,7 @@
 
 <script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
 <script type="text/javascript">
+ var first_load = true;
 
  $("#student_grades").handsontable({
      minSpareRows: 0,
@@ -77,7 +78,6 @@
  });
      
  $().ready(function() {
-     var first_load = true;
      $.ajax({
          url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
          dataType: "json",
