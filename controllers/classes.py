@@ -28,14 +28,29 @@ def index():
 
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
 
-    # Defnitely using these
+    ############################################################################
+    ## This should go into a function.
+    if not class_id:
+        response.flash = T("Class Does Not Exist")
+        session.flash = T("Class does not exist.")
+
+        # Redirect to previous link if via link, else redirect to main page.
+        if (request.env.http_referer==None):
+            redirect(URL('default', 'index'))
+        else:
+            redirect(request.env.http_referer)
+    ##
+    ############################################################################
+
+    class_name = db.classes[class_id].name
     class_list = get_class_list(teacher_id)
     class_roster = get_class_roster(teacher_id, class_id)
     class_assignments = get_class_assignments(teacher_id, class_id)
     assignments = get_student_assignments(teacher_id, class_id)
     standards = get_standards_for_class(class_id)
     
-    return dict(class_list=class_list,
+    return dict(class_name=class_name,
+                class_list=class_list,
                 class_roster=class_roster,
                 class_assignments=class_assignments,
                 assignments=assignments,
