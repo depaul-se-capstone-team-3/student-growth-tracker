@@ -9,9 +9,9 @@ db.grade_type.id.readable = db.grade_type.id.writable = False
 db.define_table(
     'grade',
     Field('name', 'string', required=True),
-    Field('display_date', 'date'),
-    Field('date_assigned', 'date'),
-    Field('due_date', 'date'),
+    Field('display_date', 'datetime'),
+    Field('date_assigned', 'datetime'),
+    Field('due_date', 'datetime'),
     Field('grade_type', 'reference grade_type'),
     Field('score', 'double'),
     Field('isPassFail', 'boolean', default=False),
