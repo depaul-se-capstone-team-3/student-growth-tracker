@@ -64,7 +64,7 @@ def student_grades():
     vargs = request.vars
 
     if vargs:
-        print 'save_student_grades called'
+        print 'student_grades called'
 
     return dumps(get_student_assignments(teacher_id, class_id))
 
@@ -72,7 +72,12 @@ def student_grades():
 def save_student_grades():
     vargs = request.vars
 
-    if vargs:
-        print 'save_student_grades called'
+    # if vargs:
+    #     # print vargs
+    #     # data = loads(vargs)
+    #     # print data
+    #     # for s in data:
+    #     #     for g in s:
+    #     #         print g
 
     return dict()
