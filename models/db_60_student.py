@@ -23,3 +23,6 @@ db.define_table(
     Field('student_score', 'double'))
 db.student_grade.student_id.readable = db.student_grade.student_id.writable = False
 db.student_grade.grade_id.readable = db.student_grade.grade_id.writable = False
+
+if __name__ == '__main__':
+    pass

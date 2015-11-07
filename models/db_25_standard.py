@@ -9,3 +9,6 @@ db.define_table(
     format = '%(short_name)s')
 
 db.standard.id.readable = db.standard.id.writable = False
+
+if __name__ == '__main__':
+    pass

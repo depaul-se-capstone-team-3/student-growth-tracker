@@ -35,20 +35,24 @@ if db(db.auth_user).isempty():
                                      email='bob.johnson@example.com',
                                      password=CRYPT()('test')[0])
     auth.add_membership(auth.id_group(TEACHER), teacher_id)
-    
+
     teacher_id = db.auth_user.insert(first_name='Ted',last_name='Whitrock',
                                      username='tedwhitrock',
                                      email='ted.whitrock@example.com',
                                      password=CRYPT()('test')[0])
     auth.add_membership(auth.id_group(TEACHER), teacher_id)
 
-    for s in range(NUM_STUDENTS):
-        st_id = db.auth_user.insert(first_name='Stu',last_name='Dent{}'.format(s),
-                                    username='student{}'.format(s),
-                                    email='student{}@example.com'.format(s),
-                                    password=CRYPT()('test')[0])
-        auth.add_membership(auth.id_group(STUDENT), st_id)
+    try:
+        if db(db.contentarea).isempty():
+            path = DATA_PATH_PATTERN % (01, 'auth_user')
+            db.auth_user.import_from_csv_file(open(path, 'r'))
+        
+            for i in xrange(3, 63):
+                auth.add_membership(auth.id_group(STUDENT), i)
 
+    except Exception, e:
+        response.flash = '%s: loading %s' % (e, path)
+    
 # Add the default grade types.
 if db(db.grade_type).isempty():
     db.grade_type.insert(name='Assignment',
@@ -59,6 +63,7 @@ if db(db.grade_type).isempty():
 # Load the rest of the test data.
 path = None
 
+# This should be updated to use actual paths.
 try:
     if db(db.contentarea).isempty():
         path = DATA_PATH_PATTERN % (20, 'contentarea')
@@ -77,7 +82,7 @@ try:
         db.gradebook.import_from_csv_file(open(path, 'r'))
 
     if db(db.grade).isempty():
-        path = DATA_PATH_PATTERN % (50, 'grade')
+        path = DATA_PATH_PATTERN % (53, 'grade')
         db.grade.import_from_csv_file(open(path, 'r'))
 
     if db(db.grade_standard).isempty():
@@ -96,5 +101,12 @@ try:
         path = DATA_PATH_PATTERN % (61, 'student_classes')
         db.student_classes.import_from_csv_file(open(path, 'r'))
 
+    if db(db.student_grade).isempty():
+        path = DATA_PATH_PATTERN % (12, 'student_grade')
+        db.student_grade.import_from_csv_file(open(path, 'r'))
+
 except Exception, e:
     response.flash = '%s: loading %s' % (e, path)
+
+if __name__ == '__main__':
+    pass

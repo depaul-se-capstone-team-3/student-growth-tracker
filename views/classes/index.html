@@ -1,44 +1,86 @@
 {{extend 'layout.html'}}
 
-<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s classes</h1>
+{{block head}}
+<!-- Anything in this block will be added
+     to the html head section of the page. -->
+<link rel="stylesheet" media="screen" href="{{=URL('static', 'js/dist/handsontable.full.css')}}">
+{{end}}
 
-<!-- The number of rows in ``class_assignments`` is the number of assignments.  -->
-<h6>Found {{=len(class_assignments)}} grades.</h6>
-
-<!-- This allows us to show multiple classes on one page. -->
-{{for class_ in class_list:}}
 <div class="row">
-  <div class="col-md-12">
-    <h2>{{=A(class_.classes.name, _href=URL('classes', 'index', args=[class_.classes.id]))}}</h2>
-    <h3>{{=A(class_.contentarea.name, _href=URL('contentarea', 'index', args=[class_.contentarea.id]))}}</h3>
-
-    <table class="table">
-      <tr>
-        <th>Student Name</th>
-        {{for a in class_assignments:}}
-        <th>{{=a.name}}</th>
-        {{pass}}
-      </tr>
-      {{for student in class_roster:}}
-      <tr>
-        <td>
-          <a href="{{=URL('students', 'index', args=[student.student.id])}}">
-            {{=student.auth_user.first_name}} {{=student.auth_user.last_name}}
-          </a>
-        </td>
-        <!-- Get the list of grades associated with ``student`` via lookup 
-             in the ``assignments`` dictionary. Then loop over the list and
-             create a column for each grade.
-
-             This needs some sort of error detection/handling.
-          -->
-        {{for grade in assignments[student.student.id]:}}
-        <td>{{=grade}}</td>
-        {{pass}}
-      </tr>
-      {{pass}}
-    </table>
-
-  </div>
+    <div class="col-sm-12">
+        <h1>{{=class_name}}</h1>
+    </div>
 </div>
-{{pass}}
+<div class="row">
+    <div class="col-sm-12">
+        <form>
+            <div class="row">
+                <div class="col-sm-12">
+                    <select>
+                        {{for standard in standards:}}
+                        <option>{{=standard.short_name}}</option>
+                        {{pass}}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="student_grades" class="dataTable"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{block page_js}}
+
+<script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
+<script type="text/javascript">
+
+ $().ready(function() {
+     $("#student_grades").handsontable({
+         minSpareRows: 0,
+         colHeaders: [
+             "Student",
+             {{for i in range(len(class_assignments)):}}
+             "{{=class_assignments[i].name}}",
+             {{pass}}
+         ],
+         rowHeaders: false,
+         contextMenu: true,
+         columns: [
+             {{for i in range(1, len(assignments[0])):}}
+             {data: {{=i}}},
+             {{pass}}
+         ],
+         afterChange: function(change, source) {
+             if(source === "loadData") {
+                 return;
+             }
+             $.ajax({
+                 url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
+                 dataType: "json",
+                 type: "POST",
+                 data: {"data": $("#student_grades").handsontable('getData')},
+                 success: function(data) {
+                 },
+                 error: function(data) {
+                 }
+             });
+         }
+     });
+     
+     $.ajax({
+         url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
+         dataType: "json",
+         type: "GET",
+         success: function(data) {
+             $("#student_grades").handsontable("loadData", data);
+         },
+         error: function(jqxhr, status, error) {
+         }
+     });
+ });
+</script>
+
+{{end}}

@@ -1,5 +1,41 @@
 {{extend 'layout.html'}}
 <h1>Current Assignments</h1>
+<script src="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.js"></script>
+<div id="grade_table">
+</div>
+<script type="text/javascript">
+        gradeTableData = {{=XML(grid.json())}},
+        container = document.getElementById('grade_table'),
+        gradeTable = new Handsontable(container,{
+            data: gradeTableData, 
+            colHeaders:[
+                "assignment Name",
+                "Date Assigned",
+                "Due Date",
+                "Grade Type",
+                "Total Score",
+                "Pass/Fail?"
+            ],
+            columns: [
+                {data: 'name'},
+                {data: 'date_assigned'},
+                {data: 'due_date'},
+                {data: 'grade_type'},
+                {data: 'score'},
+                {data: 'isPassFail'}
+        ],
+            minSpareRows: 0,
+            rowHeaders: false,
+            colWidths:[125,105,105,105,105,105,105],
+            manualColumnResize: true,
+            editor:false,
+            contextMenu:true});
+</script>
+
+
+<link rel="stylesheet" media="screen" href="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.css">
+
+<!--
 <table class="table">
     <tr>
         <td>Assignment Name </td>
@@ -19,4 +55,4 @@
         <td>{{=row.isPassFail}}</td>
     </tr>
     {{pass}}
-</table>
+</table>-->

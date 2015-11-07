@@ -79,5 +79,6 @@ auth.settings.reset_password_requires_verification = True
 # auth.enable_record_versioning(db)
 
 
-# Create a test database that's laid out just like the "real" database
-
+if __name__ == '__main__':
+    pass
+>>>>>>> upstream/master

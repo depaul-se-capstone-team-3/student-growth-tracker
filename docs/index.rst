@@ -10,6 +10,7 @@
 
 A robust gradebook program tied to the Common Core standards.
 
+
 Functionality
 =============
 
@@ -31,6 +32,7 @@ Non-functional requirements
    roadmap
    technology
    deliverables
+   functions
 
 
 .. rubric:: Indices and tables
