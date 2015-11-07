@@ -17,3 +17,6 @@ db.define_table(
     Field('school_id', 'references school'),
     Field('member_id', 'references auth_user')
 )
+
+if __name__ == '__main__':
+    pass

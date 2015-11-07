@@ -107,3 +107,6 @@ try:
 
 except Exception, e:
     response.flash = '%s: loading %s' % (e, path)
+
+if __name__ == '__main__':
+    pass

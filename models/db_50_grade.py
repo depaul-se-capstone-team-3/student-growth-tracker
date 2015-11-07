@@ -30,3 +30,6 @@ db.define_table(
     Field('class_id', 'reference classes'),
     Field('grade_id', 'reference grade'))
 db.class_grade.id.readable = db.class_grade.id.writable = False
+
+if __name__ == '__main__':
+    pass

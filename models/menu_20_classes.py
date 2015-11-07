@@ -9,3 +9,6 @@ for class_ in class_list:
                                URL('classes', 'index', args=[class_.id]), []))
 
 response.menu += [(T('Classes'), False, '', classes_menu_items)]
+
+if __name__ == '__main__':
+    pass

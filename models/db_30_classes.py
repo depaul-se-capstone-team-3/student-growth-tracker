@@ -10,3 +10,6 @@ db.define_table(
     format = '%(name)s')
 
 db.classes.id.readable = db.classes.id.writable = False
+
+if __name__ == '__main__':
+    pass
