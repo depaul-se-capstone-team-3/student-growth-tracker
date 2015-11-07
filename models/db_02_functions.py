@@ -105,12 +105,12 @@ def get_student_assignments(teacher_id, class_id):
              (db.student.id==db.student_grade.student_id) &
              (db.student_grade.grade_id==db.grade.id))
 
-    results = db(query).select(db.student.id,
+    results = db(query).select(db.student_grade.id,
+                               db.student.id,
                                db.auth_user.first_name,
                                db.auth_user.last_name,
                                db.grade.name,
                                db.student_grade.student_score,
-                               db.student_grade.id,
                                orderby=[db.student.id,
                                         db.grade.due_date])
 
@@ -119,6 +119,7 @@ def get_student_assignments(teacher_id, class_id):
     for student in get_class_roster(teacher_id, class_id):
         grades = results.find(lambda s: s.student.id==student[0])
         for grade in grades:
+            student.append(grade.student_grade.id)
             student.append(grade.student_grade.student_score)
         assignments.append(student)
 

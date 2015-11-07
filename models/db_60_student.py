@@ -20,7 +20,7 @@ db.define_table(
     'student_grade',
     Field('student_id', 'reference student'),
     Field('grade_id', 'reference grade'),
-    Field('student_score', 'double'))
+    Field('student_score', 'float'))
 db.student_grade.student_id.readable = db.student_grade.student_id.writable = False
 db.student_grade.grade_id.readable = db.student_grade.grade_id.writable = False
 
