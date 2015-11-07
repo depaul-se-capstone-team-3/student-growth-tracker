@@ -76,12 +76,16 @@ def save_student_grades():
     """
     vargs = request.vars
 
-    for k in vargs.keys():
-        student_grades = vargs[k]
-        grades = [int(s) for s in student_grades[2:]]
-        for i in range(0, len(grades), 2):
-            grade_id = grades[i]
-            score = float(grades[i+1])
-            db.student_grade[grade_id] = dict(student_score=score)
+    try:
+        for k in vargs.keys():
+            student_grades = vargs[k]
+            # grades = [int(s) for s in student_grades[2:]]
+            for i in range(2, len(student_grades), 2):
+                grade_id = int(student_grades[i])
+                score = float(student_grades[i+1])
+                db.student_grade[grade_id] = dict(student_score=score)
+
+    except Exception, e:
+        print 'Error: %s' % e
 
     return dict()
