@@ -59,25 +59,33 @@ def index():
 
 @auth.requires_login()
 def student_grades():
+    """
+    Retrieves grade information for a given ``class_id``
+    and returns it as ``json``.
+    """
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    vargs = request.vars
-
-    if vargs:
-        print 'student_grades called'
 
     return dumps(get_student_assignments(teacher_id, class_id))
 
 @auth.requires_login()
 def save_student_grades():
+    """
+    Receives ``json`` data via ajax from the ``handsontable`` object
+    and saves it back to the database.
+    """
     vargs = request.vars
 
-    # if vargs:
-    #     # print vargs
-    #     # data = loads(vargs)
-    #     # print data
-    #     # for s in data:
-    #     #     for g in s:
-    #     #         print g
+    try:
+        for k in vargs.keys():
+            student_grades = vargs[k]
+            # grades = [int(s) for s in student_grades[2:]]
+            for i in range(2, len(student_grades), 2):
+                grade_id = int(student_grades[i])
+                score = float(student_grades[i+1])
+                db.student_grade[grade_id] = dict(student_score=score)
+
+    except Exception, e:
+        print 'Error: %s' % e
 
     return dict()
