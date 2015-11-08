@@ -133,5 +133,39 @@ def get_standards_for_class(class_id):
 
     return results
 
+def get_class_total_score(teacher_id, class_id):
+    query = (teacher_classes_query(teacher_id, class_id) &
+             (db.classes.id==db.student_classes.class_id) &
+             (db.student_classes.student_id==db.student.id) &
+             (db.student.user_id==db.auth_user.id) &
+             (db.student.id==db.student_grade.student_id) &
+             (db.student_grade.grade_id==db.grade.id))
+
+
+    student_point_list = db(query).select(db.student_grade.student_score)
+    results = 0.0
+    for row in student_point_list:
+        results = row.student_score + results
+
+    return results
+
+def get_class_total_possible(teacher_id, class_id):
+    query = (teacher_classes_query(teacher_id, class_id) &
+             (db.classes.id==db.student_classes.class_id) &
+             (db.student_classes.student_id==db.student.id) &
+             (db.student.user_id==db.auth_user.id) &
+             (db.student.id==db.student_grade.student_id) &
+             (db.student_grade.grade_id==db.grade.id))
+
+
+    max_point_list = db(query).select(db.grade.score)
+    results = 0.0
+    for row in max_point_list:
+        results = row.score + results
+
+    return results
+
+
+
 if __name__ == '__main__':
     pass

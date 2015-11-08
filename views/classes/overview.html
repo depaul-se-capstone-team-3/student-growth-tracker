@@ -1,0 +1,63 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table">
+                    <tr>
+                        <td><h1>{{=class_name}}</h1></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total Students</td>
+                        <td></td>
+                        <td>{{=total_students}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Assignments</td>
+                        <td></td>
+                        <td>{{=total_grades}}</td>
+                    </tr>
+                    <tr>
+                        <td>Class Average</td>
+                        <td></td>
+                        <td>{{=average}} %</td>
+                    </tr>
+                    <tr>
+                        <td><h1>Standards</h1></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{for row in standard_dict:}}
+                    <tr>
+                        <td>{{=standard_dict[row][2]}}</td>
+                        <td>{{=standard_dict[row][3]}}</td>
+                        {{if ((standard_dict[row][1]/standard_dict[row][0]*100) > 80):}}
+                            <td class="success">{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
+                        {{else:}}
+                            <td class="danger">{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
+                        {{pass}}
+                    </tr>
+                    {{pass}}
+
+                    <tr>
+                        <td><h1>Due Soon</h1> </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{count = 0}}
+                    {{for row in due_soon:}}
+                        {{if (count != due_soon_amount):}}
+                            {{count = count + 1}}
+                            <tr>
+                                <td>{{=row.name}}</td>
+                                <td></td>
+                                <td>{{=row.due_date}}</td>
+                            </tr>
+                        {{else: break}}
+                    {{pass}}
+            </table>
+        </div>
+    </div>
+</div>
