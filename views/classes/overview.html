@@ -30,14 +30,10 @@
                         <td></td>
                     </tr>
                     {{for row in standard_dict:}}
-                    <tr>
+                    <tr class="{{=get_contextual_classes(standard_dict[row][1]/standard_dict[row][0]*100)}}">
                         <td>{{=standard_dict[row][2]}}</td>
                         <td>{{=standard_dict[row][3]}}</td>
-                        {{if ((standard_dict[row][1]/standard_dict[row][0]*100) > 80):}}
-                            <td class="success">{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
-                        {{else:}}
-                            <td class="danger">{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
-                        {{pass}}
+                        <td>{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
                     </tr>
                     {{pass}}
 

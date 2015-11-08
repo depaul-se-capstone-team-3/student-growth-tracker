@@ -165,6 +165,13 @@ def get_class_total_possible(teacher_id, class_id):
 
     return results
 
+def get_contextual_classes(point):
+    if ( point >= 90):
+        return 'success'
+    elif ( (point >=80) & (point<89) ):
+        return 'warning'
+    else:
+        return 'danger'
 
 
 if __name__ == '__main__':
