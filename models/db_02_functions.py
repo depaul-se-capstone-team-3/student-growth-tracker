@@ -80,7 +80,7 @@ def get_class_assignments(teacher_id, class_id):
              (db.classes.id==db.class_grade.class_id) &
              (db.class_grade.grade_id==db.grade.id))
 
-    class_assignments = db(query).select(db.grade.name, db.grade.score,
+    class_assignments = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,
                                          orderby=db.grade.due_date)
 
     return class_assignments
