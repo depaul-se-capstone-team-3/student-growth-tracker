@@ -66,6 +66,17 @@ def get_class_roster(teacher_id, class_id):
 
     return class_roster
 
+def class_assignment_query(teacher_id, class_id):
+    """
+    Return a :py:class:`Query <pydal.objects.Query>` object that represents the
+    set of assignments for a given class.
+    """
+    query = (teacher_classes_query(teacher_id, class_id) &
+             (db.classes.id==db.class_grade.class_id) &
+             (db.class_grade.grade_id==db.grade.id))
+
+    return query
+
 def get_class_assignments(teacher_id, class_id):
     """
     Return a :py:class:`Rows <pydal.objects.Rows>` object containing
@@ -76,9 +87,6 @@ def get_class_assignments(teacher_id, class_id):
 
     - ``grade.name``
     """
-    query = (teacher_classes_query(teacher_id, class_id) &
-             (db.classes.id==db.class_grade.class_id) &
-             (db.class_grade.grade_id==db.grade.id))
 
     class_assignments = db(query).select(db.grade.name, db.grade.score,
                                          orderby=db.grade.due_date)
@@ -98,12 +106,14 @@ def get_student_assignments(teacher_id, class_id):
     The *rows* are ordered by student id, and the columns are
     ordered by due date.
     """
-    query = (teacher_classes_query(teacher_id, class_id) &
+
+    query = (class_assignment_query(teacher_id, class_id) &
              (db.classes.id==db.student_classes.class_id) &
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
              (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id))
+             (db.class_grade.grade_id==db.student_grade.grade_id))
+
 
     results = db(query).select(db.student_grade.id,
                                db.student.id,
