@@ -90,6 +90,7 @@ def get_class_assignments(teacher_id, class_id):
 
     class_assignments = db(class_assignment_query(teacher_id, class_id)).select(db.grade.name,
                                                                                 db.grade.score,
+                                                                                orderby=db.grade.due_date)
 
     return class_assignments
 
