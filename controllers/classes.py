@@ -115,8 +115,7 @@ def overview():
     average = round(total_score / total_possible * 100.0, 2)
 
     #To display standards
-    query = ((db.gradebook.teacher==teacher_id) &
-             (db.gradebook.classes==db.classes.id) &
+    query = ((db.classes.id==class_id) &
              (db.classes.id==db.student_classes.class_id) &
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
