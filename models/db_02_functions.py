@@ -129,8 +129,9 @@ def get_standards_for_class(class_id):
     query = ((db.classes.id==class_id) &
              (db.classes.content_area==db.standard.content_area))
 
-    results = db(query).select(db.standard.id, db.standard.short_name,
-                               orderby=db.standard.short_name)
+    results = db(query).select(db.standard.id,
+                               db.standard.reference_number,
+                               orderby=db.standard.reference_number)
 
     return results
 

@@ -7,8 +7,11 @@
 {{end}}
 
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-10">
         <h1>{{=class_name}}</h1>
+    </div>
+    <div class="col-sm-2">
+        <a href="{{=URL('grades', 'create', args=[class_id])}}" class="btn btn-default">Add Assignment</a>
     </div>
 </div>
 <div class="row">
@@ -18,7 +21,7 @@
                 <div class="col-sm-12">
                     <select>
                         {{for standard in standards:}}
-                        <option>{{=standard.short_name}}</option>
+                        <option value="{{=standard.id}}">{{=standard.reference_number}}</option>
                         {{pass}}
                     </select>
                 </div>
