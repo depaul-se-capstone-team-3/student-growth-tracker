@@ -66,6 +66,7 @@ def student_grades():
     """
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
 
     return dumps(get_student_assignments(teacher_id, class_id))
 

@@ -8,15 +8,17 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <h1>{{=class_name}}</h1>
+        <h1 class="class-name">{{=class_name}}</h1>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-12">
         <form>
-            <div class="row">
+            <div class="row options-row">
                 <div class="col-sm-12">
-                    <select>
+                    Filter by stanadard: 
+                    <select id="standards-menu">
+                        <option value="-1">All</option>
                         {{for standard in standards:}}
                         <option value="{{=standard.id}}">{{=standard.reference_number}}</option>
                         {{pass}}
@@ -38,6 +40,8 @@
 <script type="text/javascript">
 
  $().ready(function() {
+     var standard_selection = "-1";
+
      $("#student_grades").handsontable({
          minSpareRows: 0,
          fixedColumnsLeft: 1,
@@ -77,6 +81,13 @@
          }
      });
      
+/*
+     $("#standards-menu").change(function() {
+         var selected_item = $("select#standards-menu option:selected").val();
+         alert("You selected '" + selected_item + "'");
+     });
+*/
+
      $.ajax({
          url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
          dataType: "json",
