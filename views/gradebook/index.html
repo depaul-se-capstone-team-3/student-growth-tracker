@@ -7,7 +7,7 @@
     <div class="col-sm-12">
       {{for row in grid:}}
       <tr>
-        <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
+        <td>{{=A(row.classes.name, _href=URL('classes', 'overview', args=[row.classes.id]))}}</td>
         <td>{{=row.classes.content_area.name}}</td>
       </tr>
       {{pass}}

@@ -6,7 +6,7 @@ class_list = db((db.gradebook.teacher==auth.user_id) &
 
 for class_ in class_list:
     classes_menu_items.append((class_.name, False,
-                               URL('classes', 'index', args=[class_.id]), []))
+                               URL('classes', 'overview', args=[class_.id]), []))
 
 response.menu += [(T('Classes'), False, '', classes_menu_items)]
 
