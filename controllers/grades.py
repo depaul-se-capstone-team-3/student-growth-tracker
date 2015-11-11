@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # try something like
-
+import datetime
 
 def index():
     #constraints = db.gradebook.teacher == auth.user.id
@@ -52,25 +52,31 @@ def create():
         else:
             redirect(request.env.http_referer)
 
-    #Creating the drop down menu
+    #Creating the drop down menu for grade type
     gradeT = Field('grade_type', requires=IS_IN_DB(db, 'grade_type.id', '%(name)s',zero=T('Choose Grade Type')))
 
+    #Creating the drob down menu for Standard
+    standardR = Field('standard', requires=IS_IN_DB(db, 'standard.short_name', '%(reference_number)s'+': '+'%(short_name)s',zero=T('Standard')))
+
     #Creating the form.
-    form = SQLFORM.factory(db.grade.name,
-                           db.grade.display_date,
-                           db.grade.date_assigned,
-                           db.grade.due_date, gradeT,
-                           db.grade.score,
-                           db.grade.isPassFail)
+    #form = SQLFORM.factory(db.grade.name,
+      #                     db.grade.display_date,
+      #                     db.grade.date_assigned,
+       #                    db.grade.due_date, gradeT,
+       #                    db.grade.score, standardR,
+       #                    db.grade.isPassFail)
+    form = SQLFORM(db.grade)
+   # form.vars.display_date = datetime.datetime.utcnow()
+    #form.vars.date_assigned = datetime.datetime.utcnow()
 
     #Processing the form
     if form.process().accepted:
 
         #inserting the new grade into db.grade
         id = db.grade.insert(**db.grade._filter_fields(form.vars))
-
-        #creating the link between class and grade.
         db.class_grade.insert(class_id = class_id,grade_id = id)
+        #creating the link between standard and grade.
+        db.grade_standard.insert(grade_id = id, standard_id = form.vars.standard)
         response.flash = T("New assignment sucssfully created")
         session.flash = T("New assignment sucssfully created")
 
@@ -81,7 +87,7 @@ def create():
     else:
         response.flash = T("Please Fill Out The Form")
         session.flash = T("Please Fill Out The Form")
-
+    return dict(form=form)
 
 def edit():
     try:
