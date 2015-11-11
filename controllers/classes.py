@@ -116,10 +116,12 @@ def overview():
 
     #To display standards
     query = ((db.classes.id==class_id) &
-             (db.classes.id==db.student_classes.class_id) &
-             (db.student_classes.student_id==db.student.id) &
-             (db.student.user_id==db.auth_user.id) &
-             (db.student.id==db.student_grade.student_id) &
+#             (db.classes.id==db.student_classes.class_id) &
+             (db.class_grade.class_id==class_id) &
+             (db.class_grade.grade_id==db.grade.id) &
+#             (db.student_classes.student_id==db.student.id) &
+#             (db.student.user_id==db.auth_user.id) &
+#             (db.student.id==db.student_grade.student_id) &
              (db.student_grade.grade_id==db.grade.id) &
              (db.grade.id==db.grade_standard.grade_id) &
              (db.standard.id==db.grade_standard.standard_id) &
@@ -140,7 +142,8 @@ def overview():
     due_soon_amount = 3
 
     #Need to filter with current day datetime.datetime.now()
-    due_soon_query = ((db.gradebook.teacher==teacher_id) &
+    due_soon_query = ((db.classes.id==class_id) &
+             (db.gradebook.teacher==teacher_id) &
              (db.gradebook.classes==db.classes.id) &
              (db.class_grade.class_id==db.classes.id) &
              (db.class_grade.grade_id==db.grade.id) &
