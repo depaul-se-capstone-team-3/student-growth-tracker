@@ -138,10 +138,14 @@ def get_student_assignments(teacher_id, class_id):
 
 def get_standards_for_class(class_id):
     query = ((db.classes.id==class_id) &
-             (db.classes.content_area==db.standard.content_area))
+             (db.classes.id==db.class_grade.class_id) &
+             (db.class_grade.grade_id==db.grade.id) &
+             (db.grade.id==db.grade_standard.grade_id) &
+             (db.grade_standard.standard_id==db.standard.id))
 
     results = db(query).select(db.standard.id,
                                db.standard.reference_number,
+                               groupby=db.standard.reference_number,
                                orderby=db.standard.reference_number)
 
     return results

@@ -52,9 +52,9 @@
              {{for i in range(len(class_assignments)):}}
              {{due_date = class_assignments[i].due_date}}
              {{due_date = due_date != None and due_date.strftime('%Y-%m-%d') or 'TBD'}}
-             "{{=XML('%s<br>Pts: %0.2f<br>Due: %s' % (class_assignments[i].name,
-                                                   class_assignments[i].score,
-                                                   due_date))}}",
+             "{{=XML('%s<br>Pts: %0.f<br>Due: %s' % (class_assignments[i].name,
+                                                     class_assignments[i].score,
+                                                     due_date))}}",
              {{pass}}
          ],
          rowHeaders: false,

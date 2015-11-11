@@ -87,8 +87,9 @@ def save_student_grades():
                 score = float(student_grades[i+1])
                 db.student_grade[grade_id] = dict(student_score=score)
 
-    except Exception, e:
-        print 'Error: %s' % e
+    except Exception as e:
+        response.flash = 'Error: %s' % e
+        session.flash = 'Error: %s' % e
 
     return dict()
 
