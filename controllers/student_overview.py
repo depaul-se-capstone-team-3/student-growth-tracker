@@ -21,11 +21,6 @@ def overview():
     for row in classes_query:
         classes_list.append([int(row.id), row.name])
 
-    #print("-------------------------------------------------")
-    #for r in classes_list:
-        #print(r[0], " ---" , r[1])
-    print("-------------classlist---------")
-    #print(classes_list)
     for c in classes_list:
         score = get_student_assignment_average(student_id,c[0])
         due_query = get_student_assignment_due(student_id, c[0])
@@ -38,28 +33,5 @@ def overview():
                 due_count = due_count + 1
                 due_list.append(row)
         overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
-        #print(c[1], "average: ", score[0]/score[1]*100.0)
-
-    #print("keys : ", overview_data.keys())
-    for k in overview_data.keys():
-        print("-----")
-        print(overview_data[k][0], "      ", overview_data[k][1])
-        for i in overview_data[k][2]:
-            print(i.name, "    ", "{:%b %d, %Y}".format(i.due_date),"    ",i.score)
-
-
 
     return dict(name=name, overview_data=overview_data)
-
-'''
-    due_query = get_student_assignment_due(student_id, 3)
-    print("-----due------")
-    count = 0
-    for row in due_list:
-        if (count == due_amount):
-            break
-        else:
-            count = count + 1
-            print("count: ", count)
-            print(row)
-'''
