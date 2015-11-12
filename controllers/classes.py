@@ -115,8 +115,7 @@ def overview():
     average = round(total_score / total_possible * 100.0, 2)
 
     #To display standards
-    query = ((db.gradebook.teacher==teacher_id) &
-             (db.gradebook.classes==db.classes.id) &
+    query = ((db.classes.id==class_id) &
              (db.classes.id==db.student_classes.class_id) &
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
@@ -145,7 +144,8 @@ def overview():
              (db.gradebook.classes==db.classes.id) &
              (db.class_grade.class_id==db.classes.id) &
              (db.class_grade.grade_id==db.grade.id) &
-             (db.grade.due_date != None))
+             (db.grade.due_date != None) &
+                     (db.grade.due_date > datetime.datetime.now()))
 
     due_soon = db(due_soon_query).select(db.grade.name, db.grade.due_date,orderby=db.grade.due_date)
 
@@ -154,6 +154,7 @@ def overview():
         due_soon_amount = len(due_soon)
 
     return dict(class_name=class_name,
+                class_id=class_id,
                 total_students=total_students,
                 total_grades=total_grades,
                 total_score=total_score,
