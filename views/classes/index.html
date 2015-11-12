@@ -44,7 +44,7 @@
          colHeaders: [
              "Student",
              {{for i in range(len(class_assignments)):}}
-             "{{=class_assignments[i].name}}"+"<br>Total Points: "+"{{=class_assignments[i].score}}",
+             "{{=class_assignments[i].name}}"+"<br>Total Points: "+"{{=class_assignments[i].score}}" + "<br>Due Date: "+" {{=class_assignments[i].due_date}}",
              {{pass}}
          ],
          rowHeaders: false,

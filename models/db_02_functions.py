@@ -88,9 +88,11 @@ def get_class_assignments(teacher_id, class_id):
 
     - ``grade.name``
     """
+    query = class_assignment_query(teacher_id, class_id)
 
-    class_assignments = db(class_assignment_query(teacher_id, class_id)).select(db.grade.name,
-                                                                                orderby=db.grade.due_date)
+    class_assignments = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,
+                                         orderby=db.grade.due_date)
+
     return class_assignments
 
 def get_student_assignments(teacher_id, class_id):

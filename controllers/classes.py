@@ -158,6 +158,7 @@ def overview():
         due_soon_amount = len(due_soon)
 
     return dict(class_name=class_name,
+                class_id=class_id,
                 total_students=total_students,
                 total_grades=total_grades,
                 total_score=total_score,
