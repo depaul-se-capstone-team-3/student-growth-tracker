@@ -147,6 +147,9 @@ def get_standards_for_class(class_id):
     return results
 
 def get_class_total_score(class_id):
+    """
+    Return a float representing the total of student's grade for given class_id.
+    """
     query = ((db.classes.id==class_id) &
              (db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id) &
@@ -165,6 +168,9 @@ def get_class_total_score(class_id):
     return results
 
 def get_class_total_possible(class_id):
+    """
+    Return a float representing the total of possible grade for given class_id.
+    """
     query = ((db.classes.id==class_id) &
                  (db.class_grade.class_id==class_id) &
                  (db.class_grade.grade_id==db.grade.id) &
@@ -182,7 +188,9 @@ def get_class_total_possible(class_id):
     return results
 
 def get_contextual_classes(point):
-
+    """
+    Return a string to be use with bootstrap coloring in views."
+    """
     if ( point >= 90):
         return 'success'
     elif ( (point >= 80) & (point < 89) ):
@@ -191,6 +199,13 @@ def get_contextual_classes(point):
         return 'danger'
 
 def get_student_assignment_average(student_id, class_id):
+    """
+    Return a list containing particular student's total score and total possible score.
+    
+    When using this function, store the result in a list for the ability to access 
+    the score individually.
+    To calculate the average, simiply do list[0]/list[1]
+    """
     query = ((db.classes.id == class_id) &
              (db.class_grade.class_id == db.classes.id) &
              (db.class_grade.grade_id == db.grade.id) &
@@ -208,6 +223,16 @@ def get_student_assignment_average(student_id, class_id):
     return ([student_score, possible_score])
 
 def get_student_assignment_due(student_id, class_id):
+    """
+    Return a :py:class:`Rows <pydal.objects.Rows>` object containing
+    all of the assignments for the class with id ``class_id`` 
+    and for the student with id ``student_id``, sorted
+    by due date.
+
+    Each :py:class:`Row <pydal.objects.Row>` object has the following fields:
+
+    - ``grade.name, grade.score, grade.due_date``
+    """
     query = ((db.classes.id == class_id) &
  (db.class_grade.class_id == db.classes.id) &
              (db.class_grade.grade_id == db.grade.id) &
@@ -222,6 +247,9 @@ def get_student_assignment_due(student_id, class_id):
     return (due_list)
 
 def get_student_name(student_id):
+    """
+    Return a string containing student's name when giving ``student_id``
+    """
     query = ((db.student.user_id == student_id) &
              (db.auth_user.id == db.student.user_id))
     name = db(query).select(db.auth_user.first_name, db.auth_user.last_name)
