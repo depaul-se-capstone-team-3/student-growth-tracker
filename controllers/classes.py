@@ -98,7 +98,7 @@ def assignment_info():
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
 
-    return dumps(get_class_assignments(teacher_id, class_id))
+    return dumps(get_class_assignments(teacher_id, class_id, standard_id).as_list())
 
 @auth.requires_login()
 def overview():

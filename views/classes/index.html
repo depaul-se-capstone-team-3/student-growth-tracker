@@ -39,16 +39,16 @@
 <script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
 <script type="text/javascript">
 
- $().ready(function() {
-     var standard_selection = "-1";
-     var column_headers = [];
+ // Data binding as a reference.
+ // When you change the data, you can update the view by rendering it.
+ // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
 
+ $().ready(function() {
      $("#student_grades").handsontable({
          minSpareRows: 0,
          fixedColumnsLeft: 1,
-         colHeaders: true,
          colWidths: 150,
-         colHeaders: column_headers,
+         colHeaders: get_column_headers(),
          rowHeaders: false,
          contextMenu: true,
          columns: [
@@ -74,18 +74,17 @@
      });
      
      
-     $("#standards-menu").change(function() {
-         var selected_item = $("select#standards-menu option:selected").val();
-         standard_selection = selected_item;
+     $("select#standards-menu").change(function() {
+         load_data({{=class_id}}, $(this).val());
      });
 
      function get_column_headers() {
          ////////////////////////////////////////////////////////////
          // Refactor this into a function.
-         var url = "{{=URL('classes', 'student_grades')}}/" + class_id + "/";
+         var url = "{{=URL('classes', 'assignment_info')}}/" + {{=class_id}} + "/";
 
-         if (standard_id !== "-1") {
-             url += standard_id;
+         if ($("select#standards-menu option:selected").val() !== "-1") {
+             url += $("select#standards-menu option:selected").val();
          }
          ////////////////////////////////////////////////////////////
 
@@ -94,7 +93,11 @@
              dataType: "json",
              type: "GET",
              success: function(data) {
-                 $("#student_grades").handsontable.colHeaders = data;
+                 var header = [];
+                 for(var i = 0; i < data.length; i++) {
+                     header[i] = data[i].name + "<br>Pts: " + data[i].score + "<br>Due: " + data[i].due_date;
+                 }
+                 $("#student_grades").handsontable.colHeaders = header;
              },
              error: function(jqxhr, status, error) {
                  alert("Status: " + status + "\nError: " + error);
@@ -129,7 +132,8 @@
      }
 
      /* load_data({{=class_id}}, $("select#standards-menu option:selected").val()); */
-     load_data({{=class_id}}, standard_selection);
+     /* load_data({{=class_id}}, standard_selection); */
+     load_data({{=class_id}}, $("select#standards-menu option:selected").val());
  });
 </script>
 
