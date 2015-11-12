@@ -92,9 +92,11 @@ def get_class_assignments(teacher_id, class_id, standard_id=None):
     - ``grade.name``
     """
 
-    query = class_assignment_query(teacher_id, class_id)
+    query = class_assignment_query(teacher_id, class_id, standard_id)
 
-    class_assignments = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,
+    class_assignments = db(query).select(db.grade.name,
+                                         db.grade.score,
+                                         db.grade.due_date,
                                          orderby=db.grade.due_date)
 
     return class_assignments
@@ -113,7 +115,7 @@ def get_student_assignments(teacher_id, class_id, standard_id=None):
     ordered by due date.
     """
 
-    query = (class_assignment_query(teacher_id, class_id) &
+    query = (class_assignment_query(teacher_id, class_id, standard_id) &
              (db.classes.id==db.student_classes.class_id) &
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &

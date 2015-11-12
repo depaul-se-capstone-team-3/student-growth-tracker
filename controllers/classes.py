@@ -92,6 +92,13 @@ def save_student_grades():
 
     return dict()
 
+@auth.requires_login()
+def assignment_info():
+    teacher_id = auth.user_id
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    return dumps(get_class_assignments(teacher_id, class_id))
 
 @auth.requires_login()
 def overview():

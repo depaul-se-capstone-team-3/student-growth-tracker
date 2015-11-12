@@ -41,22 +41,14 @@
 
  $().ready(function() {
      var standard_selection = "-1";
+     var column_headers = [];
 
      $("#student_grades").handsontable({
          minSpareRows: 0,
          fixedColumnsLeft: 1,
          colHeaders: true,
          colWidths: 150,
-         colHeaders: [
-             "Student",
-             {{for i in range(len(class_assignments)):}}
-             {{due_date = class_assignments[i].due_date}}
-             {{due_date = due_date != None and due_date.strftime('%Y-%m-%d') or 'TBD'}}
-             "{{=XML('%s<br>Pts: %0.f<br>Due: %s' % (class_assignments[i].name,
-                                                     class_assignments[i].score,
-                                                     due_date))}}",
-             {{pass}}
-         ],
+         colHeaders: column_headers,
          rowHeaders: false,
          contextMenu: true,
          columns: [
@@ -81,23 +73,63 @@
          }
      });
      
-/*
+     
      $("#standards-menu").change(function() {
          var selected_item = $("select#standards-menu option:selected").val();
-         alert("You selected '" + selected_item + "'");
+         standard_selection = selected_item;
      });
-*/
 
-     $.ajax({
-         url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
-         dataType: "json",
-         type: "GET",
-         success: function(data) {
-             $("#student_grades").handsontable("loadData", data);
-         },
-         error: function(jqxhr, status, error) {
+     function get_column_headers() {
+         ////////////////////////////////////////////////////////////
+         // Refactor this into a function.
+         var url = "{{=URL('classes', 'student_grades')}}/" + class_id + "/";
+
+         if (standard_id !== "-1") {
+             url += standard_id;
          }
-     });
+         ////////////////////////////////////////////////////////////
+
+         $.ajax({
+             url: url,
+             dataType: "json",
+             type: "GET",
+             success: function(data) {
+                 $("#student_grades").handsontable.colHeaders = data;
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+         /* "Student",
+            {{#for i in range(len(class_assignments)):}}
+            {{#due_date = class_assignments[i].due_date}}
+            {{#due_date = due_date != None and due_date.strftime('%Y-%m-%d') or 'TBD'}}
+            "{{#=XML('%s<br>Pts: %0.f<br>Due: %s' % (class_assignments[i].name, class_assignments[i].score, due_date))}}",
+            {{#pass}} */
+     }
+
+     function load_data(class_id, standard_id) {
+         var url = "{{=URL('classes', 'student_grades')}}/" + class_id + "/";
+
+         if (standard_id !== "-1") {
+             url += standard_id;
+         }
+
+         $.ajax({
+             url: url,
+             dataType: "json",
+             type: "GET",
+             success: function(data) {
+                 $("#student_grades").handsontable("loadData", data);
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+     }
+
+     /* load_data({{=class_id}}, $("select#standards-menu option:selected").val()); */
+     load_data({{=class_id}}, standard_selection);
  });
 </script>
 
