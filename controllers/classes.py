@@ -68,7 +68,7 @@ def student_grades():
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
 
-    return dumps(get_student_assignments(teacher_id, class_id))
+    return dumps(get_student_assignments(teacher_id, class_id, standard_id))
 
 @auth.requires_login()
 def save_student_grades():
@@ -81,7 +81,6 @@ def save_student_grades():
     try:
         for k in vargs.keys():
             student_grades = vargs[k]
-            # grades = [int(s) for s in student_grades[2:]]
             for i in range(2, len(student_grades), 2):
                 grade_id = int(student_grades[i])
                 score = float(student_grades[i+1])

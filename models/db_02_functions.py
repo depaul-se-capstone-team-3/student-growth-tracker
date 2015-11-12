@@ -66,7 +66,7 @@ def get_class_roster(teacher_id, class_id):
 
     return class_roster
 
-def class_assignment_query(teacher_id, class_id):
+def class_assignment_query(teacher_id, class_id, standard_id=None):
     """
     Return a :py:class:`Query <pydal.objects.Query>` object that represents the
     set of assignments for a given class.
@@ -75,9 +75,13 @@ def class_assignment_query(teacher_id, class_id):
              (db.classes.id==db.class_grade.class_id) &
              (db.class_grade.grade_id==db.grade.id))
 
+    if standard_id:
+        query &= ((db.grade.id==db.grade_standard.grade_id) &
+                  (db.grade_standard.standard_id==standard_id))
+
     return query
 
-def get_class_assignments(teacher_id, class_id):
+def get_class_assignments(teacher_id, class_id, standard_id=None):
     """
     Return a :py:class:`Rows <pydal.objects.Rows>` object containing
     all of the assignments for the class with id ``class_id``, sorted
@@ -87,6 +91,7 @@ def get_class_assignments(teacher_id, class_id):
 
     - ``grade.name``
     """
+
     query = class_assignment_query(teacher_id, class_id)
 
     class_assignments = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,
@@ -94,7 +99,7 @@ def get_class_assignments(teacher_id, class_id):
 
     return class_assignments
 
-def get_student_assignments(teacher_id, class_id):
+def get_student_assignments(teacher_id, class_id, standard_id=None):
     """
     Returns a :py:class:`list` of lists containing the student grades
     for all assignments for the class with id ``class_id``.
@@ -114,7 +119,6 @@ def get_student_assignments(teacher_id, class_id):
              (db.student.user_id==db.auth_user.id) &
              (db.student.id==db.student_grade.student_id) &
              (db.class_grade.grade_id==db.student_grade.grade_id))
-
 
     results = db(query).select(db.student_grade.id,
                                db.student.id,
