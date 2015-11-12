@@ -1,16 +1,19 @@
 {{extend 'layout.html'}}
-<h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s Gradebook</h1>
 
-<table class="table">
-  <h2>Current Classes</h2>
-  <div class="row">
-    <div class="col-sm-12">
-      {{for row in grid:}}
-      <tr>
-        <td>{{=A(row.classes.name, _href=URL('classes', 'index', args=[row.classes.id]))}}</td>
-        <td>{{=row.classes.content_area.name}}</td>
-      </tr>
-      {{pass}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{=auth.user.first_name}} {{=auth.user.last_name}}'s Gradebook</h1>
+            <table class="table">
+                {{for row in class_data:}}
+                  <tr class="{{=get_contextual_classes(float(row[3]))}}">
+                    <td><h3>{{=A(row[0], _href=URL('classes', 'index', args=[row[1]]))}}</h3></td>
+                    <td><h3>{{=row[2]}}</h3></td>
+                    <td><h3>{{=row[3]}} %</h3></td>
+                  </tr>
+                {{pass}}
+            </table>
+        </div>
     </div>
-  </div>
-</table>
+</div>

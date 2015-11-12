@@ -110,20 +110,24 @@ def overview():
     total_grades = db(grade_query).count()
 
     #To display class average
-    total_score = get_class_total_score(teacher_id, class_id)
-    total_possible= get_class_total_possible(teacher_id, class_id)
+    total_score = get_class_total_score(class_id)
+    total_possible= get_class_total_possible(class_id)
     average = round(total_score / total_possible * 100.0, 2)
 
     #To display standards
     query = ((db.classes.id==class_id) &
-             (db.classes.id==db.student_classes.class_id) &
-             (db.student_classes.student_id==db.student.id) &
-             (db.student.user_id==db.auth_user.id) &
-             (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id) &
-             (db.grade.id==db.grade_standard.grade_id) &
-             (db.standard.id==db.grade_standard.standard_id) &
-             (db.standard.content_area == db.contentarea.id))
+#             (db.classes.id==db.student_classes.class_id) &
+            (db.class_grade.class_id==class_id) &
+            (db.class_grade.grade_id==db.grade.id) &
+#             (db.student_classes.student_id==db.student.id) &
+#             (db.student.user_id==db.auth_user.id) &
+#             (db.student.id==db.student_grade.student_id) &
+            (db.student_grade.grade_id==db.grade.id) &
+            (db.grade.id==db.grade_standard.grade_id) &
+            (db.standard.id==db.grade_standard.standard_id) &
+            (db.standard.content_area == db.contentarea.id))
+    
+    
     standard_list = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score)
 
     standard_dict = {}
@@ -144,7 +148,8 @@ def overview():
              (db.gradebook.classes==db.classes.id) &
              (db.class_grade.class_id==db.classes.id) &
              (db.class_grade.grade_id==db.grade.id) &
-             (db.grade.due_date != None))
+             (db.grade.due_date != None) &
+             (db.grade.due_date > datetime.datetime.now()))
 
     due_soon = db(due_soon_query).select(db.grade.name, db.grade.due_date,orderby=db.grade.due_date)
 

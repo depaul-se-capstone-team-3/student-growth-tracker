@@ -8,7 +8,15 @@ def index():
     grid = db(constraints).select(join=db.gradebook.on(
         (db.gradebook.teacher==db.auth_user.id) & (db.gradebook.classes==db.classes.id)))
     # response.flash = 'Class List - %(first_name)s' % auth.user
-    return dict(grid=grid)
+
+    #class_data contains many classes, each class = [name, id, content_area, average]
+    class_data = []
+    for row in grid:
+        average = format(get_class_total_score(row.classes.id) / get_class_total_possible(row.classes.id) * 100.00, '.2f')
+        single_class=[row.classes.name, row.classes.id, row.classes.content_area.name, average]
+        class_data.append(single_class)
+
+    return dict(class_data=class_data)
 
 # This should go under manage - assuming this is a school/district maanged tool,
 # teachers won't add classes to their gradebooks.

@@ -144,8 +144,10 @@ def get_standards_for_class(class_id):
 
     return results
 
-def get_class_total_score(teacher_id, class_id):
-    query = (teacher_classes_query(teacher_id, class_id) &
+def get_class_total_score(class_id):
+    query = ((db.classes.id==class_id) &
+             (db.class_grade.class_id==class_id) &
+             (db.class_grade.grade_id==db.grade.id) &
              (db.classes.id==db.student_classes.class_id) &
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
@@ -160,14 +162,15 @@ def get_class_total_score(teacher_id, class_id):
 
     return results
 
-def get_class_total_possible(teacher_id, class_id):
-    query = (teacher_classes_query(teacher_id, class_id) &
-             (db.classes.id==db.student_classes.class_id) &
-             (db.student_classes.student_id==db.student.id) &
-             (db.student.user_id==db.auth_user.id) &
-             (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id))
-
+def get_class_total_possible(class_id):
+    query = ((db.classes.id==class_id) &
+                 (db.class_grade.class_id==class_id) &
+                 (db.class_grade.grade_id==db.grade.id) &
+                 (db.classes.id==db.student_classes.class_id) &
+                 (db.student_classes.student_id==db.student.id) &
+                 (db.student.user_id==db.auth_user.id) &
+                 (db.student.id==db.student_grade.student_id) &
+                 (db.student_grade.grade_id==db.grade.id))
 
     max_point_list = db(query).select(db.grade.score)
     results = 0.0
@@ -177,6 +180,7 @@ def get_class_total_possible(teacher_id, class_id):
     return results
 
 def get_contextual_classes(point):
+
     if ( point >= 90):
         return 'success'
     elif ( (point >= 80) & (point < 89) ):
@@ -186,11 +190,11 @@ def get_contextual_classes(point):
 
 def get_student_assignment_average(student_id, class_id):
     query = ((db.classes.id == class_id) &
-               (db.student.user_id == student_id) &
-               (db.classes.id == db.student_classes.class_id) &
-               (db.student_classes.student_id == db.student.id) &
-               (db.student.id == db.student_grade.student_id) &
-               (db.student_grade.grade_id == db.grade.id))
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id))
     grade_list = db(query).select(db.grade.name, db.grade.score, db.student_grade.student_score)
 
     student_score = 0.0
@@ -203,15 +207,14 @@ def get_student_assignment_average(student_id, class_id):
 
 def get_student_assignment_due(student_id, class_id):
     query = ((db.classes.id == class_id) &
-               (db.student.user_id == student_id) &
-               (db.classes.id == db.student_classes.class_id) &
-               (db.student_classes.student_id == db.student.id) &
-               (db.student.id == db.student_grade.student_id) &
-               (db.student_grade.grade_id == db.grade.id) &
-               #Remove and add
-               (db.grade.due_date != None))
-               #(db.grade.due_date != None) &
-               #(db.grade.due_date > datetime.datetime.now()))
+ (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id) &
+             (db.grade.due_date != None) &
+             (db.grade.due_date > datetime.datetime.now()))
+
     due_list = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,orderby=db.grade.due_date)
 
     return (due_list)

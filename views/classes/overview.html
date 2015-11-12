@@ -3,12 +3,8 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
+            <h1>{{=class_name}}</h1>
             <table class="table">
-                    <tr>
-                        <td><h1>{{=class_name}}</h1></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
                     <tr>
                         <td>Total Students</td>
                         <td></td>
@@ -36,7 +32,6 @@
                         <td>{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
                     </tr>
                     {{pass}}
-
                     <tr>
                         <td><h1>Due Soon</h1> </td>
                         <td></td>
