@@ -146,10 +146,12 @@ def get_standards_for_class(class_id):
 
     return results
 
+
 def get_class_total_score(class_id):
     """
     Return a float representing the total of student's grade for given class_id.
     """
+
     query = ((db.classes.id==class_id) &
              (db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id) &
@@ -167,6 +169,7 @@ def get_class_total_score(class_id):
 
     return results
 
+
 def get_class_total_possible(class_id):
     """
     Return a float representing the total of possible grade for given class_id.
@@ -179,6 +182,7 @@ def get_class_total_possible(class_id):
                  (db.student.user_id==db.auth_user.id) &
                  (db.student.id==db.student_grade.student_id) &
                  (db.student_grade.grade_id==db.grade.id))
+
 
     max_point_list = db(query).select(db.grade.score)
     results = 0.0
