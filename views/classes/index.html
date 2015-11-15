@@ -44,9 +44,9 @@
  // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
 
  var container = document.getElementById("student_grades");
+ var hot = undefined;
  var table_data = [];
  var options = {
-     data: table_data,
      minSpareRows: 0,
      fixedColumnsLeft: 1,
      colWidths: 150,
@@ -71,7 +71,7 @@
      }
  };
  
- function calc_columns(row) {
+ function set_visible_columns(row) {
      var columns = [];
      for(var i = 1; i < row.length; i += 2) {
          columns.push({data: i});
@@ -92,7 +92,9 @@
          type: "GET",
          success: function(data) {
              table_data = data;
-             hot.loadData(table_data);
+             options.data = table_data;
+             options.columns = set_visible_columns(table_data[0]);
+             hot = new Handsontable(container, options);
          },
          error: function(jqxhr, status, error) {
              alert("Status: " + status + "\nError: " + error);
@@ -101,9 +103,6 @@
  }
 
  load_data({{=class_id}}, $("select#standards-menu option:selected").val());
-// options.columns = calc_columns(table_data[0]);
- 
- var hot = new Handsontable(container, options);
 
 </script>
 

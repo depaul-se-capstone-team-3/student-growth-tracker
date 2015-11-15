@@ -77,7 +77,8 @@ def student_grades():
     
     for assignment in class_assignments:
         hdr_row += [None, assignment.name]
-        date_row += [None, assignment.due_date.strftime(DATE_FORMAT)]
+        due_date = assignment.due_date and assignment.due_date.strftime(DATE_FORMAT) or None
+        date_row += [None, due_date]
         score_row += [None, assignment.score]
 
     assignments.append(hdr_row)
