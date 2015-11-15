@@ -159,7 +159,9 @@ def get_class_total_score(class_id):
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
              (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id))
+             (db.student_grade.grade_id==db.grade.id) &
+             (db.grade.due_date != None ) &
+             (db.grade.due_date < datetime.datetime.now()))
 
 
     student_point_list = db(query).select(db.student_grade.student_score)
@@ -181,7 +183,9 @@ def get_class_total_possible(class_id):
                  (db.student_classes.student_id==db.student.id) &
                  (db.student.user_id==db.auth_user.id) &
                  (db.student.id==db.student_grade.student_id) &
-                 (db.student_grade.grade_id==db.grade.id))
+                 (db.student_grade.grade_id==db.grade.id) &
+                 (db.grade.due_date != None ) &
+                 (db.grade.due_date < datetime.datetime.now()))
 
 
     max_point_list = db(query).select(db.grade.score)
@@ -213,6 +217,8 @@ def get_student_assignment_average(student_id, class_id):
     query = ((db.classes.id == class_id) &
              (db.class_grade.class_id == db.classes.id) &
              (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.due_date < datetime.datetime.now()) &
+             (db.grade.due_date != None) &
              (db.grade.id == db.student_grade.grade_id ) &
              (db.student_grade.student_id == db.student.id ) &
              (db.student.id == student_id))
@@ -238,7 +244,7 @@ def get_student_assignment_due(student_id, class_id):
     - ``grade.name, grade.score, grade.due_date``
     """
     query = ((db.classes.id == class_id) &
- (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.class_id == db.classes.id) &
              (db.class_grade.grade_id == db.grade.id) &
              (db.grade.id == db.student_grade.grade_id ) &
              (db.student_grade.student_id == db.student.id ) &
@@ -249,6 +255,38 @@ def get_student_assignment_due(student_id, class_id):
     due_list = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,orderby=db.grade.due_date)
 
     return (due_list)
+
+
+def get_student_assignment_list(student_id, class_id):
+    """
+    Return a :py:class:`Rows <pydal.objects.Rows>` object containing
+    all of the assignments for the class with id ``class_id``
+    and for the student with id ``student_id``, filter by today's date 
+    and sorted by due date.
+
+    Each :py:class:`Row <pydal.objects.Row>` object has the following fields:
+
+    - ``grade.name, grade.score, grade.due_date, student_grade.student_score``
+    """
+    query = ((db.classes.id == class_id) &
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id) &
+             (db.grade.due_date != None))
+
+    assignment_list = db(query).select(db.grade.name, db.grade.score, db.grade.due_date, db.student_grade.student_score, orderby=db.grade.due_date)
+
+    return (assignment_list)
+
+def get_class_name(class_id):
+    """
+    Return a string containing class's name when giving ``class_id``
+    """
+    query = ((db.classes.id == class_id))
+    name = db(query).select(db.classes.name)
+    return(name[0])
 
 def get_student_name(student_id):
     """
