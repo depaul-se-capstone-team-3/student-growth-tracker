@@ -43,14 +43,40 @@
  // When you change the data, you can update the view by rendering it.
  // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
 
- var table_data = [];
- var columns = [];
  var container = document.getElementById("student_grades");
-
- function calc_columns(row) {
-     for(var i = 1; i < row.length; i += 2) {
-         columns.push({type: "numeric", format: "0.00"});
+ var table_data = [];
+ var options = {
+     data: table_data,
+     minSpareRows: 0,
+     fixedColumnsLeft: 1,
+     colWidths: 150,
+     colHeaders: false,
+     rowHeaders: false,
+     contextMenu: true,
+     afterChange: function(change, source) {
+         if(source === "loadData") {
+             return;
+         }
+         $.ajax({
+             url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
+             dataType: "json",
+             type: "POST",
+             data: {"data": $("#student_grades").handsontable('getData')},
+             success: function(data) {
+                 table_data = data;
+             },
+             error: function(data) {
+             }
+         });
      }
+ };
+ 
+ function calc_columns(row) {
+     var columns = [];
+     for(var i = 1; i < row.length; i += 2) {
+         columns.push({data: i});
+     }
+     return columns;
  }
 
  function load_data(class_id, standard_id) {
@@ -75,33 +101,9 @@
  }
 
  load_data({{=class_id}}, $("select#standards-menu option:selected").val());
+// options.columns = calc_columns(table_data[0]);
  
- var hot = new Handsontable(container, {
-     data: table_data,
-     minSpareRows: 0,
-     fixedColumnsLeft: 1,
-     colWidths: 150,
-     colHeaders: false,
-     columns: columns,
-     rowHeaders: false,
-     contextMenu: true,
-     afterChange: function(change, source) {
-         if(source === "loadData") {
-             return;
-         }
-         $.ajax({
-             url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
-             dataType: "json",
-             type: "POST",
-             data: {"data": $("#student_grades").handsontable('getData')},
-             success: function(data) {
-                 table_data = data;
-             },
-             error: function(data) {
-             }
-         });
-     }
- });
+ var hot = new Handsontable(container, options);
 
 </script>
 
