@@ -68,11 +68,26 @@ def student_grades():
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
 
-    class_assignments = get_class_assignments(teacher_id, class_id)
-    student_assignments = get_student_assignments(teacher_id, class_id,
-                                                  standard_id)
+    assignments = []
 
-    return dumps(student_assignments)
+    class_assignments = get_class_assignments(teacher_id, class_id)
+    hdr_row = [None, None]
+    date_row = [None, None]
+    score_row = [None, None]
+    
+    for assignment in class_assignments:
+        hdr_row += [None, assignment.name]
+        date_row += [None, assignment.due_date.strftime(DATE_FORMAT)]
+        score_row += [None, assignment.score]
+
+    assignments.append(hdr_row)
+    assignments.append(date_row)
+    assignments.append(score_row)
+    assignments += (get_student_assignments(teacher_id,
+                                            class_id,
+                                            standard_id))
+
+    return dumps(assignments)
 
 @auth.requires_login()
 def save_student_grades():

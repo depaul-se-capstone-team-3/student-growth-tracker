@@ -44,7 +44,14 @@
  // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
 
  var table_data = [];
+ var columns = [];
  var container = document.getElementById("student_grades");
+
+ function calc_columns(row) {
+     for(var i = 1; i < row.length; i += 2) {
+         columns.push({type: "numeric", format: "0.00"});
+     }
+ }
 
  function load_data(class_id, standard_id) {
      var url = "{{=URL('classes', 'student_grades')}}/" + class_id;
@@ -59,6 +66,7 @@
          type: "GET",
          success: function(data) {
              table_data = data;
+             hot.loadData(table_data);
          },
          error: function(jqxhr, status, error) {
              alert("Status: " + status + "\nError: " + error);
@@ -73,22 +81,10 @@
      minSpareRows: 0,
      fixedColumnsLeft: 1,
      colWidths: 150,
-     colHeaders: [
-         "Student",
-         {{for i in range(len(class_assignments)):}}
-         {{due_date = class_assignments[i].due_date}}
-         {{due_date = due_date != None and due_date.strftime('%Y-%m-%d') or 'TBD'}}
-         "{{=XML('%s<br>Pts: %0.f<br>Due: %s' % (class_assignments[i].name, 
-             class_assignments[i].score, due_date))}}",
-         {{pass}}
-     ],
+     colHeaders: false,
+     columns: columns,
      rowHeaders: false,
      contextMenu: true,
-     columns: [
-         {{for i in range(1, len(assignments[0]), 2):}}
-         {data: {{=i}}},
-         {{pass}}
-     ],
      afterChange: function(change, source) {
          if(source === "loadData") {
              return;
