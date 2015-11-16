@@ -10,6 +10,7 @@ have names that end with ``_query``.
 
 Functions that return sets of values have names that start with ``get_``.
 """
+import datetime
 
 def teacher_classes_query(teacher_id, class_id=None):
     """
@@ -156,7 +157,12 @@ def get_standards_for_class(class_id):
 
     return results
 
-def get_class_total_score(teacher_id, class_id):
+
+def get_class_total_score(class_id):
+    """
+    Return a float representing the total of student's grade for given class_id.
+    """
+
     query = ((db.classes.id==class_id) &
              (db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id) &
@@ -164,7 +170,9 @@ def get_class_total_score(teacher_id, class_id):
              (db.student_classes.student_id==db.student.id) &
              (db.student.user_id==db.auth_user.id) &
              (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id))
+             (db.student_grade.grade_id==db.grade.id) &
+             (db.grade.due_date != None ) &
+             (db.grade.due_date > datetime.datetime.now()))
 
 
     student_point_list = db(query).select(db.student_grade.student_score)
@@ -174,15 +182,22 @@ def get_class_total_score(teacher_id, class_id):
 
     return results
 
-def get_class_total_possible(teacher_id, class_id):
+
+def get_class_total_possible(class_id):
+    """
+    Return a float representing the total of possible grade for given class_id.
+    """
+    
     query = ((db.classes.id==class_id) &
-             (db.class_grade.class_id==class_id) &
-             (db.class_grade.grade_id==db.grade.id) &
-             (db.classes.id==db.student_classes.class_id) &
-             (db.student_classes.student_id==db.student.id) &
-             (db.student.user_id==db.auth_user.id) &
-             (db.student.id==db.student_grade.student_id) &
-             (db.student_grade.grade_id==db.grade.id))
+                 (db.class_grade.class_id==class_id) &
+                 (db.class_grade.grade_id==db.grade.id) &
+                 (db.classes.id==db.student_classes.class_id) &
+                 (db.student_classes.student_id==db.student.id) &
+                 (db.student.user_id==db.auth_user.id) &
+                 (db.student.id==db.student_grade.student_id) &
+                 (db.student_grade.grade_id==db.grade.id) &
+                 (db.grade.due_date != None ) &
+                 (db.grade.due_date > datetime.datetime.now()))
 
     max_point_list = db(query).select(db.grade.score)
     results = 0.0
@@ -192,13 +207,107 @@ def get_class_total_possible(teacher_id, class_id):
     return results
 
 def get_contextual_classes(point):
+    """
+    Return a string to be use with bootstrap coloring in views."
+    """
     if ( point >= 90):
         return 'success'
-    elif ( (point >=80) & (point<89) ):
+    elif ( (point >= 80) & (point < 89) ):
         return 'warning'
     else:
         return 'danger'
 
+def get_student_assignment_average(student_id, class_id):
+    """
+    Return a list containing particular student's total score and total possible score.
+    
+    When using this function, store the result in a list for the ability to access 
+    the score individually.
+    To calculate the average, simiply do list[0]/list[1]
+    """
+    query = ((db.classes.id == class_id) &
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.due_date < datetime.datetime.now()) &
+             (db.grade.due_date != None) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id))
+    grade_list = db(query).select(db.grade.name, db.grade.score, db.student_grade.student_score)
 
+    student_score = 0.0
+    possible_score = 0.0
+    for row in grade_list:
+        student_score = row.student_grade.student_score + student_score
+        possible_score = row.grade.score + possible_score
+
+    return ([student_score, possible_score])
+
+def get_student_assignment_due(student_id, class_id):
+    """
+    Return a :py:class:`Rows <pydal.objects.Rows>` object containing
+    all of the assignments for the class with id ``class_id`` 
+    and for the student with id ``student_id``, sorted
+    by due date.
+
+    Each :py:class:`Row <pydal.objects.Row>` object has the following fields:
+
+    - ``grade.name, grade.score, grade.due_date``
+    """
+    query = ((db.classes.id == class_id) &
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id) &
+             (db.grade.due_date != None) &
+             (db.grade.due_date > datetime.datetime.now()))
+
+    due_list = db(query).select(db.grade.name, db.grade.score, db.grade.due_date,orderby=db.grade.due_date)
+
+    return (due_list)
+
+
+def get_student_assignment_list(student_id, class_id):
+    """
+    Return a :py:class:`Rows <pydal.objects.Rows>` object containing
+    all of the assignments for the class with id ``class_id``
+    and for the student with id ``student_id``, filter by today's date 
+    and sorted by due date.
+
+    Each :py:class:`Row <pydal.objects.Row>` object has the following fields:
+
+    - ``grade.name, grade.score, grade.due_date, student_grade.student_score``
+    """
+    query = ((db.classes.id == class_id) &
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id) &
+             (db.grade.due_date != None))
+
+    assignment_list = db(query).select(db.grade.name, db.grade.score, db.grade.due_date, db.student_grade.student_score, orderby=db.grade.due_date)
+
+    return (assignment_list)
+
+def get_class_name(class_id):
+    """
+    Return a string containing class's name when giving ``class_id``
+    """
+    query = ((db.classes.id == class_id))
+    name = db(query).select(db.classes.name)
+    return(name[0])
+
+def get_student_name(student_id):
+    """
+    Return a string containing student's name when giving ``student_id``
+    """
+    query = ((db.student.user_id == student_id) &
+             (db.auth_user.id == db.student.user_id))
+    name = db(query).select(db.auth_user.first_name, db.auth_user.last_name)
+    return (name[0])
+
+################################################
 if __name__ == '__main__':
     pass

@@ -13,7 +13,9 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-       <button type="button" onclick="window.location.href='/student_growth_tracker/grades/create/'+{{=class_id}}">Create a new Assignment.</button>
+       <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('grades', 'create', args = [class_id,auth.user_id])}}'">Create a new Assignment
+            
+        </button>
     </div>
     
 </div>

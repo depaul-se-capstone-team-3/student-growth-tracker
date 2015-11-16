@@ -14,7 +14,7 @@ db.define_table(
     Field('due_date', 'datetime'),
     Field('grade_type', 'reference grade_type',
           requires=IS_IN_DB(db, 'grade_type.id', '%(name)s')),
-    Field('score', 'double'),
+    Field('score', 'double', requires=IS_NOT_EMPTY()),
     Field('isPassFail', 'boolean', default=False),
     #Field('isPassFail', 'boolean', requires=IS_NOT_EMPTY, default=False),
     format = '%(name)s')
