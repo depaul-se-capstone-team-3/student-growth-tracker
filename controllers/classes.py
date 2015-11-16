@@ -95,6 +95,11 @@ def save_student_grades():
     """
     Receives ``json`` data via ajax from the ``handsontable`` object
     and saves it back to the database.
+
+    In this incarnation, all data is saved to the database regardless of if it
+    has changed. This needs to be fixed so that only the changed data is saved.
+    I need to check what parameters are sent to the relevant ``handsontable``
+    function.
     """
     vargs = request.vars
 
