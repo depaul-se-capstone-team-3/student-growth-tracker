@@ -66,8 +66,29 @@ def student_grades():
     """
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
 
-    return dumps(get_student_assignments(teacher_id, class_id))
+    assignments = []
+
+    class_assignments = get_class_assignments(teacher_id, class_id)
+    hdr_row = [None, None]
+    date_row = [None, None]
+    score_row = [None, None]
+    
+    for assignment in class_assignments:
+        hdr_row += [None, assignment.name]
+        due_date = assignment.due_date and assignment.due_date.strftime(DATE_FORMAT) or None
+        date_row += [None, due_date]
+        score_row += [None, assignment.score]
+
+    assignments.append(hdr_row)
+    assignments.append(date_row)
+    assignments.append(score_row)
+    assignments += (get_student_assignments(teacher_id,
+                                            class_id,
+                                            standard_id))
+
+    return dumps(assignments)
 
 @auth.requires_login()
 def save_student_grades():
@@ -80,17 +101,24 @@ def save_student_grades():
     try:
         for k in vargs.keys():
             student_grades = vargs[k]
-            # grades = [int(s) for s in student_grades[2:]]
             for i in range(2, len(student_grades), 2):
                 grade_id = int(student_grades[i])
                 score = float(student_grades[i+1])
                 db.student_grade[grade_id] = dict(student_score=score)
 
-    except Exception, e:
-        print 'Error: %s' % e
+    except Exception as e:
+        response.flash = 'Error: %s' % e
+        session.flash = 'Error: %s' % e
 
     return dict()
 
+@auth.requires_login()
+def assignment_info():
+    teacher_id = auth.user_id
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    return dumps(get_class_assignments(teacher_id, class_id, standard_id).as_list())
 
 @auth.requires_login()
 def overview():
