@@ -112,7 +112,13 @@ def overview():
     #To display class average
     total_score = get_class_total_score(class_id)
     total_possible= get_class_total_possible(class_id)
-    average = round(total_score / total_possible * 100.0, 2)
+    print("total_score ",total_score)
+    print("total_possible ",total_possible)
+    average = 0
+    try:
+        average = round(total_score / total_possible * 100.0, 2)
+    except:
+        pass
 
     #To display standards
     query = ((db.classes.id==class_id) &
