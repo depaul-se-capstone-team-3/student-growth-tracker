@@ -135,7 +135,11 @@
          }
      });
  }
-
+ 
+ $("select#standards-menu").change(function() {
+     load_data({{=class_id}}, $(this).val());
+ });
+ 
  load_data({{=class_id}}, $("select#standards-menu option:selected").val());
 
 </script>

@@ -70,7 +70,7 @@ def student_grades():
 
     assignments = []
 
-    class_assignments = get_class_assignments(teacher_id, class_id)
+    class_assignments = get_class_assignments(teacher_id, class_id, standard_id)
     hdr_row = [None, None]
     date_row = [None, None]
     score_row = [None, None]
