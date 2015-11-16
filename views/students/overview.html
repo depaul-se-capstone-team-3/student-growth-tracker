@@ -7,7 +7,7 @@
             <table class="table">
                 {{for key in overview_data.keys():}}
                     <tr class="{{=get_contextual_classes(float(overview_data[key][1]))}}" data-toggle="collapse" id="{{=key}}" data-target=".{{=str(key)}}collapsed">
-                        <td><h3>{{=overview_data[key][0]}}</h3></td>
+                        <td><h3>{{=A(overview_data[key][0], _href=URL('students', 'index', args=[student_id,key]))}}</h3></td>
                         <td></td>
                         <td><h3>{{=overview_data[key][1]}} %</h3></td>
                     </tr>

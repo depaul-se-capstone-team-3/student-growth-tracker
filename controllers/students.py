@@ -12,7 +12,6 @@ def index():
 
     name = get_student_name(student_id).first_name + " " + get_student_name(student_id).last_name
     class_name = get_class_name(class_id).name
-    print(class_name)
 
     assignment_query = get_student_assignment_list(student_id, class_id)
 
@@ -23,9 +22,9 @@ def index():
         precent = float(row.student_grade.student_score / row.grade.score *100)
         is_due = ""
         if (row.grade.due_date > datetime.datetime.now()):
-            is_due = "success"
+            is_due = "warning"
         else:
-            is_due = ""
+            is_due = "success"
         assignment = [row.grade.name, row.student_grade.student_score, row.grade.score, precent, "{:%b %d, %Y}".format(row.grade.due_date), is_due]
         assignment_data.append(assignment)
 
@@ -67,4 +66,4 @@ def overview():
                 due_list.append(row)
         overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
 
-    return dict(name=name, overview_data=overview_data)
+    return dict(name=name, overview_data=overview_data, student_id=student_id)
