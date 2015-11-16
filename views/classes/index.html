@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <h1>{{=class_name}}</h1>
+        <h1 class="class-name">{{=class_name}}</h1>
     </div>
 </div>
 <div class="row">
@@ -22,18 +22,20 @@
 <div class="row">
     <div class="col-sm-12">
         <form>
-            <div class="row">
+            <div class="row options-row">
                 <div class="col-sm-12">
-                    <select>
+                    Filter by stanadard: 
+                    <select id="standards-menu">
+                        <option value="-1">All</option>
                         {{for standard in standards:}}
-                        <option>{{=standard.short_name}}</option>
+                        <option value="{{=standard.id}}">{{=standard.reference_number}}</option>
                         {{pass}}
                     </select>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <div id="student_grades" class="dataTable"></div>
+                    <div id="student_grades" class="dataTable hot-scrollable"></div>
                 </div>
             </div>
         </form>
@@ -45,51 +47,97 @@
 <script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
 <script type="text/javascript">
 
- $().ready(function() {
-     $("#student_grades").handsontable({
-         minSpareRows: 0,
-         colHeaders: true,
-         colHeaders: [
-             "Student",
-             {{for i in range(len(class_assignments)):}}
-             "{{=class_assignments[i].name}}"+"<br>Total Points: "+"{{=class_assignments[i].score}}" + "<br>Due Date: "+" {{=class_assignments[i].due_date}}",
-             {{pass}}
-         ],
-         rowHeaders: false,
-         contextMenu: true,
-         columns: [
-             {{for i in range(1, len(assignments[0]), 2):}}
-             {data: {{=i}}},
-             {{pass}}
-         ],
-         afterChange: function(change, source) {
-             if(source === "loadData") {
-                 return;
-             }
-             $.ajax({
-                 url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
-                 dataType: "json",
-                 type: "POST",
-                 data: {"data": $("#student_grades").handsontable('getData')},
-                 success: function(data) {
-                 },
-                 error: function(data) {
-                 }
-             });
+ // Data binding as a reference.
+ // When you change the data, you can update the view by rendering it.
+ // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
+
+ var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
+     Handsontable.renderers.NumericRenderer.apply(this, arguments);
+     if ((col > 0) && (row > 2)) {
+         new_value = parseFloat(value);
+         max_score = instance.getDataAtCell(2, col);
+         student_score = parseFloat(value);
+         percent_score = student_score/max_score;
+
+         if (percent_score >= 0.90) {
+             td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
          }
-     });
-     
+         else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
+             td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
+         }
+         else if (percent_score < 0.70) {
+             td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
+         }
+     }
+ };
+ 
+ var container = document.getElementById("student_grades");
+ var hot = undefined;
+ var table_data = [];
+ var options = {
+     minSpareRows: 0,
+     fixedColumnsLeft: 1,
+     colWidths: 150,
+     colHeaders: false,
+     rowHeaders: false,
+     contextMenu: true,
+     afterChange: function(change, source) {
+         if(source === "loadData") {
+             return;
+         }
+         $.ajax({
+             url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
+             dataType: "json",
+             type: "POST",
+             data: {"data": $("#student_grades").handsontable('getData')},
+             success: function(data) {
+                 set_table(data);
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+     }
+ };
+ 
+ function set_visible_columns(row) {
+     var columns = [];
+     for(var i = 1; i < row.length; i += 2) {
+         columns.push({data: i});
+     }
+     return columns;
+ }
+
+ function set_table(data) {
+     table_data = data;
+     options.data = table_data;
+     options.renderer = testRenderer;
+     options.columns = set_visible_columns(table_data[0]);
+ }
+
+ function load_data(class_id, standard_id) {
+     var url = "{{=URL('classes', 'student_grades')}}/" + class_id;
+
+     if (standard_id !== "-1") {
+         url += "/" + standard_id;
+     }
+
      $.ajax({
-         url: "{{=URL('classes', 'student_grades', args=[class_id])}}",
+         url: url,
          dataType: "json",
          type: "GET",
          success: function(data) {
-             $("#student_grades").handsontable("loadData", data);
+             set_table(data);
+             hot = new Handsontable(container, options);
          },
          error: function(jqxhr, status, error) {
+             alert("Status: " + status + "\nError: " + error);
          }
      });
- });
+ }
+
+ load_data({{=class_id}}, $("select#standards-menu option:selected").val());
+
 </script>
 
 {{end}}
