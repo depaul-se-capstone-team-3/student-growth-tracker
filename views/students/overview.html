@@ -1,0 +1,32 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{=name}}</h1>
+            <table class="table">
+                {{for key in overview_data.keys():}}
+                    <tr class="{{=get_contextual_classes(float(overview_data[key][1]))}}" data-toggle="collapse" id="{{=key}}" data-target=".{{=str(key)}}collapsed">
+                        <td><h3>{{=A(overview_data[key][0], _href=URL('students', 'index', args=[student_id,key]))}}</h3></td>
+                        <td></td>
+                        <td><h3>{{=overview_data[key][1]}} %</h3></td>
+                    </tr>
+                    <tr class="collapse {{=str(key)}}collapsed">
+                        <td><h3>Due Soon</h3></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {{for due in overview_data[key][2]:}}
+                        <tr class="collapse {{=str(key)}}collapsed">
+                            <td>{{=due.name}}</td>
+                            <td>{{="{:%b %d, %Y}".format(due.due_date)}}</td>
+                            <td>{{=format(due.score, '.2f')}}</td>
+                        </tr>
+                    {{pass}}
+
+                {{pass}}
+
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,68 +1,28 @@
 {{extend 'layout.html'}}
+
 <div class="container">
-{{if args:}}
-<h1><b>{{=student_query[0].auth_user.first_name}} {{=student_query[0].auth_user.last_name}}</b></h1>
-{{else:}}
-<h1><b>Current Students</b></h1>
-{{pass}}
-</div>
-
-<script src="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.js"></script>
-<div id="student_table">
-</div>
-<script type="text/javascript">
-        link = document.createElement('a'),
-        studentTableData = {{=XML(student_query.json())}},
-        container = document.getElementById('student_table'),
-        gradeTable = new Handsontable(container,{
-            data: studentTableData,
-            colHeaders:[
-                "First Name",
-                "Last Name",
-                "Grade",
-                "Score"
-            ],
-            columns: [
-                {data: 'auth_user.first_name'},
-                {data: 'auth_user.last_name'},
-                {data: 'grade.name'},
-                {data: 'student_grade.student_score'}
-        ],
-            minSpareRows: 0,
-            rowHeaders: false,
-            colWidths:[125,105,105,105,105,105,105],
-            manualColumnResize: true,
-            editor:false,
-            contextMenu:true});
-</script>
-
-
-<link rel="stylesheet" media="screen" href="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.css">
-
-
-<!--<div class="container">
     <div class="row">
         <div class="col-sm-12">
+            <h1>{{=name}}</h1>
+            <h3>{{=class_name}}</h3>
             <table class="table">
                 <tr>
-                    {{if args:}}
-                    {{else:}}                    
-                    <td><b>Name</b></td>
-                    {{pass}}
                     <td><b>Assignment Name</b></td>
-                    <td><b>Grade</b></td>
+                    <td></td>
+                    <td><div class="text-center"><b>Score</b></div></td>
+                    <td></td>
+                    <td><div class="text-center"><b>Due</b></div></td>
                 </tr>
-                {{for row in student_query:}}
+            {{for row in assignment_data:}}
                 <tr>
-                    {{if args:}}
-                    {{else:}}
-                    <td>{{=A(row.auth_user.first_name,  _href=URL('students', 'index', args=[row.student.id]))}} {{=A(row.auth_user.last_name,  _href=URL('students', 'index', args=[row.student.id]))}}</td>
-                    {{pass}}
-                    <td>{{=row.grade.name}}</td>
-                    <td>{{=row.student_grade.student_score}}</td>
+                    <td>{{=row[0]}}</td>
+                    <td></td>
+                    <td class="{{=get_contextual_classes(row[3])}}"><div class="text-center">{{=row[1]}} / {{=row[2]}}</div></td>
+                    <td></td>
+                    <td class="{{=row[5]}}"><div class="text-center">{{=row[4]}}</div></td>
                 </tr>
-                {{pass}}
+            {{pass}}
             </table>
         </div>
     </div>
-</div>-->
+</div>
