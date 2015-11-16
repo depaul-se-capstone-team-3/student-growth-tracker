@@ -43,27 +43,25 @@
  // When you change the data, you can update the view by rendering it.
  // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
 
- /*** Integrate this. See Larry's email for the extra line to add to include this.
+ var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
+     Handsontable.renderers.NumericRenderer.apply(this, arguments);
+     if ((col > 0) && (row > 2)) {
+         new_value = parseFloat(value);
+         max_score = instance.getDataAtCell(2, col);
+         student_score = parseFloat(value);
+         percent_score = student_score/max_score;
 
-    var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
-    Handsontable.renderers.NumericRenderer.apply(this, arguments)
-    if ((col > 0) && (row > 2)){
-    new_value = parseFloat(value);
-    max_score = instance.getDataAtCell(2, col);
-    student_score = parseFloat(value);
-    percent_score = student_score/max_score;
-    if (percent_score >= 0.90) {
-    td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
-    }
-    else if ((percent_score < 0.90) && (percent_score >= 0.70)){
-    td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
-    }
-    else if (percent_score < 0.70) {
-    td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
-    }
-    }
-    } // Do I need a semi-colon here?
-  */
+         if (percent_score >= 0.90) {
+             td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
+         }
+         else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
+             td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
+         }
+         else if (percent_score < 0.70) {
+             td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
+         }
+     }
+ };
  
  var container = document.getElementById("student_grades");
  var hot = undefined;
@@ -105,6 +103,7 @@
  function set_table(data) {
      table_data = data;
      options.data = table_data;
+     options.renderer = testRenderer;
      options.columns = set_visible_columns(table_data[0]);
  }
 
@@ -122,10 +121,6 @@
          success: function(data) {
              set_table(data);
              hot = new Handsontable(container, options);
-             /* table_data = data;
-                options.data = table_data;
-                options.columns = set_visible_columns(table_data[0]);
-                hot = new Handsontable(container, options); */
          },
          error: function(jqxhr, status, error) {
              alert("Status: " + status + "\nError: " + error);
