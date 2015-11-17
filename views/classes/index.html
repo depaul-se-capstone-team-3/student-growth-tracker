@@ -84,7 +84,7 @@
      colHeaders: false,
      rowHeaders: false,
      contextMenu: true,
-     /*
+
      afterChange: function(change, source) {
          if(source === "loadData") {
              return;
@@ -93,16 +93,15 @@
              url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
              dataType: "json",
              type: "POST",
-             data: {"data": $("#student_grades").handsontable('getData')},
+             data: {"data": hot.getData().slice(3)},
              success: function(data) {
-                 set_table(data);
+                 // We might do something with this later.
              },
              error: function(jqxhr, status, error) {
                  alert("Status: " + status + "\nError: " + error);
              }
          });
      }
-     */
  };
  
  function set_visible_columns(row) {
