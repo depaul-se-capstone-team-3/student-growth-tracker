@@ -171,8 +171,8 @@ def get_class_total_score(class_id):
              (db.student.user_id==db.auth_user.id) &
              (db.student.id==db.student_grade.student_id) &
              (db.student_grade.grade_id==db.grade.id) &
-             (db.grade.due_date != None ) &
-             (db.grade.due_date > datetime.datetime.now()))
+#             (db.grade.due_date != None ) &
+             (db.grade.due_date <= datetime.datetime.now()))
 
 
     student_point_list = db(query).select(db.student_grade.student_score)
@@ -196,8 +196,8 @@ def get_class_total_possible(class_id):
                  (db.student.user_id==db.auth_user.id) &
                  (db.student.id==db.student_grade.student_id) &
                  (db.student_grade.grade_id==db.grade.id) &
-                 (db.grade.due_date != None ) &
-                 (db.grade.due_date > datetime.datetime.now()))
+#                 (db.grade.due_date != None ) &
+                 (db.grade.due_date <= datetime.datetime.now()))
 
     max_point_list = db(query).select(db.grade.score)
     results = 0.0
