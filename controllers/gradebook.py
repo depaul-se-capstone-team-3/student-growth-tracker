@@ -12,7 +12,12 @@ def index():
     #class_data contains many classes, each class = [name, id, content_area, average]
     class_data = []
     for row in grid:
-        average = format(get_class_total_score(row.classes.id) / get_class_total_possible(row.classes.id) * 100.00, '.2f')
+        average = 0
+        try:
+            average = format(get_class_total_score(row.classes.id) /
+                             get_class_total_possible(row.classes.id) * 100.00, '.2f')
+        except:
+            pass
         single_class=[row.classes.name, row.classes.id, row.classes.content_area.name, average]
         class_data.append(single_class)
 
