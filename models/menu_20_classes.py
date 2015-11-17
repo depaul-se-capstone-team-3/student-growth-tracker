@@ -1,5 +1,5 @@
 if auth.has_membership('Teacher'):
-    classes_menu_items = [] # [(T('Classes'), False, URL('classes', 'index'), [])]
+    classes_menu_items = []
 
     class_list = db((db.gradebook.teacher==auth.user_id) &
                     (db.gradebook.classes==db.classes.id)).select(db.classes.id,

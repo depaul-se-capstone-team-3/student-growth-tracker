@@ -58,8 +58,11 @@
          max_score = instance.getDataAtCell(2, col);
          student_score = parseFloat(value);
          percent_score = student_score/max_score;
-
-         if (percent_score >= 0.90) {
+         
+         if (percent_score == 0) {
+             td.style.backgroundColor = '#cceeff'
+         }
+         else if (percent_score >= 0.90) {
              td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
          }
          else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
@@ -81,6 +84,7 @@
      colHeaders: false,
      rowHeaders: false,
      contextMenu: true,
+     /*
      afterChange: function(change, source) {
          if(source === "loadData") {
              return;
@@ -98,6 +102,7 @@
              }
          });
      }
+     */
  };
  
  function set_visible_columns(row) {

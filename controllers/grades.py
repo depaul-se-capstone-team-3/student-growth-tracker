@@ -27,6 +27,7 @@ def create():
     try:
         class_id = request.args(0)
         teacher_id = request.args(1)
+        content_id = 1
         exist = db.classes(class_id)
 
         #If class does not exist, redirects.
@@ -62,9 +63,22 @@ def create():
         (db.grade.id==db.grade_standard.grade_id) &
         (db.standard.id==db.grade_standard.standard_id) &
         (db.standard.content_area == db.contentarea.id))
+    
+    query = ((class_id == db.classes.id)&
+            (db.standard.content_area == db.classes.content_area))
+    
+    
+    
+            #((class_id == db.classes.id) & 
+            # (db.classes.id == db.class_grade.class_id) &
+             #(db.grade.id == db.class_grade.grade_id) &
+             #(db.grade.id == db.grade_standard.grade_id) &
+             #(db.grade_standard.standard_id == db.standard.id) &
+             #(db.classes.content_area == db.standard.content_area))
+
 #    standard_list = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score,  db.grade.score)
     #Creating the drob down menu for Standard
-    standardR = Field('standard', requires=IS_IN_DB(db, 'standard.id', '%(reference_number)s'+': '+'%(short_name)s',zero=T('Standard')))
+    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(reference_number)s'+': '+'%(short_name)s',zero=T('Standard')))
     #query = ((db.classes.id == class_id) & (db.classes.content_area==db.standard.content_area))
     now = datetime.datetime.utcnow()
     now = now - datetime.timedelta(minutes=now.minute % 10,

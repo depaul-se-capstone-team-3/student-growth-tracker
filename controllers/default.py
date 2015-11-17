@@ -8,15 +8,15 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
 
+@auth.requires_login()
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
+    if auth.has_membership(2, auth.user_id):
+        redirect(URL('gradebook','index', args=[auth.user_id]))
+    elif auth.has_membership(3, auth.user_id):
+        redirect(URL('students','overview', args=[auth.user_id]))
+    else:
+        redirect(URL('failure'))
 
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-    return dict(message=T('Please change this page!'))
 
 
 def user():
@@ -55,5 +55,3 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
-
-
