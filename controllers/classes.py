@@ -139,14 +139,13 @@ def overview():
     total_students = len(get_class_roster(teacher_id, class_id))
 
     #To display number of assignments
-    grade_query = ((db.class_grade.class_id == class_id) & (db.class_grade.grade_id == db.grade.id))
+    grade_query = ((db.class_grade.class_id == class_id) &
+                   (db.class_grade.grade_id == db.grade.id))
     total_grades = db(grade_query).count()
 
     #To display class average
     total_score = get_class_total_score(class_id)
     total_possible= get_class_total_possible(class_id)
-    print("total_score ",total_score)
-    print("total_possible ",total_possible)
     average = 0
     try:
         average = round(total_score / total_possible * 100.0, 2)
@@ -155,12 +154,8 @@ def overview():
 
     #To display standards
     query = ((db.classes.id==class_id) &
-#             (db.classes.id==db.student_classes.class_id) &
              (db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id) &
-#             (db.student_classes.student_id==db.student.id) &
-#             (db.student.user_id==db.auth_user.id) &
-#             (db.student.id==db.student_grade.student_id) &
              (db.student_grade.grade_id==db.grade.id) &
              (db.grade.id==db.grade_standard.grade_id) &
              (db.standard.id==db.grade_standard.standard_id) &
@@ -205,5 +200,4 @@ def overview():
                 average=average,
                 standard_dict=standard_dict,
                 due_soon=due_soon,
-                due_soon_amount=due_soon_amount
-               )
+                due_soon_amount=due_soon_amount)
