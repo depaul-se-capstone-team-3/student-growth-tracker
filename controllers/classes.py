@@ -115,7 +115,7 @@ def save_student_grades():
         response.flash = 'Error: %s' % e
         session.flash = 'Error: %s' % e
 
-    return dict()
+    return dumps(dict()) # Return nothing, but make sure it's in json format.
 
 @auth.requires_login()
 def assignment_info():
