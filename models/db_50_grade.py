@@ -14,8 +14,8 @@ db.define_table(
     Field('due_date', 'datetime'),
     Field('grade_type', 'reference grade_type',
           requires=IS_IN_DB(db, 'grade_type.id', '%(name)s')),
-    Field('score', 'double', requires=IS_NOT_EMPTY()),
-    Field('isPassFail', 'boolean', default=False),
+    Field('score', 'double', requires=(IS_FLOAT_IN_RANGE(minimum=0),IS_NOT_EMPTY())),
+    #Field('isPassFail', 'boolean', default=False),
     #Field('isPassFail', 'boolean', requires=IS_NOT_EMPTY, default=False),
     format = '%(name)s')
 db.grade.id.readable = db.grade.id.writable = False

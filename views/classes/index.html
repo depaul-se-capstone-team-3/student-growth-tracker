@@ -84,7 +84,7 @@
      colHeaders: false,
      rowHeaders: false,
      contextMenu: true,
-
+     //allowInvalid: false,
      afterChange: function(change, source) {
          if(source === "loadData") {
              return;
@@ -111,6 +111,7 @@
      }
      return columns;
  }
+
 
  function set_table(data) {
      table_data = data;
