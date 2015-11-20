@@ -10,6 +10,11 @@ def create():
 
 @auth.requires_login()
 def index():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     student_id = auth.user_id
 
@@ -36,6 +41,11 @@ def index():
 
 @auth.requires_login()
 def overview():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
     student_id = auth.user_id
 
     #{id: [name, average, [due_soon]]}

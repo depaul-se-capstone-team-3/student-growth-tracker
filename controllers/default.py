@@ -11,9 +11,9 @@
 @auth.requires_login()
 def index():
     if auth.has_membership(2, auth.user_id):
-        redirect(URL('gradebook','index', args=[auth.user_id]))
+        redirect(URL('gradebook','index'))
     elif auth.has_membership(3, auth.user_id):
-        redirect(URL('students','overview', args=[auth.user_id]))
+        redirect(URL('students','overview'))
     else:
         redirect(URL('failure'))
 

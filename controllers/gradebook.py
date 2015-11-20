@@ -3,6 +3,12 @@
 @auth.requires_login()
 def index():
     """pull up teacher and classes that match current user and return a grid with the result"""
+
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
     # declare constraints as where thea teacher matches an authorized user id
     constraints = db.gradebook.teacher == auth.user.id
     grid = db(constraints).select(join=db.gradebook.on(
