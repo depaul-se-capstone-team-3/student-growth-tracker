@@ -107,7 +107,27 @@
  function set_visible_columns(row) {
      var columns = [];
      for(var i = 1; i < row.length; i += 2) {
-         columns.push({data: i});
+         columns.push({
+             data: i,
+             beforeValidate: function(value, row, prop, source) {
+                 if(row <= 3) {
+                     value = 0;
+                 }
+             },
+             validator: function(value, callback) {
+                 if(value >= 0) {
+                     callback(true);
+                 }
+                 else {
+                     callback(false);
+                 }
+             },
+             afterValidate: function(isValid, value, row, prop, source) {
+                 if(!isValid) {
+                     return false;
+                 }
+             }
+         });
      }
      return columns;
  }
