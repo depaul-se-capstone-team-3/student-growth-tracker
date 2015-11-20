@@ -4,12 +4,18 @@
     <div class="row">
         <div class="col-sm-12">
             <h1>{{=name}}</h1>
+
             <table class="table">
                 {{for key in overview_data.keys():}}
-                    <tr class="{{=get_contextual_classes(float(overview_data[key][1]))}}" data-toggle="collapse" id="{{=key}}" data-target=".{{=str(key)}}collapsed">
-                        <td><h3>{{=A(overview_data[key][0], _href=URL('students', 'index', args=[student_id,key]))}}</h3></td>
+
+                    <tr class="{{=get_contextual_classes(float(overview_data[key][1]))}}">
+                        <td>
+                        <span class="h3">{{=A(overview_data[key][0], _href=URL('students', 'index', args=[key]))}}</span>&nbsp&nbsp
+                        <button class="btn btn-xs btn-{{=get_contextual_classes(float(overview_data[key][1]))}}" data-toggle="collapse"  data-target=".{{=str(key)}}collapsed">
+                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=str(key)}}collapsed" ></i></button>
+                        </td>
                         <td></td>
-                        <td><h3>{{=overview_data[key][1]}} %</h3></td>
+                        <td><span class="h3">{{=overview_data[key][1]}} %</span></td>
                     </tr>
                     <tr class="collapse {{=str(key)}}collapsed">
                         <td><h3>Due Soon</h3></td>
@@ -23,7 +29,10 @@
                             <td>{{=format(due.score, '.2f')}}</td>
                         </tr>
                     {{pass}}
-
+                <script>
+                        $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
+                        $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
+                </script>
                 {{pass}}
 
             </table>

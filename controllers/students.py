@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 # try something like
+from gluon.tools import Auth
+auth = Auth(db)
 
 def create():
     '''basic create for student and redirect to index'''
     form = SQLFORM(db.student).process(next=URL('index'))
     return dict(form=form)
 
+@auth.requires_login()
 def index():
-    student_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    class_id = (request.args(1) != None) and request.args(1, cast=int) or None
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    student_id = auth.user_id
 
     name = get_student_name(student_id).first_name + " " + get_student_name(student_id).last_name
     class_name = get_class_name(class_id).name
@@ -31,11 +34,9 @@ def index():
 
     return dict(name=name, class_name=class_name, assignment_data=assignment_data)
 
-
+@auth.requires_login()
 def overview():
-    student_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    #if (student_id == None):
-       # redirect(URL("default","index"))
+    student_id = auth.user_id
 
     #{id: [name, average, [due_soon]]}
     overview_data = {}
@@ -66,4 +67,4 @@ def overview():
                 due_list.append(row)
         overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
 
-    return dict(name=name, overview_data=overview_data, student_id=student_id)
+    return dict(name=name, overview_data=overview_data)
