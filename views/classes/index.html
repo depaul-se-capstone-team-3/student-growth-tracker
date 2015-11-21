@@ -105,28 +105,30 @@
  };
  
  function set_visible_columns(row) {
-     var columns = [];
-     for(var i = 1; i < row.length; i += 2) {
+     // The first visible column is column 1.
+     // It contains the student's name, and should not be editable.
+     var columns = [{data: 1, type: "text", readOnly: true}];
+
+     // The remainder of the visible columns contain grade data.
+     // The cells should only accept numeric values.
+     for(var i = 3; i < row.length; i += 2) {
          columns.push({
              data: i,
-             beforeValidate: function(value, row, prop, source) {
-                 if(row <= 3) {
-                     value = 0;
-                 }
-             },
+             allowInvalid: false,
+             /* beforeValidate: function(value, row, prop, source) {
+                if(row <= 3) {
+                value = 1;
+                }
+                }, */
              validator: function(value, callback) {
-                 if(value >= 0) {
-                     callback(true);
-                 }
-                 else {
-                     callback(false);
-                 }
+                 if($.isNumeric(value) && value >= 0) {callback(true);}
+                 else {callback(false);}
              },
-             afterValidate: function(isValid, value, row, prop, source) {
-                 if(!isValid) {
-                     return false;
-                 }
-             }
+             /* afterValidate: function(isValid, value, row, prop, source) {
+                if(isValid) {
+                alert("Stop doing that.");
+                }
+                } */
          });
      }
      return columns;
