@@ -103,17 +103,17 @@ def save_student_grades():
     """
     vargs = request.vars
 
-    try:
-        for k in vargs.keys():
-            student_grades = vargs[k]
-            for i in range(2, len(student_grades), 2):
+    for k in vargs.keys():
+        student_grades = vargs[k]
+        for i in range(2, len(student_grades), 2):
+            try:
                 grade_id = int(student_grades[i])
                 score = float(student_grades[i+1])
                 db.student_grade[grade_id] = dict(student_score=score)
-
-    except Exception as e:
-        response.flash = 'Error: %s' % e
-        session.flash = 'Error: %s' % e
+            except Exception as e:
+                # Don't save the value, but the client side validation
+                # should warn the user, so DRY.
+                pass
 
     return dumps(dict()) # Return nothing, but make sure it's in json format.
 

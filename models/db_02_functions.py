@@ -15,8 +15,10 @@ import datetime
 def teacher_classes_query(teacher_id, class_id=None):
     """
     Return a :py:class:`Query <pydal.objects.Query>` object that represents the
-    set of classes associated with ``teacher_id``. If ``class_id`` is provided,
-    only that class will be included in the :py:class:`Set <pydal.objects.Set>`.
+    set of classes associated with ``teacher_id``.
+
+    If ``class_id`` is provided, only that class will be included in the
+    :py:class:`Set <pydal.objects.Set>`.
     """
     query = ((db.gradebook.teacher==teacher_id) &
              (db.gradebook.classes==db.classes.id) &
@@ -144,6 +146,11 @@ def get_student_assignments(teacher_id, class_id, standard_id=None):
     return assignments
 
 def get_standards_for_class(class_id):
+    """
+
+     .. rubric:: **ADD A DOCSTRING HERE!!!**
+
+    """
     query = ((db.classes.id==class_id) &
              (db.classes.id==db.class_grade.class_id) &
              (db.class_grade.grade_id==db.grade.id) &
