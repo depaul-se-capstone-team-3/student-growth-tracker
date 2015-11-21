@@ -7,5 +7,7 @@ IS_PHONE_NUMBER = IS_MATCH('^1?((-)\d{3}-?|\(d{3}\))\d{3}-?\d{4}$')
 
 DATE_FORMAT = '%Y-%m-%d'
 
+DISPLAY_DATE_FORMAT = '%b %d, %Y'
+
 if __name__ == '__main__':
     pass
