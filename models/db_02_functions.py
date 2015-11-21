@@ -159,6 +159,7 @@ def get_standards_for_class(class_id):
 
     results = db(query).select(db.standard.id,
                                db.standard.reference_number,
+                               db.standard.short_name,
                                groupby=db.standard.reference_number,
                                orderby=db.standard.reference_number)
 

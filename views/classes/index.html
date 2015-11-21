@@ -13,9 +13,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12">
-       <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('grades', 'create', args = [class_id,auth.user_id])}}'">Create a new Assignment
-            
-        </button>
+       <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('grades', 'create', args = [class_id,auth.user_id])}}'">Create a new Assignment</button>
     </div>
     
 </div>
@@ -28,7 +26,7 @@
                     <select id="standards-menu">
                         <option value="-1">All</option>
                         {{for standard in standards:}}
-                        <option value="{{=standard.id}}">{{=standard.reference_number}}</option>
+                        <option value="{{=standard.id}}">{{=standard.short_name}}: {{=standard.reference_number}}</option>
                         {{pass}}
                     </select>
                 </div>
