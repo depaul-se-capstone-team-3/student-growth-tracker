@@ -110,8 +110,8 @@ def create():
         for student in get_class_roster(teacher_id, class_id):
             db.student_grade.insert(student_id=student[0], grade_id = id, student_score = 0)
 
-        response.flash = T("New assignment sucessfully created")
-        session.flash = T("New assignment sucessfully created")
+        response.flash = T("New assignment successfully created")
+        session.flash = T("New assignment successfully created")
         redirect(URL("classes","index/"+class_id))
     #Form error handling.
     elif form.errors:
