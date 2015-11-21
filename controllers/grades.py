@@ -2,6 +2,7 @@
 # try something like
 import datetime
 
+@auth.requires_login()
 def index():
     #constraints = db.gradebook.teacher == auth.user.id
     #grid = SQLFORM.smartgrid(db.grade)
@@ -13,6 +14,7 @@ def index():
                        db.grade.grade_type,db.grade.score, db.grade.isPassFail)
     return dict(grid=grid)
 
+@auth.requires_login()
 def query():
     gname = request.vars['gname']
     assignment = db.student_grade.grade_id==gname
@@ -20,7 +22,7 @@ def query():
     grade_query = db(assignment).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.student_grade.student_score, left=db.student_grade.on(c1))
     return dict(grade_query=grade_query)
 
-
+@auth.requires_login()
 def create():
     '''Generating form for creating a new assignment'''
     #If there is an argument class id, check to see if db.classes contains that class.
@@ -32,7 +34,7 @@ def create():
 
         #If class does not exist, redirects.
         if (exist == None):
-            response.flash = T("Class Does Not Exist")
+            response.flash = T("Class does not exist")
             session.flash = T("Class does not exist.")
 
             #Redirect to previous link if via link, else redirec to main page.
@@ -78,7 +80,7 @@ def create():
 
 #    standard_list = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score,  db.grade.score)
     #Creating the drob down menu for Standard
-    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(reference_number)s'+': '+'%(short_name)s',zero=T('Standard')))
+    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(short_name)s'+': '+'%(reference_number)s',zero=T('Standards')))
     #query = ((db.classes.id == class_id) & (db.classes.content_area==db.standard.content_area))
     now = datetime.datetime.utcnow()
     now = now - datetime.timedelta(minutes=now.minute % 10,
@@ -108,8 +110,8 @@ def create():
         for student in get_class_roster(teacher_id, class_id):
             db.student_grade.insert(student_id=student[0], grade_id = id, student_score = 0)
 
-        response.flash = T("New assignment sucssfully created")
-        session.flash = T("New assignment sucssfully created")
+        response.flash = T("New assignment successfully created")
+        session.flash = T("New assignment successfully created")
         redirect(URL("classes","index/"+class_id))
     #Form error handling.
     elif form.errors:
@@ -120,7 +122,7 @@ def create():
         #session.flash = T("Please Fill Out The Form")
     return dict(form=form)
 
-
+@auth.requires_login()
 def edit():
     try:
         record = request.vars[0]

@@ -3,13 +3,8 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h1>{{=class_name}}</h1>
+            <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
             <table class="table">
-                    <tr>
-                        <td><h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
                     <tr>
                         <td>Total Students</td>
                         <td></td>
@@ -42,16 +37,19 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    {{count = 0}}
-                    {{for row in due_soon:}}
-                        {{if (count != due_soon_amount):}}
-                            {{count = count + 1}}
-                            <tr>
-                                <td>{{=row.name}}</td>
-                                <td></td>
-                                <td>{{=row.due_date}}</td>
-                            </tr>
-                        {{else: break}}
+                    {{if (due_soon_amount != 0):}}
+                        {{count = 0}}
+                        {{for row in due_soon:}}
+                            {{if (count != due_soon_amount):}}
+                                {{count = count + 1}}
+                                <tr>
+                                    <td>{{=row.name}}</td>
+                                    <td></td>
+                                    <td>{{=row.due_date.strftime(DISPLAY_DATE_FORMAT)}}</td>
+                                </tr>
+                            {{else: break}}
+                        {{pass}}
+                    {{else:}}<tr><td></td><td><h3>NO UPCOMING ASSIGNMENTS.</h3></td><td></td></tr>
                     {{pass}}
             </table>
         </div>
