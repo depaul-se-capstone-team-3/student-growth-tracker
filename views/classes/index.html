@@ -115,20 +115,10 @@
          columns.push({
              data: i,
              allowInvalid: false,
-             /* beforeValidate: function(value, row, prop, source) {
-                if(row <= 3) {
-                value = 1;
-                }
-                }, */
              validator: function(value, callback) {
                  if($.isNumeric(value) && value >= 0) {callback(true);}
                  else {callback(false);}
              },
-             /* afterValidate: function(isValid, value, row, prop, source) {
-                if(isValid) {
-                alert("Stop doing that.");
-                }
-                } */
          });
      }
      return columns;
