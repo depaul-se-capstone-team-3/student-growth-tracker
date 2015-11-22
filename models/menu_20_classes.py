@@ -22,7 +22,7 @@ if auth.has_membership('Student'):
     for class_ in class_list:
         classes_menu_items.append((class_.name, False,
                                    URL('students', 'index',
-                                       args=[auth.user_id, class_.id]), []))
+                                       args=[class_.id]), []))
 
     response.menu += [(T('Classes'), False, '', classes_menu_items)]
 
