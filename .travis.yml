@@ -4,8 +4,8 @@ python:
     - '2.7'
 
 before_install:
-    - wget http://www.web2py.com/examples/static/web2py_src.zip
-    - gzip -x web2py_src.zip
+    - git clone https://github.com/web2py/web2py.git
+    - mv student-growth-tracker web2py/applications/student_growth_tracker
 
 install: true
 
