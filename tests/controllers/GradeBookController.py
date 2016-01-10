@@ -21,7 +21,7 @@ class GradeBookController(unittest.TestCase):
         #self.assertEqual('boo'.upper(), 'BOO')
         
         #resp = response.render(vars)
-        request.post_vars["id"] = 2
+        #request.post_vars["id"] = 2
         request.controller = 'gradebook'
         request.function = 'index'
         resp = index()
