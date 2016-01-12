@@ -18,7 +18,7 @@ install:
     - cd ~/web2py
     - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
     - sleep 3
-    - curl http://127.0.0.1:8000/student_growth_tracker/ > /dev/null
+    - curl -s http://127.0.0.1:8000/student_growth_tracker/ > /dev/null
     - sleep 3
     - PID=$(<./httpserver.pid)
     - kill -SIGTERM $PID
