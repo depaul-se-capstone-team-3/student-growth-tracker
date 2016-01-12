@@ -24,4 +24,4 @@ install:
     - kill -SIGTERM $PID
 
 script:
-    - python web2py.py -S student_growth_tracker -M -R applications/student_growth_tracker/tests/test_test.py
+    - python web2py.py -S student_growth_tracker -M -R applications/student_growth_tracker/tests/testRunner.py
