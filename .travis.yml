@@ -3,10 +3,25 @@ language: python
 python:
     - '2.7'
 
-before_install:
-    - git clone https://github.com/web2py/web2py.git
-    - mv student-growth-tracker web2py/applications/student_growth_tracker
+env:
+    - DB=sqlite
 
-install: true
+install:
+    - cd ~
+    - git clone https://github.com/web2py/web2py.git ./web2py
+    - pip install pydal
+    - cd ~/web2py/applications
+    - git clone https://github.com/bpatzke/student-growth-tracker.git ./student_growth_tracker
+    - cd student_growth_tracker/private
+    - curl -s --ftp-pasv -u sgtdata@2bpencil.com:yT~xR#k0X8Di ftp://2bpencil.com/data.tar.gz > data.tar.gz
+    - tar -xzf data.tar.gz
+    - cd ~/web2py
+    - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
+    - sleep 3
+    - curl http://127.0.0.1:8000/student_growth_tracker/ > /dev/null
+    - sleep 3
+    - PID=$(<./httpserver.pid)
+    - kill -SIGTERM $PID
 
-script: true
+script:
+    - python web2py.py -S student_growth_tracker -M -R applications/student_growth_tracker/tests/test_test.py
