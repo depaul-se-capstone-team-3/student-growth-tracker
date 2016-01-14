@@ -4,7 +4,7 @@ cache/
 databases/
 docs/_build/
 errors/
-private/dummy_files/
+private/demo_data/
 private/test_dummy_files/
 sessions/
 static/docs/
