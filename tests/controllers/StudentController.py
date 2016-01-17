@@ -21,20 +21,32 @@ class StudentController(unittest.TestCase):
         request.function = "overview"
 
         resp = overview()
+        print(resp)
 
         self.assertEquals(resp['name'], "Student One")
         self.assertEquals(resp['overview_data'][1][0], "Language Arts One")
         self.assertEquals(resp['overview_data'][1][1], "74.21")
 
         #Due_list to be tested with data later.
-        self.assertEquals(resp['overview_data'][1][2], [])
+        #self.assertEquals(resp['overview_data'][1][2], [])
+        #print(resp['overview_data'][1][2])
+        row = resp['overview_data'][1][2]
+        #print("XOXOXOXOXOXOXOXOXOXOXOXOXO")
+        #print(resp['overview_data'][1][2])
+        #print(len(row))
+        self.assertTrue(len(row) == 1)
         
         self.assertEquals(resp['overview_data'][2][0], "Math One")
         self.assertEquals(resp['overview_data'][2][1], "76.19")
 
         #Due_list to be tested with data later.
-        self.assertEquals(resp['overview_data'][2][2], [])
-
+        #self.assertEquals(resp['overview_data'][2][2], [])
+        print(resp['overview_data'][2][2])
+        row = resp['overview_data'][2][2]
+        #print("XOXOXOXOXOXOXOXOXOXOXOXOXO")
+        #print(resp['overview_data'][2][2])
+        #print(len(row))
+        self.assertTrue(len(row) == 1)
 
     def test_index(self):
         request.args.pop(0)
