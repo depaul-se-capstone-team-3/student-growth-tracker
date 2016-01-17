@@ -81,6 +81,3 @@ class StudentController(unittest.TestCase):
         self.assertEquals(resp["assignment_data"][4][5], "success")
 
 
-
-
-        
