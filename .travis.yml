@@ -36,5 +36,6 @@ script:
     - cd applications/student_growth_tracker/tests
     - python -m unittest teacher_functional_tests
     - python -m unittest student_functional_tests
+    - cd ~/web2py
     - PID=$(<./httpserver.pid)
     - kill -SIGTERM $PID
