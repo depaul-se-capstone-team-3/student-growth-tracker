@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-PROFILE_DIRECTORY = r'/Users/bryan/Library/Application Support/Firefox/Profiles/mtgfc09j.selenium-testing'
 USERNAME = 'tedwhitrock'
 PASSWORD = 'test'
 
@@ -12,8 +11,7 @@ PASSWORD = 'test'
 class TeacherFunctionalTest(unittest.TestCase):
 
     def setUp(self):
-        profile = webdriver.firefox.firefox_profile.FirefoxProfile(profile_directory=PROFILE_DIRECTORY)
-        self.browser = webdriver.Firefox(firefox_profile=profile)
+        self.browser = webdriver.Firefox()
         self.server_url = 'http://localhost:8000/student_growth_tracker/'
         self.browser.implicitly_wait(5)
 

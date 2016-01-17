@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-PROFILE_DIRECTORY = r'/Users/bryan/Library/Application Support/Firefox/Profiles/mtgfc09j.selenium-testing'
 USERNAME = 'Student_One'
 PASSWORD = 'test'
 
@@ -12,8 +11,7 @@ PASSWORD = 'test'
 class StudentFunctionalTest(unittest.TestCase):
 
     def setUp(self):
-        profile = webdriver.firefox.firefox_profile.FirefoxProfile(profile_directory=PROFILE_DIRECTORY)
-        self.browser = webdriver.Firefox(firefox_profile=profile)
+        self.browser = webdriver.Firefox()
         self.server_url = 'http://localhost:8000/student_growth_tracker/'
         self.browser.implicitly_wait(5)
 
@@ -53,8 +51,3 @@ class StudentFunctionalTest(unittest.TestCase):
 
         header = self.browser.find_element_by_tag_name('h3').text
         self.assertIn('Math One', header)
-
-        # row_text = 'Math Assignment Eleven'
-        # table = self.browser.find_element_by_tag_name('table')
-        # rows = table.find_elements_by_tag_name('tr')
-        # self.assertIn(row_text, [row.text for row in rows])
