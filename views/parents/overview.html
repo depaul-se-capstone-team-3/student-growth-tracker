@@ -1,0 +1,17 @@
+{{extend 'layout.html'}}
+<!--INFO NEEDED: Student's first and last name, classes, and grades for those classes.-->
+<!--Pseudo-code: -->
+<!--For student_info in students_info -->
+    <!--For class_info in student_info -->
+        <!--if class_info is first or last name: skip -->
+        <!--else class_info[0] is class_name, and class_info[1] is students grade -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{=student_name}} {{=student_classes}} {{=class_grades}}\n {{=student_standards}}</h1>
+            <table class="table">
+
+            </table>
+        </div>
+    </div>
+</div>
