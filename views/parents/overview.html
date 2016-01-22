@@ -2,7 +2,11 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h1>{{=student_name_dict[1][0]}} {{=student_name_dict[1][1]}}</h1>
+            <h1>
+                {{=student_name_dict}} {{=student_class_dict}} {{=student_grade_dict}} {{=student_standard_dict}}
+            </h1>
+            
+  <!--          <h1>{{=student_name_dict[1][0]}} {{=student_name_dict[1][1]}}</h1>
             <table class="table">
                 <tr class="{{=get_contextual_classes(student_class_dict[1][1])}}">
                         <td>
@@ -28,7 +32,12 @@
                         $('.{{=student_class_dict[1][1]}}collapsed').on('shown.bs.collapse', function () {$("#{{=student_class_dict[1][1]}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
                         $('.{{=student_class_dict[1][1]}}collapsed').on('hidden.bs.collapse', function () {$("#{{=student_class_dict[1][1]}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
                 </script>
-            </table>
+            </table>-->
+            
+            
+            
+            
+            
         </div>
     </div>
 </div>
