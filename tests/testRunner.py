@@ -13,5 +13,9 @@ suite = unittest.TestSuite()
 for test_file in test_files:
     execfile(str(os.path.abspath(test_file)), globals())
     suite.addTest(unittest.makeSuite(globals()[str(os.path.basename(test_file)[:-3])]))
-    
+
+#db = test_db
+#auth.db = test_db
+
+
 unittest.TextTestRunner(verbosity=2).run(suite)
