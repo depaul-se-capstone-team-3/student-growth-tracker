@@ -1,0 +1,21 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Admin Tools</h1>
+            <table class="table table-striped table-condensed">
+                <tr><td><h2>{{=A('Add Teacher', _href=URL('admin', 'teacher_create'))}}</h2></td></tr>
+                <tr><td><h2>{{=A('Add Student', _href=URL('admin', 'student_create'))}}</h2></td></tr>
+                <tr><td><h2>{{=A('Add Parent', _href=URL('admin', 'parent_create'))}}</h2></td></tr>
+                <tr><td><h2>{{=A('Assign Teacher to Class', _href=URL('admin', 'assign_teacher_to_class'))}}</h2></td></tr>
+                <tr><td><h2>{{=A('Assign Student to Class', _href=URL('admin', 'assign_student_to_class'))}}</h2></td></tr>
+                <tr><td><h2>{{=A('Assign Parent to Student', _href=URL('admin', 'assign_parent_to_student'))}}</h2></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.table td {text-align: center;}
+</style>
