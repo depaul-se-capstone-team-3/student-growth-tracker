@@ -6,6 +6,9 @@ python:
 env:
     - DB=sqlite
 
+before_install:
+    - npm install -g bower
+
 install:
     - cd ~
     - git clone https://github.com/web2py/web2py.git ./web2py
