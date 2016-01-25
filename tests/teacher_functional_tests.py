@@ -120,6 +120,7 @@ class TeacherFunctionalTest(unittest.TestCase):
         self.log_in() # Gradebook
         self.browser.find_element_by_link_text('Math One').click() # Math One class overview
         self.browser.find_element_by_link_text('Math One').click() # Math One class details
+
         grade_container = self.browser.find_element_by_id('student_grades')
         grade_table = grade_container.find_element_by_tag_name('table')
         header_row = grade_table.find_element_by_tag_name('tr')
@@ -127,7 +128,13 @@ class TeacherFunctionalTest(unittest.TestCase):
         num_assignments = len(header_columns)
 
         # Navigate directly to the new assignment page.
-        self.browser.get(self.server_url + 'grades/create/2/2')
+        # self.browser.get(self.server_url + 'grades/create/2/2')
+        new_assignment_button = self.browser.find_element_by_xpath("//div[@class='col-sm-12']/button")
+        new_assignment_button.click()
+
+        # Make sure we've landed on the create grade page.
+        add_grade_header = self.browser.find_element_by_tag_name('h1')
+        self.assertEqual('Create a Grade:', add_grade_header.text)
 
         # Add a name
         assignment_name_input = self.browser.find_element_by_id('no_table_name')
@@ -154,28 +161,30 @@ class TeacherFunctionalTest(unittest.TestCase):
         self.assertIn('Math One', header)
 
         # Find the div that should contain the table of grades.
-        grade_container = self.browser.find_element_by_id('student_grades')
+        updated_grade_container = self.browser.find_element_by_id('student_grades')
         self.assertIsNotNone(grade_container)
 
         # Find the table that contains the grades.
-        grade_table = grade_container.find_element_by_tag_name('table')
+        updated_grade_table = updated_grade_container.find_element_by_tag_name('table')
         self.assertIsNotNone(grade_table)
 
-        header_row = grade_table.find_element_by_tag_name('tr')
-        header_columns = header_row.find_elements_by_tag_name('td')
-        new_assignment_column = header_columns[len(header_columns) - 1]
+        updated_header_row = updated_grade_table.find_element_by_tag_name('tr')
+        updated_header_columns = updated_header_row.find_elements_by_tag_name('td')
+
+        last_column_index = len(updated_header_columns) - 1
+        new_assignment_column = updated_header_columns[last_column_index]
+
         self.assertEqual('new test assignment', new_assignment_column.text)
-        self.assertEqual(num_assignments + 1, len(header_columns))
-        self.assertEqual('new test assignment', new_assignment_column.text)
+        self.assertEqual(num_assignments + 1, len(updated_header_columns))
 
-    def test_add_new_assignment_requires_name(self):
-        pass
+    # def test_add_new_assignment_requires_name(self):
+    #     pass
 
-    def test_add_new_assignment_requires_grade_type(self):
-        pass
+    # def test_add_new_assignment_requires_grade_type(self):
+    #     pass
 
-    def test_add_new_assignment_requires_score(self):
-        pass
+    # def test_add_new_assignment_requires_score(self):
+    #     pass
 
-    def test_add_new_assignment_requires_standard(self):
-        pass
+    # def test_add_new_assignment_requires_standard(self):
+    #     pass
