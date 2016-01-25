@@ -177,8 +177,43 @@ class TeacherFunctionalTest(unittest.TestCase):
         self.assertEqual('new test assignment', new_assignment_column.text)
         self.assertEqual(num_assignments + 1, len(updated_header_columns))
 
-    # def test_teacher_add_new_assignment_requires_name(self):
-    #     pass
+    def test_teacher_add_new_assignment_requires_name(self):
+        self.browser.get(self.server_url)
+
+        self.log_in() # Gradebook
+        self.browser.find_element_by_link_text('Math One')
+
+        # Navigate directly to the new assignment page.
+        self.browser.get(self.server_url + 'grades/create/2/2')
+
+        # Make sure we're on the create grade page.
+        add_grade_header = self.browser.find_element_by_tag_name('h1')
+        self.assertEqual('Create a Grade:', add_grade_header.text)
+
+        # Add a grade type
+        grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
+        grade_type_selector.select_by_visible_text('Assignment')
+
+        # Add a score
+        score_input = self.browser.find_element_by_id('no_table_score')
+        score_input.send_keys('20')
+
+        # Add a standard
+        standard_selector = Select(self.browser.find_element_by_id('no_table_standard'))
+        standard_selector.select_by_value('10')
+
+        # Submit without adding a grade type.
+        submit_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+        submit_button.click()
+
+        # Make sure we're still on the create grade page.
+        add_grade_header = self.browser.find_element_by_tag_name('h1')
+        self.assertEqual('Create a Grade:', add_grade_header.text)
+
+        # Find the error for the grade type.
+        name_error = self.browser.find_element_by_id('name__error')
+        self.assertIsNotNone(name_error)
+        self.assertEqual('Enter a value', name_error.text)
 
     def test_teacher_add_new_assignment_requires_grade_type(self):
         self.browser.get(self.server_url)

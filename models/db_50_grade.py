@@ -8,7 +8,7 @@ db.grade_type.id.readable = db.grade_type.id.writable = False
 
 db.define_table(
     'grade',
-    Field('name', 'string', required=True),
+    Field('name', 'string', required=True, requires=IS_NOT_EMPTY()),
     Field('display_date', 'datetime'),
     Field('date_assigned', 'datetime'),
     Field('due_date', 'datetime'),
