@@ -1,0 +1,43 @@
+{{extend 'layout.html'}}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>
+                {{=student_name_dict}} {{=student_class_dict}} {{=student_grade_dict}} {{=student_standard_dict}}
+            </h1>
+            
+  <!--          <h1>{{=student_name_dict[1][0]}} {{=student_name_dict[1][1]}}</h1>
+            <table class="table">
+                <tr class="{{=get_contextual_classes(student_class_dict[1][1])}}">
+                        <td>
+                        <button class="btn btn-xs btn-{{=get_contextual_classes(student_class_dict[1][1])}}" data-toggle="collapse"  data-target=".{{=student_class_dict[1][1]}}collapsed">
+                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=student_class_dict[1][1]}}collapsed" ></i>
+                        </button>
+                            <span class="h3">{{=student_class_dict[1][1]}}</span>
+                        </td>
+                        <td></td>
+                        <td><span class="h3">{{=format(student_grade_dict[1][1],'.2f')}}%</span></td>
+                    </tr>
+                {{for row in student_standard_dict[1]:}}
+                    <tr>
+                        <td><b>{{=student_standard_dict[1][row][2]}}:</b> {{=format((student_standard_dict[1][row][1]/student_standard_dict[1][row][0])*100,'.2f')}}%</td>
+                    </tr>
+                {{pass}}
+                    <tr class="collapse {{=student_class_dict[1][1]}}collapsed">
+                        <td><h3>Due Soon</h3></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                <script>
+                        $('.{{=student_class_dict[1][1]}}collapsed').on('shown.bs.collapse', function () {$("#{{=student_class_dict[1][1]}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
+                        $('.{{=student_class_dict[1][1]}}collapsed').on('hidden.bs.collapse', function () {$("#{{=student_class_dict[1][1]}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
+                </script>
+            </table>-->
+            
+            
+            
+            
+            
+        </div>
+    </div>
+</div>

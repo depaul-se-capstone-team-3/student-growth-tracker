@@ -10,6 +10,14 @@ db.define_table(
 db.classes.id.readable = db.classes.id.writable = False
 
 db.define_table(
+    'parent_student',
+    Field('parent_id', 'reference auth_user'),
+    Field('student_id', 'reference student'))
+db.parent_student.parent_id.readable = db.parent_student.parent_id.writable = False
+db.parent_student.student_id.readable = db.parent_student.student_id.writable = False
+    
+    
+db.define_table(
     'student_classes',
     Field('student_id', 'reference student'),
     Field('class_id', 'reference classes'))

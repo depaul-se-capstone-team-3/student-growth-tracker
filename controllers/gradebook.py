@@ -35,3 +35,26 @@ def create():
     """generate form for new gradebook entry, redirect to index"""
     form = SQLFORM(db.gradebook).process(next=URL('index'))
     return dict(form=form)
+
+
+def overview():
+    teacher_id = auth.user_id
+    query = teacher_classes_query(teacher_id)
+    class_names = db(query).select(db.classes.name)
+    class_ids = db(query).select(db.classes.id)
+    class_averages = []
+    for cid in class_ids:
+        total_score = get_class_total_score(cid)
+        total_possible= get_class_total_possible(cid)
+        average = 0
+        try:
+            average = round(total_score / total_possible * 100.0, 2)
+            class_averages.append(average)
+        except:
+            pass
+    
+    
+    
+    return dict(class_names=class_names,
+                class_averages=class_averages
+               )
