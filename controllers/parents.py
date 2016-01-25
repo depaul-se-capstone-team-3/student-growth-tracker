@@ -59,10 +59,7 @@ def index():
                                                      row.student_grade.student_score,
                                                      row.standard.reference_number,
                                                      row.standard.short_name]
- 
-             #
-             #
-             
+
             class_dict[student_class.name] = [student_average, standard_dict]
             full_dict[name] = class_dict
             """
