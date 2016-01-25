@@ -316,6 +316,30 @@ def get_student_name(student_id):
     name = db(query).select(db.auth_user.first_name, db.auth_user.last_name)
     return (name[0])
 
+def get_student_classes(student_id):
+    query = ((db.student.id==student_id)&(db.student.id == db.student_classes.student_id)&(db.student_classes.class_id==db.classes.id))
+    classes_query = db(query).select(db.classes.id, db.classes.name)
+    return (classes_query)
+
+def parent_student_query(parent_id):
+    query =  ((db.auth_user.id == parent_id) &
+             (db.auth_user.id == db.parent_student.parent_id) &
+             (db.parent_student.student_id == db.student.id))
+    return query
+
+def student_standards_query(student_id, class_id):
+    query = ((db.student.id == student_id)&
+    (db.student.id == db.student_classes.student_id)&
+    (db.student_classes.class_id==db.classes.id)&
+    (db.classes.id ==class_id)&
+    (db.classes.id==db.class_grade.class_id)&
+    (db.class_grade.grade_id ==db.grade.id)&
+    (db.grade.id == db.grade_standard.grade_id)&
+    (db.grade_standard.standard_id==db.standard.id)&
+    (db.student_grade.student_id == student_id)&
+    (db.grade.id == db.student_grade.grade_id))
+    return query
+
 ################################################
 if __name__ == '__main__':
     pass
