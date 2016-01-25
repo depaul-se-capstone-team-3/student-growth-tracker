@@ -51,15 +51,17 @@ def index():
             for row in standard_info:
                 if row.standard.id in standard_dict.keys():
                     if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
-                        max_score = standard_dict[row.standard.id][0] #+ row.grade.score
-                        student_score = standard_dict[row.standard.id][1] #+                                                                row.student_grade.student_score
-                        standard_dict[row.standard.id] = [max_score, student_score,                                                                     row.standard.reference_number,                                                                 row.standard.short_name]
+                        max_score =  standard_dict[row.standard.id][0] + row.grade.score 
+                        student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
+                        standard_dict[row.standard.id] = [max_score, student_score,                                                                     row.standard.reference_number,row.standard.short_name]
                 else:
                     standard_dict[row.standard.id] = [row.grade.score,
                                                      row.student_grade.student_score,
                                                      row.standard.reference_number,
                                                      row.standard.short_name]
  
+             #
+             #
              
             class_dict[student_class.name] = [student_average, standard_dict]
             full_dict[name] = class_dict
@@ -73,6 +75,8 @@ def index():
     return dict(student_id_dict=student_id_dict,
                 student_classes=student_classes,
                 class_list=class_list,
+                standard_info=standard_info,
+                student_standards=student_standards,
                 student_name_dict=student_name_dict,
                 standard_dict=standard_dict,
                 full_dict=full_dict)
