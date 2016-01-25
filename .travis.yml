@@ -13,7 +13,10 @@ install:
     - pip install selenium
     - cd ~/web2py/applications
     - git clone https://github.com/bpatzke/student-growth-tracker.git ./student_growth_tracker
-    - cd student_growth_tracker/private
+    - cd student_growth_tracker
+    - bower install handsontable --save
+    - cp -r bower_components/handsontable/dist ./static/js/
+    - cd private
     - curl -s --ftp-pasv -u sgtdata@2bpencil.com:yT~xR#k0X8Di ftp://2bpencil.com/data.tar.gz > data.tar.gz
     - tar -xzf data.tar.gz
     - cd ~/web2py
