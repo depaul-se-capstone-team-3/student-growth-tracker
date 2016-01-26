@@ -3,7 +3,6 @@
 @auth.requires_login()
 def index():
     """pull up teacher and classes that match current user and return a grid with the result"""
-
     if auth.has_membership(2, auth.user_id):
         pass
     else:
@@ -38,6 +37,10 @@ def create():
 
 
 def overview():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     query = teacher_classes_query(teacher_id)
     class_names = db(query).select(db.classes.name)

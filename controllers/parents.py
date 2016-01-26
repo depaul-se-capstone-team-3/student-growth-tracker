@@ -2,6 +2,10 @@
 # try something like
 @auth.requires_login()
 def index(): 
+    if auth.has_membership(4, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     parent_id = auth.user_id
     #setup query of students linked to the parent_id
     student_ids_query = ((db.auth_user.id == parent_id) &
@@ -80,6 +84,10 @@ def index():
 
 @auth.requires_login()
 def overview():
+    if auth.has_membership(4, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     parent_id = auth.user_id
     query = (db.auth_user.id == parent_id)
     parent_name = db(query).select(db.auth_user.first_name, db.auth_user.last_name)

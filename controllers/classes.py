@@ -9,6 +9,12 @@ import datetime
 
 @auth.requires_login()
 def index():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    elif auth.has_membership(2,auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Display the list of classes associated with the logged in user.
 
@@ -60,6 +66,10 @@ def index():
 
 @auth.requires_login()
 def student_grades():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Retrieves grade information for a given ``class_id``
     and returns it as ``json``.
@@ -92,6 +102,12 @@ def student_grades():
 
 @auth.requires_login()
 def save_student_grades():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    elif auth.has_membership(2,auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Receives ``json`` data via ajax from the ``handsontable`` object
     and saves it back to the database.
@@ -119,6 +135,10 @@ def save_student_grades():
 
 @auth.requires_login()
 def assignment_info():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
@@ -127,6 +147,10 @@ def assignment_info():
 
 @auth.requires_login()
 def overview():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
 
