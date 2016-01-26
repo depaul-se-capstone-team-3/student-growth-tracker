@@ -140,6 +140,12 @@ class TeacherFunctionalTest(unittest.TestCase):
         assignment_name_input = self.browser.find_element_by_id('no_table_name')
         assignment_name_input.send_keys('new test assignment')
 
+        # Add a sufficiently distant due date so the
+        # grade shows up as the last thing in the table.
+        due_date_input = self.browser.find_element_by_id('no_table_due_date')
+        due_date_input.clear()
+        due_date_input.send_keys('2025-12-31 00:00:00')
+
         # Add a grade type
         grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
         grade_type_selector.select_by_visible_text('Assignment')
