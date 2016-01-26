@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 # try something like
-def index(): return dict()
+@auth.requires_login()
+def index(): 
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+    return dict()
 
 def teacher_create():
     query = ((db.auth_group.id == 2))
