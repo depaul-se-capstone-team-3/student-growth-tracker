@@ -37,7 +37,11 @@
                         {{standards = class_dict[class_key][1]}}
                         {{for standard in standards:}}
                         <tr class="collapse {{=j}}">
-                            <td>{{=str(standards[standard][2])}}</td>
+
+
+
+                            <td>{{=str(standards[standard][2])}} {{=str(standards[standard][3])}}</td>
+
                             <td>{{=format((standards[standard][1]/standards[standard][0] * 100), '.2f')}} %</td>
                         </tr>
                         {{pass}}

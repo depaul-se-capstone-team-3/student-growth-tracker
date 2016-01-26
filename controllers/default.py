@@ -14,6 +14,8 @@ def index():
         redirect(URL('gradebook','index'))
     elif auth.has_membership(3, auth.user_id):
         redirect(URL('students','overview'))
+    elif auth.has_membership(1, auth.user_id):
+        redirect(URL('admin','index'))
     elif auth.has_membership(4, auth.user_id):
         redirect(URL('parents','overview'))
     else:
