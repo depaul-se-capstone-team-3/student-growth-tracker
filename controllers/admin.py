@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # try something like
-def index():
+
+def index(): 
     if auth.has_membership(1, auth.user_id):
         pass
     else:

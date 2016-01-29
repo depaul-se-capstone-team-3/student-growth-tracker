@@ -4,6 +4,10 @@ from gluon.tools import Auth
 auth = Auth(db)
 
 def create():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     '''basic create for student and redirect to index'''
     form = SQLFORM(db.student).process(next=URL('index'))
     return dict(form=form)

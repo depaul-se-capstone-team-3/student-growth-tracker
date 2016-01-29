@@ -24,6 +24,10 @@ def query():
 
 @auth.requires_login()
 def create():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     '''Generating form for creating a new assignment'''
     #If there is an argument class id, check to see if db.classes contains that class.
     try:
@@ -124,6 +128,10 @@ def create():
 
 @auth.requires_login()
 def edit():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     try:
         record = request.vars[0]
         form = SQLFORM(db.student_grade, record)

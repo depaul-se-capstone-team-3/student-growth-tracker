@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+<h1>
+    <b>Parent Overview</b>
+</h1>
+{{for student in full_dict.keys():}}
+    <h2>
+        <u>{{=student}}</u>
+    </h2>
+    <table class="table">
+        {{classes = full_dict[student]}}
+        {{for key in classes.keys():}}
+            <tr>
+                <td><h3><b>{{=key}}</b></h3></td>
+                <td><h3><b>{{=format(classes[key][0],'.2f')}}%</b></h3></td>
+            </tr>
+        {{standards = classes[key][1]}}
+        {{for standard in standards.keys():}}
+            <tr>
+                <td>{{=standards[standard][3]}}</td>
+                <td>{{=format((standards[standard][1]/standards[standard][0])*100,'.2f')}}%</td>
+            </tr>
+            
+            
+            {{pass}}
+        {{pass}}
+    </table>
+    {{pass}}
