@@ -9,9 +9,6 @@ class StudentController(unittest.TestCase):
     def setUp(self):
         execfile("applications/student_growth_tracker/controllers/students.py", globals())
         auth.user = Storage(dict(id=3))
-        #auth.membership = 3
-        #auth.login_bare("bwash","test")
-        #auth_user.id = Storage(dict(id=2))
         env = exec_environment('applications/student_growth_tracker/models/db.py')
         request = Request(env)
         
@@ -21,31 +18,20 @@ class StudentController(unittest.TestCase):
         request.function = "overview"
 
         resp = overview()
-        print(resp)
 
         self.assertEquals(resp['name'], "Student One")
         self.assertEquals(resp['overview_data'][1][0], "Language Arts One")
         self.assertEquals(resp['overview_data'][1][1], "74.21")
 
-        #Due_list to be tested with data later.
-        #self.assertEquals(resp['overview_data'][1][2], [])
-        #print(resp['overview_data'][1][2])
+        # Due_list to be tested with data later.
         row = resp['overview_data'][1][2]
-        #print("XOXOXOXOXOXOXOXOXOXOXOXOXO")
-        #print(resp['overview_data'][1][2])
-        #print(len(row))
         self.assertTrue(len(row) == 1)
         
         self.assertEquals(resp['overview_data'][2][0], "Math One")
         self.assertEquals(resp['overview_data'][2][1], "76.19")
 
-        #Due_list to be tested with data later.
-        #self.assertEquals(resp['overview_data'][2][2], [])
-        print(resp['overview_data'][2][2])
+        # Due_list to be tested with data later.
         row = resp['overview_data'][2][2]
-        #print("XOXOXOXOXOXOXOXOXOXOXOXOXO")
-        #print(resp['overview_data'][2][2])
-        #print(len(row))
         self.assertTrue(len(row) == 1)
 
     def test_index(self):

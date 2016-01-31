@@ -9,7 +9,7 @@ class GradesController(unittest.TestCase):
         self.controller = execfile("applications/student_growth_tracker/controllers/grades.py", globals())
         
 
-    #Not fully working example
+    # Not fully working example
     def test_create(self):
         self.assertEqual('boo'.upper(), 'BOO')
 

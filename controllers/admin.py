@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # try something like
+import collections
 
-def index(): 
+def index():
     if auth.has_membership(1, auth.user_id):
         pass
     else:
@@ -34,7 +35,6 @@ def teacher_create():
         db.auth_membership.insert(user_id = id, group_id = 2)
 
     return dict(form=form)
-
 
 
 
@@ -170,6 +170,11 @@ def assign_parent_to_student():
 
 
 def standard_overview():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
     grade_query = ((db.classes.grade_level))
     grade = db(grade_query).select(db.classes.grade_level)
     grade_list = []
@@ -207,3 +212,136 @@ def standard_overview():
 
 
     return dict(overview_data = overview_data)
+
+
+def class_list():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.auth_user.id == db.gradebook.teacher)&
+             (db.gradebook.classes == db.classes.id)&
+             (db.classes.content_area == db.contentarea.id))
+
+    class_list = db(query).select(db.classes.grade_level, db.contentarea.name,  db.classes.name, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id)
+
+    return dict(class_list = class_list)
+
+def teacher_list():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.auth_membership.group_id == 2)&
+             (db.auth_user.id == db.auth_membership.user_id))
+
+    teacher_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
+
+    return dict(teacher_list = teacher_list)
+
+def student_list():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.student_classes.id > 0)&
+             (db.student_classes.student_id == db.student.id)&
+             (db.student.user_id == db.auth_user.id))
+
+    student_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.auth_user.username, db.auth_user.email)
+
+    return dict(student_list = student_list)
+
+def parent_list():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.auth_membership.group_id == 4)&
+             (db.auth_user.id == db.auth_membership.user_id))
+
+    parent_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
+
+    return dict(parent_list = parent_list)
+
+def teacher_class():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.auth_user.id == db.gradebook.teacher)&
+             (db.gradebook.classes == db.classes.id)&
+             (db.classes.content_area == db.contentarea.id))
+    teacher_class = db(query).select(db.classes.grade_level, db.classes.name, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id)
+
+    view_data = {}
+    for row in teacher_class:
+        if row.auth_user.id in view_data.keys():
+            view_data[row.auth_user.id][3].append(row.classes.name)
+        else:
+            view_data[row.auth_user.id] = [row.auth_user.first_name, row.auth_user.last_name, row.classes.grade_level, [row.classes.name]]
+
+
+    return dict(view_data = view_data)
+
+def student_class():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.student_classes.id > 0)&
+             (db.student_classes.student_id == db.student.id)&
+             (db.student.user_id == db.auth_user.id)&
+             (db.student_classes.class_id == db.classes.id))
+    student_class =  db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.auth_user.username, db.auth_user.email, db.classes.name)
+
+    view_data = {}
+    for row in student_class:
+        if row.student.school_id_number in view_data.keys():
+            view_data[row.student.school_id_number][4].append(row.classes.name)
+        else:
+            view_data[row.student.school_id_number] = [row.auth_user.first_name, row.auth_user.last_name, row.student.school_id_number, row.auth_user.username, [row.classes.name]]
+
+    sorted_view_data = collections.OrderedDict(sorted(view_data.items()))
+    view_data = sorted_view_data
+
+    return dict(view_data = view_data)
+
+def parent_student():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    query = ((db.parent_student.id > 0)&
+             (db.parent_student.parent_id == db.auth_user.id))
+    parent_query = db(query).select(db.auth_user.ALL, db.parent_student.ALL)
+    parent_dict = {}
+    for row in parent_query:
+        if row.auth_user.id in parent_dict.keys():
+            parent_dict[row.auth_user.id][3].append(row.parent_student.student_id)
+        else:
+            #[id, first, last, [stuent]]
+            parent_dict[row.auth_user.id] = [row.auth_user.id, row.auth_user.first_name, row.auth_user.last_name, [row.parent_student.student_id] ]
+
+    for i in parent_dict.keys():
+        print(parent_dict[i][3])
+
+    view_data = {}
+    for key in parent_dict.keys():
+        view_data[key] = [parent_dict[key], []]
+
+        for student in parent_dict[key][3]:
+            student_query = ((db.student.id == student)&
+                     (db.student.user_id == db.auth_user.id))
+            student_info = db(student_query).select(db.auth_user.ALL)
+            for student in student_info:
+                view_data[key][1].append(student.first_name + " " + student.last_name)
+
+    return dict(view_data = view_data)
