@@ -2,6 +2,8 @@
 A controller to generate all of the charts we'll be using.
 """
 
+import gluon.contrib.simplejson as json
+
 
 @auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
 def standards_performance_for_teacher():
@@ -17,12 +19,22 @@ def standards_performance_for_teacher():
              (db.grade.id==db.grade_standard.grade_id) &
              (db.standard.id==db.grade_standard.standard_id))
 
-    standard_list = db(query).select(db.standard.id,
-                                     db.standard.reference_number,
-                                     db.student_grade.student_score,
-                                     db.grade.score)
+    standard_list = db(query).select(db.standard.short_name,
+                                     db.student_grade.student_score.sum(),
+                                     db.grade.score.sum(),
+                                     orderby=db.standard.reference_number,
+                                     groupby=db.standard.reference_number)
 
-    return dict(sl=standard_list)
+    standard_data = {
+        'label': [],
+        'data': []
+    }
+
+    for standard in standard_list:
+        standard_data['label'].append(standard.standard.short_name)
+        standard_data['data'].append((standard['SUM(student_grade.student_score)'] / standard['SUM(grade.score)']) * 100)
+
+    return dict(standard_data=standard_data)
 
 
 def chart():
