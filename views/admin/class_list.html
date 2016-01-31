@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Classes List</h1>
+            <table class="table table-striped table-condensed">
+                <tr>
+                    <td><h3><b>Grade</b></h3></td>
+                    <td><h3><b>Content Area</b></h3></td>
+                    <td><h3><b>Class Name</b></h3></td>
+                    <td><h3><b>Teach By</b></h3></td>
+                </tr>
+                {{for row in class_list:}}
+                    <tr>
+                        <td>{{=row.classes.grade_level}}</td>
+                        <td>{{=row.contentarea.name}}</td>
+                        <td>{{=row.classes.name}}</td>
+                        <td>{{=row.auth_user.first_name + " " + row.auth_user.last_name}}</td>
+                    </tr>
+                {{pass}}
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.table td {text-align: center;}
+</style>
