@@ -12,3 +12,9 @@
 .options-row {
     padding: 0px 0px 15px 0px;
 }
+
+.header-info {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 50px 10px 10px 0px;
+}

@@ -1,57 +1,66 @@
 {{extend 'layout.html'}}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-12">
+
+    <div class="row"> <!-- header -->
+        <div class="col-md-3">
             <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
-            <table class="table">
-                    <tr>
-                        <td>Total Students</td>
-                        <td></td>
-                        <td>{{=total_students}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Assignments</td>
-                        <td></td>
-                        <td>{{=total_grades}}</td>
-                    </tr>
-                    <tr>
-                        <td>Class Average</td>
-                        <td></td>
-                        <td>{{=average}} %</td>
-                    </tr>
-                    <tr>
-                        <td><h1>Standards</h1></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {{for row in standard_dict:}}
-                    <tr class="{{=get_contextual_classes(standard_dict[row][1]/standard_dict[row][0]*100)}}">
-                        <td>{{=standard_dict[row][2]}}</td>
-                        <td>{{=standard_dict[row][3]}}</td>
-                        <td>{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
-                    </tr>
-                    {{pass}}
-                    <tr>
-                        <td><h1>Due Soon</h1> </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {{if (due_soon_amount != 0):}}
-                        {{count = 0}}
-                        {{for row in due_soon:}}
-                            {{if (count != due_soon_amount):}}
-                                {{count = count + 1}}
-                                <tr>
-                                    <td>{{=row.name}}</td>
-                                    <td></td>
-                                    <td>{{=row.due_date.strftime(DISPLAY_DATE_FORMAT)}}</td>
-                                </tr>
-                            {{else: break}}
-                        {{pass}}
-                    {{else:}}<tr><td></td><td><h3>NO UPCOMING ASSIGNMENTS.</h3></td><td></td></tr>
-                    {{pass}}
-            </table>
+        </div>
+
+        <!-- Fix this so that when it collapses, it becomes left-aligned -->
+        <div class="col-md-3">
+            <h3 class="center">Class Average</h3>
+            <h3 class="center">{{=average}} %</h3>
+        </div>
+
+        <div class="col-md-3">
+            <h3 class="center">Total Assignments</h3>
+            <h3 class="center">{{=total_grades}}</h3>
+        </div>
+
+        <div class="col-md-3">
+            <h3 class="center">Total Students</h3>
+            <h3 class="center">{{=total_students}}</h3>
         </div>
     </div>
+
+    <div class="row"> <!-- tables (standards performance and assignments due soon) -->
+
+        <div class="col-md-6"> <!-- standards performance -->
+            <h2>Standards</h2>
+            <table class="table">
+                {{for row in standard_dict:}}
+                <tr class="{{=get_contextual_classes(standard_dict[row][1]/standard_dict[row][0]*100)}}">
+                    <td>{{=standard_dict[row][2]}}</td>
+                    <td>{{=standard_dict[row][3]}}</td>
+                    <td>{{=format(standard_dict[row][1]/standard_dict[row][0]*100,'.2f')}} %</td>
+                </tr>
+                {{pass}}
+            </table>
+        </div>
+
+        <div class="col-md-6"> <!-- due soon -->
+            <h2>Due Soon</h2>
+            <table class="table">
+                {{if (due_soon_amount != 0):}}
+                {{for row in due_soon:}}
+                <tr>
+                    <td>{{=row.name}}</td>
+                    <td>{{=row.due_date.strftime(DISPLAY_DATE_FORMAT)}}</td>
+                </tr>
+                {{pass}}
+                {{else:}}
+                <tr>
+                    <td>NO UPCOMING ASSIGNMENTS</td>
+                    <td></td>
+                </tr>
+                {{pass}}
+            </table>
+        </div>
+
+    </div>
+    
+    <!-- charts -->
+    {{=LOAD('charts', 'chart.load')}}
+
 </div>
