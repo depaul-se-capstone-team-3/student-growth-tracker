@@ -20,7 +20,7 @@ install:
     - bower install handsontable#0.19.0
     - cp -r bower_components/handsontable/dist ./static/js/
     - cd private
-    - curl -s --ftp-pasv -u sgtdata@2bpencil.com:yT~xR#k0X8Di ftp://2bpencil.com/data.tar.gz > data.tar.gz
+    - curl -s --ftp-pasv -u sgtdata@2bpencil.com:yT~xR#k0X8Di ftp://143.95.66.41/data.tar.gz > data.tar.gz
     - tar -xzf data.tar.gz
     - cd ~/web2py
     - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
