@@ -51,13 +51,14 @@
 
  var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
      Handsontable.renderers.NumericRenderer.apply(this, arguments);
-     if ((col > 0) && (row > 2)) {
+     if ((col > 0)) {
+         delta = 0.001;
          new_value = parseFloat(value);
-         max_score = instance.getDataAtCell(2, col);
+         max_score = parseFloat(max_scores[col]); //instance.getDataAtCell(2, col);
          student_score = parseFloat(value);
-         percent_score = student_score/max_score;
+         percent_score = student_score / max_score;
          
-         if (percent_score == 0) {
+         if ((percent_score - delta) < 0.0) {
              td.style.backgroundColor = '#cceeff'
          }
          else if (percent_score >= 0.90) {
@@ -75,6 +76,8 @@
  var container = document.getElementById("student_grades");
  var hot = undefined;
  var table_data = [];
+ var max_scores = [];
+
  var options = {
      minSpareRows: 0,
      fixedColumnsLeft: 1,
@@ -82,11 +85,10 @@
      colHeaders: false,
      rowHeaders: false,
      contextMenu: true,
-     //allowInvalid: false,
+
      afterChange: function(change, source) {
-         if(source === "loadData") {
-             return;
-         }
+         if(source === "loadData") {return;}
+
          $.ajax({
              url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
              dataType: "json",
@@ -100,6 +102,7 @@
              }
          });
      }
+
  };
  
  function set_visible_columns(row) {
@@ -122,11 +125,23 @@
      return columns;
  }
 
+ function build_headers(grade_names, due_dates, points) {
+     var headers = [''];
+     max_scores.push(0.0);
+
+     for(var i = 3; i < grade_names.length; i += 2) {
+         headers.push(grade_names[i] + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
+         max_scores.push(points[i]);
+     }
+
+     return headers;
+ }
 
  function set_table(data) {
-     table_data = data;
+     table_data = data.slice(3); // table_data is the global data structure for the data.
      options.data = table_data;
      options.renderer = testRenderer;
+     options.colHeaders = build_headers(data[0], data[1], data[2])
      options.columns = set_visible_columns(table_data[0]);
  }
 
