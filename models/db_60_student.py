@@ -32,5 +32,12 @@ db.define_table(
 db.student_grade.student_id.readable = db.student_grade.student_id.writable = False
 db.student_grade.grade_id.readable = db.student_grade.grade_id.writable = False
 
+db.define_table(
+    'attendance',
+    Field('student_id', 'reference student'),
+    Field('class_id', 'reference classes'),
+    Field('attendance_date', 'datetime', requires=(IS_DATE)),
+    Field('present', 'boolean', default=False, required=True))
+
 if __name__ == '__main__':
     pass
