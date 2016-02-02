@@ -24,8 +24,14 @@ def index():
 
     name = get_student_name(student_id).first_name + " " + get_student_name(student_id).last_name
     class_name = get_class_name(class_id).name
-
-    assignment_query = get_student_assignment_list(student_id, class_id)
+    #pull student.id, since get_student_assignment_list needs student.id vs. auth.user_id
+    user_id_query = (db.student.user_id == auth.user_id)
+    user_id_rows = db(user_id_query).select(db.student.id)
+    user_id = 0
+    for key in user_id_rows:
+        user_id = key.id
+        
+    assignment_query = get_student_assignment_list(user_id, class_id)
 
     #[name, score, possible_score, precent, due]
     assignment_data = []
