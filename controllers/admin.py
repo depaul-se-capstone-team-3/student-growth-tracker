@@ -17,6 +17,9 @@ def classes_create():
         redirect(URL('default','index'))
 
     form = SQLFORM.factory(db.classes, submit_button='Create Class')
+    if form.process().accepted:
+        db.classes.insert(**db.classes._filter_fields(form.vars))
+
     return dict(form=form)
 
 
