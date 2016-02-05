@@ -1,13 +1,13 @@
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
-from .base import FunctionalTest
+from .base import FunctionalTest, TEACHER_USER_NAME, TEACHER_PASSWORD
 
 
 class TeacherFunctionalTest(FunctionalTest):
 
-    username = 'tedwhitrock'
-    password = 'test'
+    username = TEACHER_USER_NAME
+    password = TEACHER_PASSWORD
 
     def test_correct_page_loads(self):
         """

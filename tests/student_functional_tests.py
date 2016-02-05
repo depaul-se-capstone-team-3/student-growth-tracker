@@ -1,12 +1,12 @@
 from selenium.webdriver.common.keys import Keys
 
 
-from .base import FunctionalTest
+from .base import FunctionalTest, STUDENT_USER_NAME, STUDENT_PASSWORD
 
 class StudentFunctionalTest(FunctionalTest):
 
-    username = 'Student_One'
-    password = 'test'
+    username = STUDENT_USER_NAME
+    password = STUDENT_PASSWORD
 
     def test_correct_page_loads(self):
         """

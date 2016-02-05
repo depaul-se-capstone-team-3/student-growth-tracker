@@ -5,6 +5,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
 
+TEACHER_USER_NAME = 'tedwhitrock'
+TEACHER_PASSWORD = 'test'
+STUDENT_USER_NAME = 'Student_One'
+STUDENT_PASSWORD = 'test'
+
+
 class FunctionalTest(unittest.TestCase):
 
     def setUp(self):
