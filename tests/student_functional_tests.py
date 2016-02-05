@@ -1,31 +1,19 @@
-import unittest
-
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-USERNAME = 'Student_One'
-PASSWORD = 'test'
+from .base import FunctionalTest
 
+class StudentFunctionalTest(FunctionalTest):
 
-class StudentFunctionalTest(unittest.TestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.server_url = 'http://localhost:8000/student_growth_tracker/'
-        self.browser.implicitly_wait(5)
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def log_in(self):
-        uname_input = self.browser.find_element_by_id('auth_user_username')
-        uname_input.send_keys(USERNAME)
-        pwd_input = self.browser.find_element_by_id('auth_user_password')
-        pwd_input.send_keys(PASSWORD)
-        pwd_input.send_keys(Keys.ENTER)
+    username = 'Student_One'
+    password = 'test'
 
     def test_correct_page_loads(self):
+        """
+        Test that:
+
+        #. the login page displays by default.
+        """
         self.browser.get(self.server_url)
 
         # Get the "logo" text to make sure we're on the correct page.
@@ -34,6 +22,12 @@ class StudentFunctionalTest(unittest.TestCase):
         self.assertIn('Student Growth Tracker', logo_text)
 
     def test_student_can_log_in(self):
+        """
+        Test that:
+
+        #. the teacher can log in,
+        #. the gradebook is displayed upon login.
+        """
         self.browser.get(self.server_url)
 
         self.log_in()
