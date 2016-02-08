@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <canvas id="pieChart" width="300" height="300"></canvas>
+    </div>
+</div>
+
+<script src="{{=URL('static', 'js/Chart.js')}}"></script>
+<script>
+
+var pieChartData = [
+    {
+        value: {{=average}},
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Average"
+    },
+    {
+        value: {{=100-average}},
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Below Average"
+    }
+]
+
+
+ var pieChartContext = $("#pieChart").get(0).getContext("2d");
+ var myPieChart = new Chart(pieChartContext).Pie(pieChartData);
+
+</script>
