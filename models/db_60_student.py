@@ -36,8 +36,15 @@ db.define_table(
     'attendance',
     Field('student_id', 'reference student'),
     Field('class_id', 'reference classes'),
-    Field('attendance_date', 'datetime', requires=(IS_DATE)),
+    Field('attendance_date', 'date'),
     Field('present', 'boolean', default=False, required=True))
+db.attendance.attendance_date.requires = STUDENTS_PRESENT()
+
+db.define_table(
+    'students_not_present',
+    Field('date', 'date', requires=(IS_DATE()), required=True),
+    Field('title'),
+    Field('staff_on_site', 'boolean', default=False, required=True))
 
 if __name__ == '__main__':
     pass
