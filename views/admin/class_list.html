@@ -11,12 +11,12 @@
                     <td><h3><b>Class Name</b></h3></td>
                     <td><h3><b>Teach By</b></h3></td>
                 </tr>
-                {{for row in class_list:}}
+                {{for key in class_list_data.keys():}}
                     <tr>
-                        <td>{{=row.classes.grade_level}}</td>
-                        <td>{{=row.contentarea.name}}</td>
-                        <td>{{=row.classes.name}}</td>
-                        <td>{{=row.auth_user.first_name + " " + row.auth_user.last_name}}</td>
+                        <td>{{=class_list_data[key][0]}}</td>
+                        <td>{{=class_list_data[key][1]}}</td>
+                        <td>{{=class_list_data[key][2]}}</td>
+                        <td>{{=class_list_data[key][3]}}</td>
                     </tr>
                 {{pass}}
             </table>
