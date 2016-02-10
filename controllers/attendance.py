@@ -85,7 +85,6 @@ def index():
     for a in raw_attendance.keys():
         attendance[a] = []
         for i in range(len(days)):
-            # attendance[a].append(days[i])
             attendance[a].append(raw_attendance[a].get(days[i], False))
 
     return dict(date_header=date_header,
