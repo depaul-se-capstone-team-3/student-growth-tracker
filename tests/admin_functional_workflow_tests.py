@@ -93,7 +93,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         self.assertIsNotNone(student_container)
         table_rows = student_container.find_elements_by_tag_name('tr')
         #check that the right number of students return
-        self.assertEqual(len(table_rows), 33)
+        self.assertEqual(len(table_rows), 23)
         #check some of the data to verify sequence and returns
         row_list = table_rows[1].find_elements_by_tag_name('td')
         self.assertEquals(row_list[0].text, '1001')
@@ -323,7 +323,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         self.assertIsNotNone(student_container)
         table_rows = student_container.find_elements_by_tag_name('tr')
         #check that the new student is where we expect it.
-        row_list = table_rows[33].find_elements_by_tag_name('td')
+        row_list = table_rows[23].find_elements_by_tag_name('td')
         self.assertEquals(row_list[0].text, '2001')
         self.assertEquals(row_list[1].text, 'Test Student')
         self.assertEquals(row_list[2].text, 'Test_Student')
