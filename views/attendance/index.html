@@ -1,0 +1,70 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<!-- Anything in this block will be added
+     to the html head section of the page. -->
+{{end}}
+
+<!-- 
+     # In the view
+     #
+     # Row headers: student names
+     # Column headers: date (vertical format)
+     #                 weekday abbreviation
+     #
+     # for each student
+     #   for each weekday
+     #     if it is a non-attendance day:
+     #       display as "greyed out", no checkbox
+     #     else:
+     #       display checkbox
+     #       if present:
+     #         checkbox=checked
+     #       else:
+     #         checkbox=unchecked
+
+     Is it possible to have a table header that stays fixed while things scroll under it.
+     Like frozen rows in Excel.
+
+     It would be nice to have the row and columm highlight under the cursor.
+   -->
+
+<h1>{{=date_header}} Attendance</h1>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <table class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    {{for date in sorted(class_days.keys()):}}
+                    <th>{{=date.day}}<br>{{=class_days[date][0]}}</th>
+                    {{pass}}
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#for }}
+                <tr>
+                    <td>
+                        Name
+                    </td>
+                    {{for j in range(len(class_days)):}}
+                    <td>
+                        {{=j}}
+                    </td>
+                    {{pass}}
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{{=attendance}}
+
+{{block page_js}}
+
+{{end}}
