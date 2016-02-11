@@ -21,14 +21,14 @@ class StudentController(unittest.TestCase):
 
         self.assertEquals(resp['name'], "Student One")
         self.assertEquals(resp['overview_data'][1][0], "Language Arts One")
-        self.assertEquals(resp['overview_data'][1][1], "74.21")
+        self.assertEquals(resp['overview_data'][1][1], "77.89")
 
         # Due_list to be tested with data later.
         row = resp['overview_data'][1][2]
         self.assertTrue(len(row) == 1)
         
         self.assertEquals(resp['overview_data'][2][0], "Math One")
-        self.assertEquals(resp['overview_data'][2][1], "76.19")
+        self.assertEquals(resp['overview_data'][2][1], "86.67")
 
         # Due_list to be tested with data later.
         row = resp['overview_data'][2][2]

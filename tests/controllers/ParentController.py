@@ -31,8 +31,8 @@ class ParentController(unittest.TestCase):
         class_dict_s2 = full_dict[2][1]
         self.assertTrue(class_dict_s1.has_key("Language Arts One"))
         self.assertTrue(class_dict_s1.has_key("Math One"))
-        self.assertEquals(class_dict_s1["Language Arts One"][0],"74.21")
-        self.assertEquals(class_dict_s1["Math One"][0],"76.19")
+        self.assertEquals(class_dict_s1["Language Arts One"][0],"77.89")
+        self.assertEquals(class_dict_s1["Math One"][0],"86.67")
         self.assertTrue(class_dict_s2.has_key("Language Arts One"))
         self.assertTrue(class_dict_s2.has_key("Math One"))
 
