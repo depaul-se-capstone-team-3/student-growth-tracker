@@ -15,6 +15,7 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from operator import itemgetter
+import collections
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
@@ -345,7 +346,7 @@ def pdf_overview():
         else:
             standards_list.append(row.standard.reference_number)
             standard_total_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
-
+        
     #create a pdf for this class overview
     create_single_class_pdf(teacher_name, class_id, class_name, class_average, total_students, total_grades,standards_list, grade_standard_dict, grade_student_dict, standard_total_dict)
 
@@ -417,7 +418,7 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     i = 0
     standard_averages=[[]]
     #Go through the standard_total_dict keys and add all the necessary values to the standard_averages 2d list.
-    for standard in standard_total_dict.keys():
+    for standard in sorted(standard_total_dict.keys()):
         standard_table.append([])
         standard_table[i].append(standard_total_dict[standard][3]+": "+format((standard_total_dict[standard][1]/standard_total_dict[standard][0])*100,'.2f')+"%")
         standard_averages[0].append(int(round((standard_total_dict[standard][1]/standard_total_dict[standard][0])*100)))
@@ -448,8 +449,8 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
 
     #Update colors of the bars in the graph
     bc.bars.symbol = ShadedRect()
-    bc.bars.symbol.fillColorStart = colors.blue
-    bc.bars.symbol.fillColorEnd = colors.blue
+    bc.bars.symbol.fillColorStart = colors.lightblue
+    bc.bars.symbol.fillColorEnd = colors.lightblue
     bc.bars.symbol.strokeWidth = 0
 
 
@@ -483,7 +484,7 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     legend.dxTextSpace = 10
     legend.columnMaximum = 4
 
-    legend.colorNamePairs = [(colors.blue, 'grade average')]
+    legend.colorNamePairs = [(colors.lightblue, 'grade average')]
     drawing.add(legend, 'legend')
     drawing_title = "Bar Graph"
 
