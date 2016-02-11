@@ -169,24 +169,24 @@ def overview():
     #Class ID
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
 
+
     #Teacher Name
     teacher_name = get_teacher_name(teacher_id)
-    
-    #Class Name
+
+    # To display class name.
     query = teacher_classes_query(teacher_id, class_id)
     class_query = db(query).select(db.classes.name)
     class_name = class_query[0].name
-    
-    
-    #To display number of students.
+
+    # To display number of students.
     total_students = len(get_class_roster(teacher_id, class_id))
 
-    #To display number of assignments
+    # To display number of assignments
     grade_query = ((db.class_grade.class_id == class_id) &
                    (db.class_grade.grade_id == db.grade.id))
     total_grades = db(grade_query).count()
 
-    #To display class average
+    # To display class average
     total_score = get_class_total_score(class_id)
     total_possible= get_class_total_possible(class_id)
     average = 0
@@ -195,7 +195,7 @@ def overview():
     except:
         pass
 
-    #To display standards
+    # To display standards
     query = ((db.classes.id==class_id) &
              (db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id) &
@@ -215,11 +215,12 @@ def overview():
                 standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
         else:
             standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
-        
-    #To display due soon
+
+    # To display due soon
+
     due_soon_amount = 3
 
-    #Need to filter with current day datetime.datetime.now()
+    # Need to filter with current day datetime.datetime.now()
     due_soon_query = ((db.classes.id==class_id) &
              (db.gradebook.teacher==teacher_id) &
              (db.gradebook.classes==db.classes.id) &
@@ -230,7 +231,7 @@ def overview():
 
     due_soon = db(due_soon_query).select(db.grade.name, db.grade.due_date,orderby=db.grade.due_date)
 
-    #If number of assignment is less than the number we want to display
+    # If number of assignment is less than the number we want to display
     if(len(due_soon) < due_soon_amount):
         due_soon_amount = len(due_soon)
 

@@ -105,8 +105,8 @@ class TeacherFunctionalTest(unittest.TestCase):
         self.assertIsNotNone(grade_table)
 
         header_row = grade_table.find_element_by_tag_name('tr')
-        header_columns = header_row.find_elements_by_tag_name('td')
-        self.assertEqual('Math Assignment Eleven', header_columns[1].text)
+        header_columns = header_row.find_elements_by_tag_name('th')
+        self.assertTrue(header_columns[1].text.startswith('Math Assignment Eleven'))
 
     def test_teacher_add_new_assignment(self):
         """
@@ -124,7 +124,7 @@ class TeacherFunctionalTest(unittest.TestCase):
         grade_container = self.browser.find_element_by_id('student_grades')
         grade_table = grade_container.find_element_by_tag_name('table')
         header_row = grade_table.find_element_by_tag_name('tr')
-        header_columns = header_row.find_elements_by_tag_name('td')
+        header_columns = header_row.find_elements_by_tag_name('th')
         num_assignments = len(header_columns)
 
         # Check that the "Create new assignment" button takes us to
@@ -175,12 +175,12 @@ class TeacherFunctionalTest(unittest.TestCase):
         self.assertIsNotNone(grade_table)
 
         updated_header_row = updated_grade_table.find_element_by_tag_name('tr')
-        updated_header_columns = updated_header_row.find_elements_by_tag_name('td')
+        updated_header_columns = updated_header_row.find_elements_by_tag_name('th')
 
         last_column_index = len(updated_header_columns) - 1
         new_assignment_column = updated_header_columns[last_column_index]
 
-        self.assertEqual('new test assignment', new_assignment_column.text)
+        self.assertTrue(new_assignment_column.text.startswith('new test assignment'))
         self.assertEqual(num_assignments + 1, len(updated_header_columns))
 
     def test_teacher_add_new_assignment_requires_name(self):

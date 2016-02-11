@@ -24,8 +24,14 @@ def index():
 
     name = get_student_name(student_id).first_name + " " + get_student_name(student_id).last_name
     class_name = get_class_name(class_id).name
-
-    assignment_query = get_student_assignment_list(student_id, class_id)
+    #pull student.id, since get_student_assignment_list needs student.id vs. auth.user_id
+    user_id_query = (db.student.user_id == auth.user_id)
+    user_id_rows = db(user_id_query).select(db.student.id)
+    user_id = 0
+    for key in user_id_rows:
+        user_id = key.id
+        
+    assignment_query = get_student_assignment_list(user_id, class_id)
 
     #[name, score, possible_score, precent, due]
     assignment_data = []
@@ -68,6 +74,10 @@ def overview():
     for row in classes_query:
         classes_list.append([int(row.id), row.name])
 
+    actual_student_id_query = (db.student.user_id == student_id)
+    actual_student_id_rows = db(actual_student_id_query).select(db.student.id)
+    row = actual_student_id_rows[0]
+    student_id = row.id
     for c in classes_list:
         score = get_student_assignment_average(student_id,c[0])
         due_query = get_student_assignment_due(student_id, c[0])
@@ -81,4 +91,4 @@ def overview():
                 due_list.append(row)
         overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
 
-    return dict(name=name, overview_data=overview_data)
+    return dict(name=name, overview_data=overview_data, due_list=due_list, due_count=due_count)
