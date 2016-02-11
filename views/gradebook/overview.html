@@ -3,6 +3,8 @@
     <div class="row">
         <div class="col-sm-12">
             <h1>Classes Overview</h1>
+            <Button type="button" name ="seeting_button"
+                    onclick ="create_a_test_pdf(class_names, class_averages);">PDF</Button>
             <table class="table">
                     <tr>
                         <td><h4>Classes:</h4></td>
@@ -12,8 +14,8 @@
                     </tr>
                     <tr>
                         <td><h4>Class Average:</h4></td>
-                        {{for row in class_averages:}}
-                            <td><b>{{=row}}%</b></td>
+                        {{for row in class_averages_dict:}}
+                        <td>{{=class_averages_dict[row]}}%</td>
                         {{pass}}
                     </tr>
                     <tr>
