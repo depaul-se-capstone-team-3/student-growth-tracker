@@ -81,7 +81,7 @@ def overview():
         class_dict = {}
         
         for student_class in student_classes:
-            student_average_list = get_student_assignment_average(student.user_id, student_class.id)
+            student_average_list = get_student_assignment_average(student.id, student_class.id)
             student_average = format(float((student_average_list[0]/student_average_list[1] * 100)), '.2f')
             i += 1
             

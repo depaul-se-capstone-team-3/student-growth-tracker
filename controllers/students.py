@@ -74,6 +74,10 @@ def overview():
     for row in classes_query:
         classes_list.append([int(row.id), row.name])
 
+    actual_student_id_query = (db.student.user_id == student_id)
+    actual_student_id_rows = db(actual_student_id_query).select(db.student.id)
+    row = actual_student_id_rows[0]
+    student_id = row.id
     for c in classes_list:
         score = get_student_assignment_average(student_id,c[0])
         due_query = get_student_assignment_due(student_id, c[0])
@@ -87,4 +91,4 @@ def overview():
                 due_list.append(row)
         overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
 
-    return dict(name=name, overview_data=overview_data)
+    return dict(name=name, overview_data=overview_data, due_list=due_list, due_count=due_count)

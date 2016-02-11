@@ -183,10 +183,11 @@ def get_class_total_score(class_id):
              (db.grade.due_date <= datetime.datetime.now()))
 
 
-    student_point_list = db(query).select(db.student_grade.student_score)
+    student_point_list = db(query).select(db.student_grade.student_score, db.grade.due_date)
     results = 0.0
     for row in student_point_list:
-        results = row.student_score + results
+        if (row.grade.due_date <= datetime.datetime.now()):
+            results = row.student_grade.student_score + results
 
     return results
 
@@ -207,10 +208,11 @@ def get_class_total_possible(class_id):
 #                 (db.grade.due_date != None ) &
                  (db.grade.due_date <= datetime.datetime.now()))
 
-    max_point_list = db(query).select(db.grade.score)
+    max_point_list = db(query).select(db.grade.score, db.grade.due_date)
     results = 0.0
     for row in max_point_list:
-        results = row.score + results
+        if (row.due_date <= datetime.datetime.now()):
+            results = row.score + results
 
     return results
 
@@ -241,13 +243,14 @@ def get_student_assignment_average(student_id, class_id):
              (db.grade.id == db.student_grade.grade_id ) &
              (db.student_grade.student_id == db.student.id ) &
              (db.student.id == student_id))
-    grade_list = db(query).select(db.grade.name, db.grade.score, db.student_grade.student_score)
+    grade_list = db(query).select(db.grade.name, db.grade.score, db.student_grade.student_score, db.grade.due_date)
 
     student_score = 0.0
     possible_score = 0.0
     for row in grade_list:
-        student_score = row.student_grade.student_score + student_score
-        possible_score = row.grade.score + possible_score
+        if (row.grade.due_date < datetime.datetime.now()):
+            student_score = row.student_grade.student_score + student_score
+            possible_score = row.grade.score + possible_score
 
     return ([student_score, possible_score])
 
