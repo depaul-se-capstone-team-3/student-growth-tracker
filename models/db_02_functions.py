@@ -11,7 +11,15 @@ have names that end with ``_query``.
 Functions that return sets of values have names that start with ``get_``.
 """
 import datetime
-
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import *
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from cgi import escape
+import time
 def teacher_classes_query(teacher_id, class_id=None):
     """
     Return a :py:class:`Query <pydal.objects.Query>` object that represents the
@@ -309,6 +317,10 @@ def get_class_name(class_id):
     query = ((db.classes.id == class_id))
     name = db(query).select(db.classes.name)
     return(name[0])
+def get_teacher_name(teacher_id):
+    query = (db.auth_user.id == teacher_id)
+    name = db(query).select(db.auth_user.first_name, db.auth_user.last_name)
+    return (name[0])
 
 def get_student_name(student_id):
     """

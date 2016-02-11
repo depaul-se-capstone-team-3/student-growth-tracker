@@ -5,6 +5,8 @@
     <div class="row"> <!-- header -->
         <div class="col-md-3">
             <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
+            <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('classes', 'pdf_overview', args = [class_id])}}'">Download PDF</button>
+
         </div>
 
         <!-- Fix this so that when it collapses, it becomes left-aligned -->
@@ -41,6 +43,7 @@
 
         <div class="col-md-6"> <!-- due soon -->
             <h2>Due Soon</h2>
+
             <table class="table">
                 {{if (due_soon_amount != 0):}}
                 {{for row in due_soon:}}
