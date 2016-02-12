@@ -88,6 +88,7 @@ def index():
             attendance[a].append(raw_attendance[a].get(days[i], False))
 
     return dict(date_header=date_header,
+                menu_months=months_in_session(),
                 class_list=class_list,
                 class_days=class_days,
                 attendance=attendance)
@@ -124,3 +125,21 @@ def class_days_this_month(first_day, last_day):
         current = current + datetime.timedelta(days=1)
     
     return dates
+
+def months_in_session():
+    first_day = db.students_not_present.date.min()
+    open_date = db().select(first_day).first()[first_day]
+
+    last_day = db.students_not_present.date.max()
+    close_date = db().select(last_day).first()[last_day]
+
+    months = []
+    current = open_date
+
+    while current < close_date:
+        months.append(current.strftime('%B, %Y'))
+        new_month = (current.month % 12) + 1
+        new_year = current.year + (current.month / 12)
+        current = current.replace(year=new_year, month=new_month)
+
+    return months

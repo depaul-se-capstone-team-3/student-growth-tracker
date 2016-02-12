@@ -33,8 +33,26 @@
 
 <div class="row">
     <div class="col-sm-12">
+        <select id="attendance_month">
+            {{for month in menu_months:}}
+            <option value="{{=month}}"
+                    {{if month == date_header:}}selected{{pass}}>{{=month}}</option>
+            {{pass}}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
 
         <table class="table table-striped">
+
+            <!--
+                 I can probably add column highlighting with a
+                 colgroup and a class, and maybe some javascript.
+
+                 Don't need row highlighting, as we've go the stripes.
+            -->
 
             <thead>
                 <tr>
