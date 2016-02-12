@@ -11,14 +11,6 @@ have names that end with ``_query``.
 Functions that return sets of values have names that start with ``get_``.
 """
 import datetime
-from reportlab.lib.enums import TA_JUSTIFY
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import *
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from cgi import escape
 import time
 def teacher_classes_query(teacher_id, class_id=None):
     """
