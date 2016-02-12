@@ -16,6 +16,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from operator import itemgetter
 import collections
+from cStringIO import StringIO
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
@@ -253,7 +254,9 @@ def pdf_overview():
         pass
     else:
         redirect(URL('default','index'))
-
+    #pdfName = class_name+"_CLR"+".pdf"
+    #response.headers['Content-Type'] = 'application/pdf'
+    #response.headers['Content-Disposition'] ='attachment;filename=test.pdf;'
     teacher_id = auth.user_id
     #Class Id
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
@@ -347,18 +350,35 @@ def pdf_overview():
             standards_list.append(row.standard.reference_number)
             standard_total_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
         
+        
+    #buff = StringIO()
+    #p = canvas.Canvas(buff)
     #create a pdf for this class overview
-    create_single_class_pdf(teacher_name, class_id, class_name, class_average, total_students, total_grades,standards_list, grade_standard_dict, grade_student_dict, standard_total_dict)
+    pdf = create_single_class_pdf(teacher_name, class_id, class_name, class_average, total_students, total_grades,standards_list, grade_standard_dict, grade_student_dict, standard_total_dict)
 
+   # p.drawString(100,100, "Hello World!")
+    #doc.build(Story)
+    #p.showPage()
+    #p.save()
+
+    #pdf = buff.getvalue()
+    #buff.close()
+    return pdf
     #Make sure no one stays on this page. if everything passes above, then they are booted back to their default index screen. 
     #WHEN IS THIS USED: if the user manually types the url above. if they go by way of a button, the pdf_creation Function redirects them
     #to the page they were originally on.
-    redirect(URL('default','index'))
+    
+    #redirect(URL('default','index'))
 
 def create_single_class_pdf(teacher_name, class_id,class_name, class_average, total_students, total_grades, standards_list, grade_standard_dict, grade_student_dict, standard_total_dict):
+    pdfName = class_name+"_CLR"+".pdf"
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] ='attachment;filename=%s;'%pdfName
     styles = getSampleStyleSheet()
     HeaderStyle = styles["Heading1"]
-    doc = SimpleDocTemplate(class_name+"_CLR"+".pdf",pagesize=letter,rightMargin=72,leftMargin=72,topMargin=72,bottomMargin=18)
+    buff = StringIO()
+    doc = SimpleDocTemplate(buff,pagesize=letter,rightMargin=72,leftMargin=72,topMargin=72,bottomMargin=18)
+    doc.title=pdfName
     Story=[]
     Elements=[]
     formatted_time = time.ctime()
@@ -416,10 +436,14 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     test_values=[[10,20,50,90,80]]
     standard_table=[]
     i = 0
+    minimum = 100
     standard_averages=[[]]
     #Go through the standard_total_dict keys and add all the necessary values to the standard_averages 2d list.
     for standard in sorted(standard_total_dict.keys()):
         standard_table.append([])
+        current_avg = (standard_total_dict[standard][1]/standard_total_dict[standard][0])*100
+        if minimum > current_avg:
+            minimum = current_avg
         standard_table[i].append(standard_total_dict[standard][3]+": "+format((standard_total_dict[standard][1]/standard_total_dict[standard][0])*100,'.2f')+"%")
         standard_averages[0].append(int(round((standard_total_dict[standard][1]/standard_total_dict[standard][0])*100)))
 
@@ -437,14 +461,17 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     bc = VerticalBarChart()
 
     #location in the document (x,y)
-    bc.x = 50
-    bc.y = 50
+    bc.x = 10
+    bc.y = 30
 
     #width and height of the graph
-    bc.height = 125
-    bc.width = 300
+    bc.height = 225
+    bc.width = 400
     bc.data = data
-
+    bc.categoryAxis.drawGridLast=True
+    bc.categoryAxis.gridStart=0
+    bc.categoryAxis.gridStrokeLineCap = 2
+    bc.categoryAxis.gridEnd=3
     bc.barLabels = [10,20,30,40,50]
 
     #Update colors of the bars in the graph
@@ -457,10 +484,13 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     #this draws a line at the top of the graph to close it. 
     bc.strokeColor = colors.black
 
-    #Y-axis min, max, and steps. 
-    bc.valueAxis.valueMin = 0
+    #Y-axis min, max, and steps.
+    if minimum != 100:
+        bc.valueAxis.valueMin = minimum -10
+    else:
+        bc.valueAxis.valueMin = 50
     bc.valueAxis.valueMax = 100
-    bc.valueAxis.valueStep = 10
+    bc.valueAxis.valueStep = 5
 
     #where to anchor the origin of the graph
     bc.categoryAxis.labels.boxAnchor = 'ne'
@@ -478,7 +508,7 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     #Graph Legend
     legend = Legend()
     legend.alignment = 'right'
-    legend.x = 355
+    legend.x = 420
     legend.y = 150
     legend.deltax = 60
     legend.dxTextSpace = 10
@@ -487,10 +517,7 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     legend.colorNamePairs = [(colors.lightblue, 'grade average')]
     drawing.add(legend, 'legend')
     drawing_title = "Bar Graph"
-
     Story.append(drawing)
-    
-    #drawing.save(fnRoot='example', formats=['png', 'pdf'])
 
     t=Table(standard_table)
     t.setStyle(t.setStyle(TableStyle([('BOX', (0,0), (-1,-1), 0.25, colors.black),
@@ -498,6 +525,7 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
                                       ('BACKGROUND',(0,0),(0,-1),colors.lightgrey),
                                       ('INNERGRID', (0,0), (-1,-1), 0.25, colors.black),])))
     Story.append(t)
-    
     doc.build(Story)
-    redirect(request.env.http_referer)
+    pdf = buff.getvalue()
+    buff.close()
+    return pdf
