@@ -60,6 +60,7 @@ def create():
     #else:
      #   redirect(request.env.http_referer)
 
+
     query = ((db.classes.id==class_id) &
         (db.classes.id==db.student_classes.class_id) &
         (db.student_classes.student_id==db.student.id) &
@@ -69,12 +70,10 @@ def create():
         (db.grade.id==db.grade_standard.grade_id) &
         (db.standard.id==db.grade_standard.standard_id) &
         (db.standard.content_area == db.contentarea.id))
-    
+
     query = ((class_id == db.classes.id)&
             (db.standard.content_area == db.classes.content_area))
-    
-    
-    
+
             #((class_id == db.classes.id) & 
             # (db.classes.id == db.class_grade.class_id) &
              #(db.grade.id == db.class_grade.grade_id) &
@@ -84,7 +83,10 @@ def create():
 
 #    standard_list = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score,  db.grade.score)
     #Creating the drob down menu for Standard
-    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(short_name)s'+': '+'%(reference_number)s',zero=T('Standards')))
+
+    fields = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number)
+
+    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(short_name)s'+': '+'%(reference_number)s',zero=T('Choose a standard')))
     #query = ((db.classes.id == class_id) & (db.classes.content_area==db.standard.content_area))
     now = datetime.datetime.utcnow()
     now = now - datetime.timedelta(minutes=now.minute % 10,
@@ -93,9 +95,9 @@ def create():
 
     form = SQLFORM.factory(db.grade,standardR)
 
-    form.vars.display_date = now
-    form.vars.date_assigned = now
-    form.vars.due_date = now + datetime.timedelta(days=1)
+    form.vars.display_date = now.strftime("%B %d, %Y")
+    form.vars.date_assigned = now.strftime("%B %d, %Y")
+    form.vars.due_date = (now + datetime.timedelta(days=1)).strftime("%B %d, %Y")
 
     #Processing the form
     if form.process().accepted:
@@ -106,7 +108,8 @@ def create():
         #creating the link between class and grade.
         db.class_grade.insert(class_id = class_id,grade_id = id)
         #creating the link between grade and standard
-        db.grade_standard.insert(grade_id = id, standard_id = form.vars.standard)
+        if form.vars.standard != zero:
+            db.grade_standard.insert(grade_id = id, standard_id = form.vars.standard)
 
         #get student_class query (get_class_roster(tearcher_id, class_id))
         #for-loop through students

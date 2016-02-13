@@ -89,6 +89,9 @@ def overview():
             else:
                 due_count = due_count + 1
                 due_list.append(row)
-        overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
+        if score[1] != 0:
+            overview_data[c[0]] = [c[1], format(score[0]/score[1]*100.0 , '.2f'), due_list]
+        else:
+            overview_data[c[0]] = [c[1], 0.0, due_list]
 
     return dict(name=name, overview_data=overview_data, due_list=due_list, due_count=due_count)
