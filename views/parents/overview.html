@@ -24,10 +24,10 @@
                         <td></td>
                     </tr>
                     {{for class_key in class_dict.keys():}}
-                         <tr class="{{=get_contextual_classes(float(total_average))}}">
+                         <tr class="{{=get_contextual_classes(float(class_dict[class_key][0]))}}">
                             <td>
                                 {{#code below figures out the button color based on input values}}
-                            <button class="btn btn-xs btn-{{=get_contextual_classes(float(total_average))}}" data-toggle="collapse"  data-target=".{{=j}}">
+                            <button class="btn btn-xs btn-{{=get_contextual_classes(float(class_dict[class_key][0]))}}" data-toggle="collapse"  data-target=".{{=j}}">
                                 <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=j}}" ></i></button>&nbsp&nbsp
                             <span class="h3">{{=A(class_key, _href=URL('parents', 'index', args=[class_dict[class_key][2], student]))}}</span>
                             </td>
