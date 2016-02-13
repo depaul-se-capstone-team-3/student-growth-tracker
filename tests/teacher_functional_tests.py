@@ -106,7 +106,7 @@ class TeacherFunctionalTest(unittest.TestCase):
 
         header_row = grade_table.find_element_by_tag_name('tr')
         header_columns = header_row.find_elements_by_tag_name('th')
-        self.assertTrue(header_columns[1].text.startswith('Math Assignment Eleven'))
+        self.assertTrue(header_columns[1].text.startswith('Math Assignment'))
 
     def test_teacher_add_new_assignment(self):
         """
