@@ -1,28 +1,34 @@
 {{extend 'layout.html'}}
 
-<div class="container">
 
-    <div class="row"> <!-- header -->
-        <div class="col-md-3">
+<div class="container">
+    <div class="row"> <!-- class average -->
+        <div class="col-md-12">
             <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
         </div>
-
-        <!-- Fix this so that when it collapses, it becomes left-aligned -->
-        <div class="col-md-3">
-            <h3 class="center">Class Average</h3>
-            <h3 class="center">{{=average}} %</h3>
-        </div>
-
-        <div class="col-md-3">
-            <h3 class="center">Total Assignments</h3>
-            <h3 class="center">{{=total_grades}}</h3>
-        </div>
-
-        <div class="col-md-3">
-            <h3 class="center">Total Students</h3>
-            <h3 class="center">{{=total_students}}</h3>
-        </div>
     </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <div class="col-md-6" align="center">
+      <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_pie.load', args=2)}}</div>  -->
+        <div class="row">{{=LOAD('charts', 'class_overview_percent_range_pie.load', args=class_id)}}</div>
+      <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_assignment_range_pie.load', args=2)}}</div> -->
+    </div>
+
+    <div class="col-md-6" align="center"> <!-- average  breakdown -->
+        <div class="row"><h3>Class Average: &nbsp{{=average}} %</h3></div>
+        <div class="row"><h3>Total Students: &nbsp{{=total_students}}</h3></div>
+        <div class="row"><h3>Total Assignments: &nbsp{{=total_grades}}</h3></div>
+    </div>
+
+</div>
+<br>
+<br>
+
+<div class="container">
+
 
     <div class="row"> <!-- tables (standards performance and assignments due soon) -->
 
@@ -59,8 +65,7 @@
         </div>
 
     </div>
-    
     <!-- charts -->
-    {{=LOAD('charts', 'chart.load')}}
+    {{=LOAD('charts', 'class_overview_standard_bar.load', args=class_id)}}
 
 </div>

@@ -1,6 +1,10 @@
 <div class="row">
-    <div class="col-md-12">
-        <canvas id="averageBreakdown" width="150" height="150"></canvas>
+    <div class="col-md-6" align="right">
+        <canvas id="averageBreakdown" width="200" height="200"></canvas>
+    </div>
+    <div class="col-md-6" align="left">
+        <br><br><br>
+        <div id="js-legend" class="chart-legend"></div>
     </div>
 </div>
 
@@ -43,5 +47,6 @@ var pieChartData = [
  var pieChartOptions = {animateRotate : true};
  var averageBreakdownContext = $("#averageBreakdown").get(0).getContext("2d");
  var myPieChart = new Chart(averageBreakdownContext).Pie(pieChartData, pieChartOptions);
+ document.getElementById('js-legend').innerHTML = myPieChart.generateLegend();
 
 </script>

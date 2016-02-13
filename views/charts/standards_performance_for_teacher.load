@@ -29,8 +29,10 @@
                         scaleLabel : "<%= value + ' %'   %>",
                         scaleOverride: true,
                         scaleSteps: 10,
-                        scaleStepWidth: 10,
-                        scaleStartValue: 0
+                        scaleStepWidth: 5,
+                        scaleStartValue: 50,
+                        barValueSpacing:70,
+                        barDatasetSpacing:20,
                        };
  var barChartContext = $("#barChart").get(0).getContext("2d");
  var myBarChart = new Chart(barChartContext).Bar(barChartData, barChartOptions);
