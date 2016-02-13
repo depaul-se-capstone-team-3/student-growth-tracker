@@ -53,6 +53,7 @@ def class_overview_pie():
 def class_overview_percent_range_pie():
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
     teacher_id = auth.user_id
+
     query = ((db.classes.id == class_id)&
              (db.classes.id == db.class_grade.class_id)&
              (db.grade.id == db.class_grade.grade_id)&
@@ -96,7 +97,9 @@ def class_overview_percent_range_pie():
 
 def class_overview_assignment_range_pie():
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+
     teacher_id = auth.user_id
+
     query = ((db.classes.id == class_id)&
              (db.classes.id == db.class_grade.class_id)&
              (db.grade.id == db.class_grade.grade_id)&
@@ -137,11 +140,6 @@ def class_overview_assignment_range_pie():
         else:
             pie_data[50] = pie_data[50]+1
 
-    for key in pie_data.keys():
-        print("key: ", key)
-        print(pie_data[key])
-
-
     return dict(pie_data=pie_data)
 
 
@@ -175,7 +173,45 @@ def class_overview_standard_bar():
 
     return dict(standard_dict=standard_dict)
 
+def admin_standard_overview_bar():
+    key = (request.args(0) != None) and request.args(0, cast=int) or None
+    grade_query = ((db.classes.grade_level))
+    grade = db(grade_query).select(db.classes.grade_level)
+    grade_list = []
+    for row in grade:
+        grade_list.append(row.grade_level)
+    grade_list = list(set(grade_list))
+    #print(grade_list)
 
+    overview_data = {}
+    for grade in grade_list:
+        standard_query = ((db.classes.grade_level == grade)&
+                          (db.classes.id == db.student_classes.class_id)&
+                          (db.student.id == db.student_classes.student_id)&
+                          (db.student.id == db.student_grade.student_id)&
+                          (db.grade.id == db.student_grade.grade_id)&
+                          (db.grade.id == db.grade_standard.grade_id)&
+                          (db.standard.id == db.grade_standard.standard_id)&
+                          (db.classes.id == db.class_grade.class_id)&
+                          (db.grade.id == db.class_grade.grade_id)&
+                          (db.standard.content_area == db.contentarea.id))
+
+        standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score)
+
+        standard_dict = {}
+        for row in standard_list:
+            if row.standard.id in standard_dict.keys():
+                if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
+                    max_score = standard_dict[row.standard.id][0] + row.grade.score
+                    student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
+                    standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+            else:
+                standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+
+        overview_data[grade] = standard_dict
+
+
+    return dict(overview_data = overview_data, key=key)
 
 
 

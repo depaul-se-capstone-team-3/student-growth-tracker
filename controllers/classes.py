@@ -5,6 +5,7 @@ Everything concerning classes goes here. Sort of. We'll clarify as we go on.
 """
 
 from gluon.contrib.simplejson import dumps, loads
+import collections
 import datetime
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
@@ -22,6 +23,7 @@ from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
 from reportlab.graphics.widgets.grids import ShadedRect
 from reportlab.graphics.shapes import Drawing
+
 
 @auth.requires_login()
 def index():
@@ -236,6 +238,9 @@ def overview():
     # If number of assignment is less than the number we want to display
     if(len(due_soon) < due_soon_amount):
         due_soon_amount = len(due_soon)
+
+    sorted_standard_dict = collections.OrderedDict(sorted(standard_dict.items()))
+    standard_dict = sorted_standard_dict
 
     return dict(class_name=class_name,
                 class_id=class_id,
