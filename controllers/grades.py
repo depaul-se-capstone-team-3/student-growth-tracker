@@ -24,36 +24,28 @@ def query():
 
 @auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
 def create():
-
     # Generating form for creating a new assignment.
     # If there is an argument class id, check to see if
     # db.classes contains that class.
     class_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    if not class_id:
-        response.flash = T("Class ID Required.")
-        session.flash = T("Class ID Required.")
+    if not class_id or not db.classes(class_id):
+        session.flash = T('Invalid class ID: "%s"' % class_id)
+        redirect(URL('default', 'index'))
 
     teacher_id = auth.user_id
-    exist = db.classes(class_id)
-    content_id = 1
-
-    if not exist:
-        response.flash = T("Class does not exist.")
-        session.flash = T("Class does not exist.")
 
     query = ((db.classes.id==class_id) &
              (db.classes.content_area==db.contentarea.id) &
              (db.standard.content_area==db.contentarea.id))
 
-    # # Creating the drob down menu for Standard
+    # Creating the drop down menu for Standard.
     standards = db(query).select(db.standard.id,
                                  db.standard.short_name,
                                  db.standard.reference_number)
 
     options = []
     for row in standards:
-        text = '%s - %s' % (row.reference_number,
-                            row.short_name)
+        text = '%s - %s' % (row.reference_number, row.short_name)
         options.append(OPTION(text, _value=row.id))
 
     standards_menu = SELECT(options, _name='standards', _multiple='multiple',
@@ -66,30 +58,31 @@ def create():
     if form.validate():
         response.flash = 'New grade created.'
 
-    #     # inserting the new grade into db.grade
-    #     id = db.grade.insert(**db.grade._filter_fields(form.vars))
+        name = form.vars.name
+        display_date = form.vars.display_date
+        date_assigned = form.vars.date_assigned
+        due_date = form.vars.due_date
+        grade_type = form.vars.grade_type
+        score = form.vars.score
+        selected_standards = form.vars.standards
 
-    #     # creating the link between class and grade.
-    #     db.class_grade.insert(class_id = class_id,grade_id = id)
+        grade_id = db.grade.insert(name=form.vars.name,
+                                   display_date=form.vars.display_date,
+                                   date_assigned=form.vars.date_assigned,
+                                   due_date=form.vars.due_date,
+                                   grade_type=form.vars.grade_type,
+                                   score=form.vars.score)
 
-    #     # creating the link between grade and standard
-    #     if form.vars.standard != zero:
-    #         db.grade_standard.insert(grade_id = id, standard_id = form.vars.standard)
+        db.class_grade.insert(class_id=class_id, grade_id=grade_id)
 
-    #     # get student_class query (get_class_roster(tearcher_id, class_id))
-    #     # for-loop through students
-    #     # add to the student_grade table with (student_id,grade_id, 0)
-    #     for student in get_class_roster(teacher_id, class_id):
-    #         db.student_grade.insert(student_id=student[0], grade_id = id, student_score = 0)
+        for standard_id in selected_standards:
+            db.grade_standard.insert(grade_id=grade_id,
+                                     standard_id=standard_id)
 
-    #     response.flash = T("New assignment successfully created")
-    #     session.flash = T("New assignment successfully created")
-    #     redirect(URL("classes","index/"+class_id))
-
-    # #Form error handling.
-    # elif form.errors:
-    #     response.flash = T("Form Has Errors")
-    #     session.flash = T("Form Has Errors")
+        for student in get_class_roster(teacher_id, class_id):
+            db.student_grade.insert(student_id=student[0],
+                                    grade_id=grade_id,
+                                    student_score=0)
 
     return dict(form=form, standards=standards_menu)
 

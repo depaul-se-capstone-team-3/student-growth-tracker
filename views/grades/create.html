@@ -41,15 +41,9 @@
                 </div>
                 <div class="col-sm-4">
                     <h4>Grade Type</h4>
-                    <!-- select name="grade_type" class="generic-widget form-control">
-                        <option value="Assignment">Assignment</option>
-                        <option value="Assessment">Assessment</option>
-                    </select -->
                     {{=form.custom.widget.grade_type}}
                 </div>
-                <!-- </div> -->
 
-            <!-- <div class="row"> -->
                 <div class="col-sm-4">
                     <h4>Standards</h4>
                     {{=standards}}
@@ -71,15 +65,3 @@
     <div class="col-sm-2"></div>
 </div>
 {{=form.custom.end}}
-
-{{=form.vars}}
-
-{{if form.errors:}}
-<h3>Errors</h3>
-<ul>
-    {{for fieldname in form.errors:}}
-    <li>{{=fieldname}} error: {{=form.errors[fieldname]}}</li>
-    {{pass}}
-</ul>
-{{form.errors.clear()}}
-{{pass}}
