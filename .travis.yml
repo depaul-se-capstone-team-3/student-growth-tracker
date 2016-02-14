@@ -14,6 +14,7 @@ install:
     - git clone https://github.com/web2py/web2py.git ./web2py
     - pip install pydal
     - pip install selenium
+    - pip install reportlab
     - cd ~/web2py/applications
     - git clone https://github.com/bpatzke/student-growth-tracker.git ./student_growth_tracker
     - cd student_growth_tracker
