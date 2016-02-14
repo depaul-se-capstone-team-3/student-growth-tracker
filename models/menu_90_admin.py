@@ -10,7 +10,7 @@ if auth.has_membership(1, auth.user_id):
     views_menu_items = [("Standards Overview", False, URL("admin","standard_overview")),
                         ("Class List", False, URL("admin","class_list")),
                         ("Teacher List", False, URL("admin","teacher_list")),
-                        ("'Student List", False, URL("admin","student_list")),
+                        ("Student List", False, URL("admin","student_list")),
                         ("Parent List", False, URL("admin","parent_list")),
                         ("Teacher - Class Relation", False, URL("admin","teacher_class")),
                         ("Student - Class Relation", False, URL("admin","student_class")),
