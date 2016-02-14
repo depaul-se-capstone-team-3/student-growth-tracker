@@ -1,36 +1,19 @@
-import unittest
-
-from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait, Select
 
-
-USERNAME = 'tedwhitrock'
-PASSWORD = 'test'
+from .base import FunctionalTest, TEACHER_USER_NAME, TEACHER_PASSWORD
 
 
-class TeacherFunctionalTest(unittest.TestCase):
+class TeacherFunctionalTest(FunctionalTest):
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.server_url = 'http://localhost:8000/student_growth_tracker/'
-        self.browser.implicitly_wait(10)
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def log_in(self):
-        uname_input = self.browser.find_element_by_id('auth_user_username')
-        uname_input.send_keys(USERNAME)
-        pwd_input = self.browser.find_element_by_id('auth_user_password')
-        pwd_input.send_keys(PASSWORD)
-        pwd_input.send_keys(Keys.ENTER)
+    username = TEACHER_USER_NAME
+    password = TEACHER_PASSWORD
 
     def test_correct_page_loads(self):
         """
         Test that:
 
-        #. the login page displays by default.
+        1. The login page displays by default.
         """
         self.browser.get(self.server_url)
 
@@ -43,8 +26,8 @@ class TeacherFunctionalTest(unittest.TestCase):
         """
         Test that:
 
-        #. the teacher can log in,
-        #. the gradebook is displayed upon login.
+        1. The teacher can log in,
+        2. The gradebook is displayed upon login.
         """
         self.browser.get(self.server_url)
 
@@ -57,7 +40,7 @@ class TeacherFunctionalTest(unittest.TestCase):
         """
         Test that:
 
-        #. the teacher can access the overview for a specific class.
+        1. The teacher can access the overview for a specific class.
         """
         self.browser.get(self.server_url)
 
@@ -72,7 +55,7 @@ class TeacherFunctionalTest(unittest.TestCase):
         """
         Test that:
 
-        #. the teacher can access the grade details for a specific class.
+        1. The teacher can access the grade details for a specific class.
         """
         self.browser.get(self.server_url)
 
@@ -88,7 +71,7 @@ class TeacherFunctionalTest(unittest.TestCase):
         """
         Test that:
 
-        #. the teacher can view the grade detail table for a specific class.
+        1. The teacher can view the grade detail table for a specific class.
         """
         self.browser.get(self.server_url)
 
