@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-# try something like
+
 import datetime
+from types import ListType
 
 @auth.requires_login()
 def index():
-    #constraints = db.gradebook.teacher == auth.user.id
-    #grid = SQLFORM.smartgrid(db.grade)
-
-    #grid = db(db.grade.name).select(join=db.grade.on((db.grade.name==db.student_grade.grade_id)))
-    
     grid = db().select(db.grade.id, db.grade.name, db.grade.display_date,
                        db.grade.date_assigned, db.grade.due_date,
                        db.grade.grade_type,db.grade.score, db.grade.isPassFail)
@@ -49,22 +44,24 @@ def create():
         options.append(OPTION(text, _value=row.id))
 
     standards_menu = SELECT(options, _name='standards', _multiple='multiple',
-                            _class='generic-widget form-control')
+                            _class='generic-widget form-control',
+                            _id='standards')
 
     form = SQLFORM(db.grade)
+    # Insert the SELECT object at the end of the form.
     form.insert(-1, standards_menu)
 
     # Processing the form
     if form.validate():
         response.flash = 'New grade created.'
 
-        name = form.vars.name
-        display_date = form.vars.display_date
-        date_assigned = form.vars.date_assigned
-        due_date = form.vars.due_date
-        grade_type = form.vars.grade_type
-        score = form.vars.score
-        selected_standards = form.vars.standards
+        # If only one item is selected, form.vars.standards is a string.
+        # If multiple items are selected, form.vars.standards is a
+        # list of strings.
+        if type(form.vars.standards) is not ListType:
+            selected_standards = [form.vars.standards]
+        else:
+            selected_standards = form.vars.standards
 
         grade_id = db.grade.insert(name=form.vars.name,
                                    display_date=form.vars.display_date,
@@ -83,6 +80,8 @@ def create():
             db.student_grade.insert(student_id=student[0],
                                     grade_id=grade_id,
                                     student_score=0)
+
+        redirect(URL('classes', 'index', args=[class_id]))
 
     return dict(form=form, standards=standards_menu)
 
