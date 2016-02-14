@@ -74,7 +74,6 @@ class ParentController(unittest.TestCase):
         for standard in standards_dict_s1.keys():
             count += 1
         self.assertEquals(count, 5)
-        print (standards_dict_s1)
         #sequence cannot be verified, but check that the right standards are in the dict
         self.assertTrue(standards_dict_s1.has_key(6))
         self.assertTrue(standards_dict_s1.has_key(7))
