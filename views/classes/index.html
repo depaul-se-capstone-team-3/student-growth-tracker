@@ -77,11 +77,13 @@
  var hot = undefined;
  var table_data = [];
  var max_scores = [];
+ var font_size = 14; // By observation. Not accurate, but it will do for now.
+ var column_width = 125;
 
  var options = {
      minSpareRows: 0,
      fixedColumnsLeft: 1,
-     /* colWidths: 150, */ // Maybe add a function that can calculate where to break headers so lines are < colWidths.
+     colWidths: column_width, // Maybe add a function that can calculate where to break headers so lines are < colWidths.
      rowHeaders: false,
      contextMenu: true,
 
@@ -129,7 +131,20 @@
      max_scores.push(0.0);
 
      for(var i = 3; i < grade_names.length; i += 2) {
-         headers.push(grade_names[i] + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
+         var grade_name = '';
+         var min_chars = 10
+         var start_index = 0;
+         var current_index = grade_names[i].indexOf(' ', start_index + min_chars);
+
+         while (current_index != -1) {
+             grade_name = grade_name + grade_names[i].substring(start_index, current_index) + '<br>';
+             start_index = current_index;
+             current_index = grade_names[i].indexOf(' ', start_index + min_chars);
+         }
+
+         grade_name = grade_name + grade_names[i].substring(start_index);
+
+         headers.push(grade_name + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
          max_scores.push(points[i]);
      }
 
