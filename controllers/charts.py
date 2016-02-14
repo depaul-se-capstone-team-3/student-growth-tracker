@@ -3,6 +3,7 @@ A controller to generate all of the charts we'll be using.
 """
 
 import gluon.contrib.simplejson as json
+import collections
 
 
 @auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
@@ -169,6 +170,9 @@ def class_overview_standard_bar():
                 standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
         else:
             standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+
+    sorted_standard_dict = collections.OrderedDict(sorted(standard_dict.items()))
+    standard_dict = sorted_standard_dict
 
 
     return dict(standard_dict=standard_dict)
