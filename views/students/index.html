@@ -23,6 +23,9 @@
                 </tr>
             {{pass}}
             </table>
+            <div class="col-sm-12">
+                    {{=LOAD('charts', 'student_index_line.load', args=[class_id,student_id])}}
+            </div>
         </div>
     </div>
 </div>
