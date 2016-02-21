@@ -47,7 +47,7 @@ def index():
         assignment_data.append(assignment)
 
 
-    return dict(name=name, class_name=class_name, assignment_data=assignment_data)
+    return dict(name=name, class_name=class_name, assignment_data=assignment_data, class_id=class_id, student_id=student_id)
 
 @auth.requires_login()
 def overview():

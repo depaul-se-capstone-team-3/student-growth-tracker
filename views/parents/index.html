@@ -23,7 +23,11 @@
                     <td class="{{=row[5]}}"><div class="text-center">{{=row[4]}}</div></td>
                 </tr>
             {{pass}}
+
             </table>
+            <div class="col-sm-12">
+                    {{=LOAD('charts', 'parent_index_line.load', args=[class_id,student_id])}}
+            </div>
         </div>
     </div>
 </div>

@@ -42,7 +42,7 @@ def index():
             assignment = [row.grade.name, row.student_grade.student_score, row.grade.score, precent, "{:%b %d, %Y}".format(row.grade.due_date), is_due]
             assignment_data.append(assignment)
 
-        return dict(name=name, class_name=class_name, assignment_data=assignment_data, parent_name=parent_name, student_id=student_id, student_auth_id=student_auth_id,student_id_list=student_id_list)
+        return dict(name=name, class_name=class_name, assignment_data=assignment_data, parent_name=parent_name, student_id=student_id, student_auth_id=student_auth_id,student_id_list=student_id_list, class_id=class_id)
     else:
         return dict(redirect(URL('default','index')))
 
@@ -90,13 +90,14 @@ def index():
                                                       row.standard.reference_number,
                                                       row.standard.short_name]
 
-            
             class_dict[student_class.name] = [student_average, standard_dict, student_class.id]
             full_dict[student.id] = [name, class_dict]
 
 
     return dict(full_dict=full_dict,
-                 parent_name=parent_name)
+                 parent_name=parent_name,
+               class_id=class_id,
+               student_id=student_id)
 
 @auth.requires_login()
 def overview():
