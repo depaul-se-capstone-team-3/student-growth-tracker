@@ -47,7 +47,7 @@ def index():
     teacher_id = auth.user_id # Cache the user id of the logged-in teacher
                               # to make it easier to access and recognize.
 
-    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
 
     ############################################################################
     ## This should go into a function.
@@ -86,8 +86,8 @@ def student_grades():
     and returns it as ``json``.
     """
     teacher_id = auth.user_id
-    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) is not None) and request.args(1, cast=int) or None
 
     assignments = []
 
@@ -144,8 +144,8 @@ def save_student_grades():
                requires_login=True)
 def assignment_info():
     teacher_id = auth.user_id
-    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
-    standard_id = (request.args(1) != None) and request.args(1, cast=int) or None
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
+    standard_id = (request.args(1) is not None) and request.args(1, cast=int) or None
 
     return dumps(get_class_assignments(teacher_id, class_id, standard_id).as_list())
 
@@ -154,7 +154,7 @@ def assignment_info():
 def overview():
     teacher_id = auth.user_id
     #Class ID
-    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
 
 
     #Teacher Name
@@ -213,7 +213,7 @@ def overview():
              (db.gradebook.classes==db.classes.id) &
              (db.class_grade.class_id==db.classes.id) &
              (db.class_grade.grade_id==db.grade.id) &
-             (db.grade.due_date != None) &
+             (db.grade.due_date is not None) &
              (db.grade.due_date > datetime.datetime.now()))
 
     due_soon = db(due_soon_query).select(db.grade.name, db.grade.due_date,orderby=db.grade.due_date)
@@ -241,7 +241,7 @@ def overview():
 def pdf_overview():
     teacher_id = auth.user_id
     #Class Id
-    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
 
     #To display class name.
     query = teacher_classes_query(teacher_id, class_id)
