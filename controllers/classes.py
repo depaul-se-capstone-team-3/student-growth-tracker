@@ -25,10 +25,17 @@ from reportlab.graphics.widgets.grids import ShadedRect
 from reportlab.graphics.shapes import Drawing
 
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id) or
-               auth.has_membership('Administrator', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id) or
+#                auth.has_membership('Administrator', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def index():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    elif auth.has_membership(2,auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Display the list of classes associated with the logged in user.
 
@@ -78,9 +85,14 @@ def index():
                 assignments=assignments,
                 standards=standards)
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def student_grades():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Retrieves grade information for a given ``class_id``
     and returns it as ``json``.
@@ -111,10 +123,17 @@ def student_grades():
 
     return dumps(assignments)
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id) or
-               auth.has_membership('Administrator', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id) or
+#                auth.has_membership('Administrator', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def save_student_grades():
+    if auth.has_membership(3, auth.user_id):
+        pass
+    elif auth.has_membership(2,auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     """
     Receives ``json`` data via ajax from the ``handsontable`` object
     and saves it back to the database.
@@ -140,18 +159,28 @@ def save_student_grades():
 
     return dumps(dict()) # Return nothing, but make sure it's in json format.
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def assignment_info():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
     standard_id = (request.args(1) is not None) and request.args(1, cast=int) or None
 
     return dumps(get_class_assignments(teacher_id, class_id, standard_id).as_list())
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def overview():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     #Class ID
     class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
@@ -236,9 +265,14 @@ def overview():
                 due_soon=due_soon,
                 due_soon_amount=due_soon_amount)
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id),
+#                requires_login=True)
+@auth.requires_login()
 def pdf_overview():
+    if auth.has_membership(2, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
     teacher_id = auth.user_id
     #Class Id
     class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
@@ -352,8 +386,8 @@ def pdf_overview():
     
     #redirect(URL('default','index'))
 
-@auth.requires(auth.has_membership('Teacher', auth.user_id),
-               requires_login=True)
+# @auth.requires(auth.has_membership('Teacher', auth.user_id),
+#                requires_login=True)
 def create_single_class_pdf(teacher_name, class_id,class_name, class_average, total_students, total_grades, standards_list, grade_standard_dict, grade_student_dict, standard_total_dict):
     pdfName = class_name+"_CLR"+".pdf"
     response.headers['Content-Type'] = 'application/pdf'
