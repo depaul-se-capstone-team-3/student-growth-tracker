@@ -14,6 +14,7 @@ install:
     - git clone https://github.com/web2py/web2py.git ./web2py
     - pip install pydal
     - pip install selenium
+    - pip install reportlab
     - cd ~/web2py/applications
     - git clone https://github.com/bpatzke/student-growth-tracker.git ./student_growth_tracker
     - cd student_growth_tracker
@@ -39,9 +40,10 @@ script:
     - python web2py.py -S student_growth_tracker -M -R applications/student_growth_tracker/tests/testRunner.py
     - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
     - sleep 3
-    - cd applications/student_growth_tracker/tests
-    - python -m unittest teacher_functional_tests
-    - python -m unittest student_functional_tests
+    - cd applications/student_growth_tracker/
+    - python -m unittest tests.teacher_functional_tests
+    - python -m unittest tests.student_functional_tests
+    - python -m unittest tests.parent_functional_tests
     - cd ~/web2py
     - PID=$(<./httpserver.pid)
     - kill -SIGTERM $PID

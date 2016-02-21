@@ -54,7 +54,7 @@
      if ((col > 0)) {
          delta = 0.001;
          new_value = parseFloat(value);
-         max_score = parseFloat(max_scores[col]); //instance.getDataAtCell(2, col);
+         max_score = parseFloat(max_scores[col]);
          student_score = parseFloat(value);
          percent_score = student_score / max_score;
          
@@ -75,7 +75,7 @@
  
  var container = document.getElementById("student_grades");
  var hot = undefined;
- var table_data = [];
+ var table_data = undefined;
  var max_scores = [];
  var font_size = 14; // By observation. Not accurate, but it will do for now.
  var column_width = 125;
@@ -83,27 +83,30 @@
  var options = {
      minSpareRows: 0,
      fixedColumnsLeft: 1,
-     colWidths: column_width, // Maybe add a function that can calculate where to break headers so lines are < colWidths.
+     colWidths: column_width,
      rowHeaders: false,
      contextMenu: true,
 
      afterChange: function(change, source) {
          if(source === "loadData") {return;}
 
+         var new_data = hot.getData();
+
          $.ajax({
              url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
              dataType: "json",
              type: "POST",
-             data: {"data": hot.getData().slice(3)},
+             data: {"data": new_data},
              success: function(data) {
-                 // We might do something with this later.
+                 // Reset the table data array.
+                 table_data = undefined;
+                 table_data = new_data;
              },
              error: function(jqxhr, status, error) {
                  alert("Status: " + status + "\nError: " + error);
              }
          });
      }
-
  };
  
  function set_visible_columns(row) {
