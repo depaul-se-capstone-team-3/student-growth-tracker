@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-12">
+        <canvas id="student_index_line" width="1000" height="400"></canvas>
+    </div>
+</div>
+
+<script src="{{=URL('static', 'js/Chart.js')}}"></script>
+<script>
+
+var data = {
+     labels: [
+          {{for key in assignment_dict.keys():}}
+          "{{=XML(assignment_dict[key][0])}}",
+          {{pass}}
+     ],
+    datasets: [
+        {
+            label: "Class Average",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [
+                {{for key in assignment_dict.keys():}}
+                {{=(assignment_dict[key][2])}},
+                {{pass}}
+            ]
+        },
+        {
+            label: "Student Score",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [
+                {{for key in assignment_dict.keys():}}
+                {{=(assignment_dict[key][1])}},
+                {{pass}}
+            ]
+        }
+    ]
+};
+
+ var lineChartOptions = {responsive: true,
+                         multiTooltipTemplate:"<%= datasetLabel%> <%= value %>% "
+                       };
+
+ var lineChartContext = $("#student_index_line").get(0).getContext("2d");
+ var myLineChart = new Chart(lineChartContext).Line(data, lineChartOptions);
+
+
+</script>
