@@ -56,7 +56,8 @@ def index():
                          (db.student_classes.class_id==db.classes.id) &
                          (db.student.id==db.student_classes.student_id))
 
-    results = db(attendance_query).select(db.student.id,
+    results = db(attendance_query).select(db.attendance.id,
+                                          db.student.id,
                                           db.attendance.attendance_date,
                                           db.attendance.present,
                                           orderby=db.attendance.attendance_date,
@@ -69,25 +70,27 @@ def index():
 
     raw_attendance = {}
     
-    for a in results:
-        student_id = a.student.id
-        attendance_date = a.attendance.attendance_date
-        present = a.attendance.present
+    for student_attendance_info in results:
+        attendance_record_id = student_attendance_info.attendance.id
+        student_id = student_attendance_info.student.id
+        attendance_date = student_attendance_info.attendance.attendance_date
+        present = student_attendance_info.attendance.present
 
         if not raw_attendance.has_key(student_id):
             raw_attendance[student_id] = {}
 
-        raw_attendance[student_id][attendance_date] = present
+        raw_attendance[student_id][attendance_date] = (attendance_record_id, present)
 
-    days = sorted(class_days.keys())
+    ordered_class_day_list = sorted(class_days.keys())
     
     attendance = {}
-    for a in raw_attendance.keys():
-        attendance[a] = []
-        for i in range(len(days)):
-            attendance[a].append(raw_attendance[a].get(days[i], False))
+    for student_id in raw_attendance.keys():
+        attendance[student_id] = {}
+        for class_day in ordered_class_day_list:
+            attendance[student_id][class_day] = raw_attendance[student_id].get(class_day, ('N/A', False))
 
-    return dict(date_header=date_header,
+    return dict(class_id=class_id,
+                date_header=date_header,
                 menu_months=months_in_session(),
                 class_list=class_list,
                 class_days=class_days,

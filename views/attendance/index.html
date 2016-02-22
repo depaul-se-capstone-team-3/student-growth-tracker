@@ -64,16 +64,28 @@
             </thead>
 
             <tbody>
+                {{ordered_class_day_list = sorted(class_days.keys())}}
+
                 {{for student in sorted(class_list.keys()):}}
+                {{student_id = class_list[student]}}
                 <tr>
+
                     <td>
                         {{=student}}
                     </td>
-                    {{for j in range(len(class_days)):}}
+
+                    {{for class_day in ordered_class_day_list:}}
+                    {{attendance_record_id, student_present = attendance[student_id][class_day]}}
                     <td>
-                        <input type="checkbox" {{=(attendance[class_list[student]][j] == True) and 'checked="checked"'}} />
+                        <input type="checkbox"
+                               id="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
+                               {{ if student_present:}}
+                               checked="checked"
+                               {{pass}}
+                        />
                     </td>
                     {{pass}}
+
                 </tr>
                 {{pass}}
             </tbody>
@@ -81,7 +93,3 @@
         </table>
     </div>
 </div>
-
-{{block page_js}}
-
-{{end}}
