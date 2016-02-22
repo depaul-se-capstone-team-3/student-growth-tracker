@@ -1,14 +1,9 @@
-# -*- coding: utf-8 -*-
-# try something like
+
 import datetime
+from types import ListType
 
 @auth.requires_login()
 def index():
-    #constraints = db.gradebook.teacher == auth.user.id
-    #grid = SQLFORM.smartgrid(db.grade)
-
-    #grid = db(db.grade.name).select(join=db.grade.on((db.grade.name==db.student_grade.grade_id)))
-    
     grid = db().select(db.grade.id, db.grade.name, db.grade.display_date,
                        db.grade.date_assigned, db.grade.due_date,
                        db.grade.grade_type,db.grade.score, db.grade.isPassFail)
@@ -22,109 +17,73 @@ def query():
     grade_query = db(assignment).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.student_grade.student_score, left=db.student_grade.on(c1))
     return dict(grade_query=grade_query)
 
-@auth.requires_login()
+@auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
 def create():
-    if auth.has_membership(2, auth.user_id):
-        pass
-    else:
-        redirect(URL('default','index'))
-    '''Generating form for creating a new assignment'''
-    #If there is an argument class id, check to see if db.classes contains that class.
-    try:
-        class_id = request.args(0)
-        teacher_id = request.args(1)
-        content_id = 1
-        exist = db.classes(class_id)
+    # Generating form for creating a new assignment.
+    # If there is an argument class id, check to see if
+    # db.classes contains that class.
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    if not class_id or not db.classes(class_id):
+        session.flash = T('Invalid class ID: "%s"' % class_id)
+        redirect(URL('default', 'index'))
 
-        #If class does not exist, redirects.
-        if (exist == None):
-            response.flash = T("Class does not exist")
-            session.flash = T("Class does not exist.")
-
-            #Redirect to previous link if via link, else redirec to main page.
-        #    if (request.env.http_referer==None):
-        #        redirect(URL("default","index"))
-          #  else:
-         #       redirect(request.env.http_referer)
-
-    #If no argument given, throws Invalid class and redirect.
-    except:
-        response.flash = T("Invalid Class")
-        session.flash = T("Invalid Class")
-
-            #If class does not exist, redirects.
-    #if (request.env.http_referer==None):
-       # redirect(URL("default","index"))
-
-        #Redirect to previous link if via link, else redirec to main page.
-    #else:
-     #   redirect(request.env.http_referer)
+    teacher_id = auth.user_id
 
     query = ((db.classes.id==class_id) &
-        (db.classes.id==db.student_classes.class_id) &
-        (db.student_classes.student_id==db.student.id) &
-        (db.student.user_id==db.auth_user.id) &
-        (db.student.id==db.student_grade.student_id) &
-        (db.student_grade.grade_id==db.grade.id) &
-        (db.grade.id==db.grade_standard.grade_id) &
-        (db.standard.id==db.grade_standard.standard_id) &
-        (db.standard.content_area == db.contentarea.id))
-    
-    query = ((class_id == db.classes.id)&
-            (db.standard.content_area == db.classes.content_area))
-    
-    
-    
-            #((class_id == db.classes.id) & 
-            # (db.classes.id == db.class_grade.class_id) &
-             #(db.grade.id == db.class_grade.grade_id) &
-             #(db.grade.id == db.grade_standard.grade_id) &
-             #(db.grade_standard.standard_id == db.standard.id) &
-             #(db.classes.content_area == db.standard.content_area))
+             (db.classes.content_area==db.contentarea.id) &
+             (db.standard.content_area==db.contentarea.id))
 
-#    standard_list = db(query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score,  db.grade.score)
-    #Creating the drob down menu for Standard
-    standardR = Field('standard', requires=IS_IN_DB(db(query), 'standard.id', '%(short_name)s'+': '+'%(reference_number)s',zero=T('Standards')))
-    #query = ((db.classes.id == class_id) & (db.classes.content_area==db.standard.content_area))
-    now = datetime.datetime.utcnow()
-    now = now - datetime.timedelta(minutes=now.minute % 10,
-                             seconds=now.second,
-                             microseconds=now.microsecond)
+    # Creating the drop down menu for Standard.
+    standards = db(query).select(db.standard.id,
+                                 db.standard.short_name,
+                                 db.standard.reference_number)
 
-    form = SQLFORM.factory(db.grade,standardR)
+    options = []
+    for row in standards:
+        text = '%s - %s' % (row.reference_number, row.short_name)
+        options.append(OPTION(text, _value=row.id))
 
-    form.vars.display_date = now
-    form.vars.date_assigned = now
-    form.vars.due_date = now + datetime.timedelta(days=1)
+    standards_menu = SELECT(options, _name='standards', _multiple='multiple',
+                            _class='generic-widget form-control',
+                            _id='standards')
 
-    #Processing the form
-    if form.process().accepted:
+    form = SQLFORM(db.grade)
+    # Insert the SELECT object at the end of the form.
+    form.insert(-1, standards_menu)
 
-        #inserting the new grade into db.grade
-        id = db.grade.insert(**db.grade._filter_fields(form.vars))
+    # Processing the form
+    if form.validate():
+        response.flash = 'New grade created.'
 
-        #creating the link between class and grade.
-        db.class_grade.insert(class_id = class_id,grade_id = id)
-        #creating the link between grade and standard
-        db.grade_standard.insert(grade_id = id, standard_id = form.vars.standard)
+        # If only one item is selected, form.vars.standards is a string.
+        # If multiple items are selected, form.vars.standards is a
+        # list of strings.
+        if type(form.vars.standards) is not ListType:
+            selected_standards = [form.vars.standards]
+        else:
+            selected_standards = form.vars.standards
 
-        #get student_class query (get_class_roster(tearcher_id, class_id))
-        #for-loop through students
-        #add to the student_grade table with (student_id,grade_id, 0)
+        grade_id = db.grade.insert(name=form.vars.name,
+                                   display_date=form.vars.display_date,
+                                   date_assigned=form.vars.date_assigned,
+                                   due_date=form.vars.due_date,
+                                   grade_type=form.vars.grade_type,
+                                   score=form.vars.score)
+
+        db.class_grade.insert(class_id=class_id, grade_id=grade_id)
+
+        for standard_id in selected_standards:
+            db.grade_standard.insert(grade_id=grade_id,
+                                     standard_id=standard_id)
+
         for student in get_class_roster(teacher_id, class_id):
-            db.student_grade.insert(student_id=student[0], grade_id = id, student_score = 0)
+            db.student_grade.insert(student_id=student[0],
+                                    grade_id=grade_id,
+                                    student_score=0)
 
-        response.flash = T("New assignment successfully created")
-        session.flash = T("New assignment successfully created")
-        redirect(URL("classes","index/"+class_id))
-    #Form error handling.
-    elif form.errors:
-        response.flash = T("Form Has Errors")
-        session.flash = T("Form Has Errors")
-    #else:
-       # response.flash = T("Please Fill Out The Form")
-        #session.flash = T("Please Fill Out The Form")
-    return dict(form=form)
+        redirect(URL('classes', 'index', args=[class_id]))
+
+    return dict(form=form, standards=standards_menu)
 
 @auth.requires_login()
 def edit():

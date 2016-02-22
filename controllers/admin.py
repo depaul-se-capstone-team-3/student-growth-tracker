@@ -17,6 +17,9 @@ def classes_create():
         redirect(URL('default','index'))
 
     form = SQLFORM.factory(db.classes, submit_button='Create Class')
+    if form.process().accepted:
+        db.classes.insert(**db.classes._filter_fields(form.vars))
+
     return dict(form=form)
 
 
@@ -220,13 +223,23 @@ def class_list():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_user.id == db.gradebook.teacher)&
-             (db.gradebook.classes == db.classes.id)&
+    class_query = ((db.classes.id > 0)&
              (db.classes.content_area == db.contentarea.id))
+    class_query_list = db(class_query).select(db.classes.grade_level, db.contentarea.name,  db.classes.name, db.classes.id)
 
-    class_list = db(query).select(db.classes.grade_level, db.contentarea.name,  db.classes.name, db.auth_user.first_name, db.auth_user.last_name, db.auth_user.id)
+    class_list_data = {}
+    for row in class_query_list:
 
-    return dict(class_list = class_list)
+        teacher_query = ((db.classes.id == row.classes.id)&
+                         (db.gradebook.classes == db.classes.id)&
+                         (db.gradebook.teacher == db.auth_user.id))
+        teacher = db(teacher_query).select(db.auth_user.first_name, db.auth_user.last_name)
+        if len(teacher) > 0:
+            class_list_data[row.classes.id] = [ row.classes.grade_level, row.contentarea.name, row.classes.name, teacher[0].first_name + " " +  teacher[0].last_name ]
+        else:
+            class_list_data[row.classes.id] = [ row.classes.grade_level, row.contentarea.name, row.classes.name, "N/A" ]
+
+    return dict(class_list_data = class_list_data)
 
 def teacher_list():
     if auth.has_membership(1, auth.user_id):
@@ -247,9 +260,10 @@ def student_list():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.student_classes.id > 0)&
-             (db.student_classes.student_id == db.student.id)&
-             (db.student.user_id == db.auth_user.id))
+    query = ((db.auth_group.id == 3)&
+             (db.auth_group.id == db.auth_membership.group_id)&
+             (db.auth_user.id == db.auth_membership.user_id)&
+             (db.auth_user.id == db.student.user_id))
 
     student_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.auth_user.username, db.auth_user.email)
 

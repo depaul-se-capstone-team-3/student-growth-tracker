@@ -9,9 +9,9 @@ db.grade_type.id.readable = db.grade_type.id.writable = False
 db.define_table(
     'grade',
     Field('name', 'string', required=True, requires=IS_NOT_EMPTY()),
-    Field('display_date', 'datetime'),
-    Field('date_assigned', 'datetime'),
-    Field('due_date', 'datetime'),
+    Field('display_date', 'datetime', requires = IS_DATE(format=('%B %d, %Y'))),
+    Field('date_assigned', 'datetime', requires = IS_DATE(format=('%B %d, %Y'))),
+    Field('due_date', 'datetime', requires = IS_DATE(format=('%B %d, %Y'))),
     Field('grade_type', 'reference grade_type',
           requires=IS_IN_DB(db, 'grade_type.id', '%(name)s')),
     Field('score', 'double', requires=(IS_FLOAT_IN_RANGE(minimum=0),IS_NOT_EMPTY())),

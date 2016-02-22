@@ -12,8 +12,8 @@
                     </tr>
                     <tr>
                         <td><h4>Class Average:</h4></td>
-                        {{for row in class_averages:}}
-                            <td><b>{{=row}}%</b></td>
+                        {{for row in class_averages_dict:}}
+                        <td>{{=class_averages_dict[row]}}%</td>
                         {{pass}}
                     </tr>
                     <tr>

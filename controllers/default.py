@@ -7,6 +7,8 @@
 ## - user is required for authentication and authorization
 ## - download is for downloading files uploaded in the db (does streaming)
 #########################################################################
+def error():
+    return(redirect(URL('default','index')))
 
 @auth.requires_login()
 def index():

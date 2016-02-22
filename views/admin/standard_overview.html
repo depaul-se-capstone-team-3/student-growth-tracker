@@ -1,0 +1,57 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Standard Overview</h1>
+
+            <table class="table">
+                {{for key in overview_data:}}
+                    <tr>
+                        <td>
+                            <button class="btn btn-xs btn-{{=key}}" data-toggle="collapse"  data-target=".{{=str(key)}}collapsed">
+                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=str(key)}}collapsed" ></i></button>&nbsp&nbsp
+                            <span class="h3">Grade {{=key}}</span>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr class="collapse {{=str(key)}}collapsed">
+                        <tr class="collapse {{=str(key)}}collapsed" height="400" align="right">
+                            <td width="900">{{=LOAD('charts', 'admin_standard_overview_bar.load', args=key)}}</td>
+                            <td></td>
+                        </tr>
+
+                        {{for data in overview_data[key]:}}
+                        <tr class="collapse {{=str(key)}}collapsed">
+                            <td class="{{=get_contextual_classes(float(overview_data[key][data][1] / overview_data[key][data][0]*100.0))}}"> {{=overview_data[key][data][2]}} &nbsp&nbsp&nbsp {{=overview_data[key][data][3]}}</td>
+                            <td class="{{=get_contextual_classes(float(overview_data[key][data][1] / overview_data[key][data][0]*100.0))}}"> {{=format(overview_data[key][data][1] / overview_data[key][data][0] * 100.0, ".2f")}} &nbsp%</td>
+                        </tr>
+                        {{pass}}
+
+                    </tr>
+
+                <script>
+                        $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
+                        $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
+                </script>
+
+                {{pass}}
+
+            </table>
+
+        </div>
+    </div>
+</div>
+<style>
+    .btn{border:none;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase}
+    .btn-xs,.btn-group-xs>.btn{padding:1px 5px;font-size:18px;border-radius:3px}
+    
+    .btn-success {  color: #fff;  background-color: #94d194;  border-color: #4cae4c;}
+    .btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.open > .dropdown-toggle.btn-success {  color: #fff;  background-color: #449d44;  border-color: #398439;}
+    
+    .btn-warning { color: #fff; background-color: #f3bd72; border-color: #eea236;}
+    .btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.open > .dropdown-toggle.btn-warning { color: #fff; background-color: #ec971f; border-color: #d58512;}
+    
+    .btn-danger { color: #fff; background-color: #e48481; border-color: #d43f3a;}
+    .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger { color: #fff; background-color: #c9302c; border-color: #ac2925;}
+</style>

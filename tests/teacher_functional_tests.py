@@ -13,7 +13,7 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the login page displays by default.
+        1. The login page displays by default.
         """
         self.browser.get(self.server_url)
 
@@ -26,8 +26,8 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can log in,
-        #. the gradebook is displayed upon login.
+        1. The teacher can log in,
+        2. The gradebook is displayed upon login.
         """
         self.browser.get(self.server_url)
 
@@ -40,7 +40,7 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can access the overview for a specific class.
+        1. The teacher can access the overview for a specific class.
         """
         self.browser.get(self.server_url)
 
@@ -55,7 +55,7 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can access the grade details for a specific class.
+        1. The teacher can access the grade details for a specific class.
         """
         self.browser.get(self.server_url)
 
@@ -71,7 +71,7 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can view the grade detail table for a specific class.
+        1. The teacher can view the grade detail table for a specific class.
         """
         self.browser.get(self.server_url)
 
@@ -95,8 +95,8 @@ class TeacherFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can create a new assignment for the class.
-        #. the assignment shows up in the grade table.
+        1. The teacher can create a new assignment for the class.
+        2. The assignment shows up in the grade table.
         """
         self.browser.get(self.server_url)
 
@@ -117,28 +117,36 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we've landed on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Add a name
-        assignment_name_input = self.browser.find_element_by_id('no_table_name')
+        assignment_name_input = self.browser.find_element_by_id('grade_name')
         assignment_name_input.send_keys('new test assignment')
+
+        display_date_input = self.browser.find_element_by_id('grade_display_date')
+        display_date_input.clear()
+        display_date_input.send_keys('December 31, 2025')
+
+        date_assigned_input = self.browser.find_element_by_id('grade_date_assigned')
+        date_assigned_input.clear()
+        date_assigned_input.send_keys('December 31, 2025')
 
         # Add a sufficiently distant due date so the
         # grade shows up as the last thing in the table.
-        due_date_input = self.browser.find_element_by_id('no_table_due_date')
+        due_date_input = self.browser.find_element_by_id('grade_due_date')
         due_date_input.clear()
-        due_date_input.send_keys('2025-12-31 00:00:00')
+        due_date_input.send_keys('December 31, 2025')
 
         # Add a grade type
-        grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
+        grade_type_selector = Select(self.browser.find_element_by_id('grade_grade_type'))
         grade_type_selector.select_by_visible_text('Assignment')
 
         # Add a score
-        score_input = self.browser.find_element_by_id('no_table_score')
+        score_input = self.browser.find_element_by_id('grade_score')
         score_input.send_keys('20')
 
         # Add a standard
-        standard_selector = Select(self.browser.find_element_by_id('no_table_standard'))
+        standard_selector = Select(self.browser.find_element_by_id('standards'))
         standard_selector.select_by_value('10')
 
         # Submit the new grade.
@@ -177,18 +185,18 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Add a grade type
-        grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
+        grade_type_selector = Select(self.browser.find_element_by_id('grade_grade_type'))
         grade_type_selector.select_by_visible_text('Assignment')
 
         # Add a score
-        score_input = self.browser.find_element_by_id('no_table_score')
+        score_input = self.browser.find_element_by_id('grade_score')
         score_input.send_keys('20')
 
         # Add a standard
-        standard_selector = Select(self.browser.find_element_by_id('no_table_standard'))
+        standard_selector = Select(self.browser.find_element_by_id('standards'))
         standard_selector.select_by_value('10')
 
         # Submit without adding a grade type.
@@ -197,7 +205,7 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're still on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Find the error for the grade type.
         name_error = self.browser.find_element_by_id('name__error')
@@ -215,18 +223,18 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Add a name
-        assignment_name_input = self.browser.find_element_by_id('no_table_name')
+        assignment_name_input = self.browser.find_element_by_id('grade_name')
         assignment_name_input.send_keys('new test assignment')
 
         # Add a score
-        score_input = self.browser.find_element_by_id('no_table_score')
+        score_input = self.browser.find_element_by_id('grade_score')
         score_input.send_keys('20')
 
         # Add a standard
-        standard_selector = Select(self.browser.find_element_by_id('no_table_standard'))
+        standard_selector = Select(self.browser.find_element_by_id('standards'))
         standard_selector.select_by_value('10')
 
         # Submit without adding a grade type.
@@ -235,7 +243,7 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're still on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Find the error for the grade type.
         grade_type_error = self.browser.find_element_by_id('grade_type__error')
@@ -253,18 +261,18 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Add a name
-        assignment_name_input = self.browser.find_element_by_id('no_table_name')
+        assignment_name_input = self.browser.find_element_by_id('grade_name')
         assignment_name_input.send_keys('new test assignment')
 
         # Add a grade type
-        grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
+        grade_type_selector = Select(self.browser.find_element_by_id('grade_grade_type'))
         grade_type_selector.select_by_visible_text('Assignment')
 
         # Add a standard
-        standard_selector = Select(self.browser.find_element_by_id('no_table_standard'))
+        standard_selector = Select(self.browser.find_element_by_id('standards'))
         standard_selector.select_by_value('10')
 
         # Submit without adding a grade type.
@@ -273,47 +281,9 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Make sure we're still on the create grade page.
         add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
+        self.assertEqual('Create a Grade', add_grade_header.text)
 
         # Find the error for the grade type.
         score_error = self.browser.find_element_by_id('score__error')
         self.assertIsNotNone(score_error)
         self.assertEqual('Enter a number greater than or equal to 0', score_error.text)
-
-    def test_teacher_add_new_assignment_requires_standard(self):
-        self.browser.get(self.server_url)
-
-        self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One')
-
-        # Navigate directly to the new assignment page.
-        self.browser.get(self.server_url + 'grades/create/2/2')
-
-        # Make sure we're on the create grade page.
-        add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
-
-        # Add a name
-        assignment_name_input = self.browser.find_element_by_id('no_table_name')
-        assignment_name_input.send_keys('new test assignment')
-
-        # Add a grade type
-        grade_type_selector = Select(self.browser.find_element_by_id('no_table_grade_type'))
-        grade_type_selector.select_by_visible_text('Assignment')
-
-        # Add a score
-        score_input = self.browser.find_element_by_id('no_table_score')
-        score_input.send_keys('20')
-
-        # Submit without adding a grade type.
-        submit_button = self.browser.find_element_by_xpath("//input[@type='submit']")
-        submit_button.click()
-
-        # Make sure we're still on the create grade page.
-        add_grade_header = self.browser.find_element_by_tag_name('h1')
-        self.assertEqual('Create a Grade:', add_grade_header.text)
-
-        # Find the error for the grade type.
-        standard_error = self.browser.find_element_by_id('standard__error')
-        self.assertIsNotNone(standard_error)
-        self.assertEqual('Value not in database', standard_error.text)

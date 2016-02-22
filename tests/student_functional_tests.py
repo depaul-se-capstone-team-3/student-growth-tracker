@@ -12,7 +12,7 @@ class StudentFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the login page displays by default.
+        1. The login page displays by default.
         """
         self.browser.get(self.server_url)
 
@@ -25,8 +25,8 @@ class StudentFunctionalTest(FunctionalTest):
         """
         Test that:
 
-        #. the teacher can log in,
-        #. the gradebook is displayed upon login.
+        1. The teacher can log in,
+        2. The gradebook is displayed upon login.
         """
         self.browser.get(self.server_url)
 
