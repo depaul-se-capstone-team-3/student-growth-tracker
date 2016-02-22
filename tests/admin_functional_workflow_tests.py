@@ -32,7 +32,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         self.log_in()
 
-        header = self.browser.find_element_by_tag_name('h1').text
+        header = self.browser.find_element_by_tag_name('h2').text
         self.assertIn('Admin Tools', header)
 
     def test_class_workflow(self):
@@ -42,7 +42,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #CLASS LIST TEST BEGINS
         #select Class List link and make sure we get to the right page.
-        self.browser.find_element_by_link_text('Class List').click()
+        self.browser.find_element_by_id('classes_list').click()
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Classes List', header)
         #make sure there's a return in the test data
@@ -66,7 +66,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #TEACHER LIST TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Teacher List').click()
+        self.browser.find_element_by_id('teacher_list').click()
         #select Teacher List link and make sure we get to the right page.
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Teacher List', header)
@@ -84,7 +84,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #STUDENT LIST TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Student List').click()
+        self.browser.find_element_by_id('student_list').click()
         #select Student List link and make sure we get to the right page.
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Student List', header)
@@ -108,7 +108,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         #PARENT LIST TEST BEGINS
         #select home, then Parent List link and make sure we get to the right page.
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Parent List').click()
+        self.browser.find_element_by_id('parent_list').click()
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Parent List', header)
         #make sure something returns with data
@@ -125,7 +125,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #TEACHER-CLASS RELATION TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()        
-        self.browser.find_element_by_link_text('Teacher - Class Relation').click()
+        self.browser.find_element_by_id('teacher_class_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Teacher - Class Relation', header)
@@ -149,7 +149,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #STUDENT-CLASS RELATION TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Student - Class Relation').click()
+        self.browser.find_element_by_id('student_class_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Student - Class Relation', header)
@@ -177,7 +177,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #PARENT-STUDENT RELATION TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Parent - Student Relation').click()
+        self.browser.find_element_by_id('parent_student_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Parent - Student Relation', header)
@@ -195,7 +195,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ADD TEACHER TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()        
-        self.browser.find_element_by_link_text('Add Teacher').click()
+        self.browser.find_element_by_id('teacher_create').click()
         
         #Enter the various information fields for adding a new teacher
         teacher_name_input = self.browser.find_element_by_id('no_table_first_name')
@@ -219,7 +219,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #check that the newly added teacher is in the database
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Teacher List').click()
+        self.browser.find_element_by_id('teacher_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Teacher List', header)
@@ -234,7 +234,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ADD CLASS TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()      
-        self.browser.find_element_by_link_text('Add Class').click()
+        self.browser.find_element_by_id('classes_create').click()
         
         #Enter the various information fields for adding a new class
         class_name_input = self.browser.find_element_by_id('no_table_name')
@@ -259,15 +259,14 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #check that newly added class is in the database
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        
-        self.browser.find_element_by_link_text('Class List').click()
+        self.browser.find_element_by_id('classes_list').click()        
         class_container = self.browser.find_element_by_id('class_list_table')
         self.assertIsNotNone(class_container)
         table_rows = class_container.find_elements_by_tag_name('tr')
         
         #ADD STUDENT TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()        
-        self.browser.find_element_by_link_text('Add Student').click()
+        self.browser.find_element_by_id('student_create').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Create Student', header)
@@ -298,7 +297,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ADD STUDENT TO CLASS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()       
-        self.browser.find_element_by_link_text('Assign Student to Class').click()
+        self.browser.find_element_by_id('assign_student').click()
         
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Assign Student to Class', header)
@@ -314,7 +313,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #Check that student is in the database
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Student List').click()
+        self.browser.find_element_by_id('student_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Student List', header)
@@ -330,7 +329,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ADD PARENT TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Add Parent').click()
+        self.browser.find_element_by_id('parent_create').click()
         
         #Enter the various information fields for adding a new parent
         header = self.browser.find_element_by_tag_name('h1').text
@@ -355,7 +354,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         submit_button.click()
 
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Parent List').click()
+        self.browser.find_element_by_id('parent_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Parent List', header)
@@ -373,7 +372,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ASSIGN TEACHER TO CLASS TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()        
-        self.browser.find_element_by_link_text('Assign Teacher to Class').click()
+        self.browser.find_element_by_id('assign_teacher').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Assign Teacher to Class', header)
@@ -388,7 +387,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         submit_button.click()
         
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Teacher - Class Relation').click()
+        self.browser.find_element_by_id('teacher_class_list').click()
 
         header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Teacher - Class Relation', header)
@@ -406,7 +405,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
 
         #ASSIGN PARENT TO STUDENT TEST BEGINS
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Assign Parent to Student').click()        
+        self.browser.find_element_by_id('assign_parent').click()      
 
         parent_selector = Select(self.browser.find_element_by_id('no_table_Parent'))
         parent_selector.select_by_value('29')
@@ -418,7 +417,7 @@ class AdminFunctionalWorkflowTest(unittest.TestCase):
         submit_button.click()
 
         self.browser.find_element_by_link_text('Student Growth Tracker').click()
-        self.browser.find_element_by_link_text('Parent - Student Relation').click()
+        self.browser.find_element_by_id('parent_student_list').click()
 
         parent_student_container = self.browser.find_element_by_id('parent_student_table')
         self.assertIsNotNone(parent_student_container)
