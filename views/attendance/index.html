@@ -5,15 +5,15 @@
      to the html head section of the page. -->
 {{end}}
 
-<!-- 
+<!--
      # In the view
      #
      # Row headers: student names
-     # Column headers: date (vertical format)
+     # Column headers: day of the month
      #                 weekday abbreviation
      #
      # for each student
-     #   for each weekday
+     #   for each day of the month:
      #     if it is a non-attendance day:
      #       display as "greyed out", no checkbox
      #     else:
@@ -23,17 +23,16 @@
      #       else:
      #         checkbox=unchecked
 
-     Is it possible to have a table header that stays fixed while things scroll under it.
+     Is it possible to have a table header that stays fixed while things scroll under it?
      Like frozen rows in Excel.
-
-     It would be nice to have the row and columm highlight under the cursor.
+     I doubt it.
    -->
 
 <h1>{{=date_header}} Attendance</h1>
 
 <div class="row">
-    <div class="col-sm-12">
-        <select id="attendance_month">
+    <div class="col-sm-2">
+        <select id="attendance_month" class="generic-widget form-control">
             {{for month in menu_months:}}
             <option value="{{=month}}"
                     {{if month == date_header:}}selected{{pass}}>{{=month}}</option>
@@ -50,8 +49,6 @@
             <!--
                  I can probably add column highlighting with a
                  colgroup and a class, and maybe some javascript.
-
-                 Don't need row highlighting, as we've go the stripes.
             -->
 
             <thead>
@@ -77,7 +74,7 @@
                     {{for class_day in ordered_class_day_list:}}
                     {{attendance_record_id, student_present = attendance[student_id][class_day]}}
                     <td>
-                        <input type="checkbox"
+                        <input type="checkbox" class="attendance-checkbox"
                                id="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
                                {{ if student_present:}}
                                checked="checked"
@@ -93,3 +90,34 @@
         </table>
     </div>
 </div>
+
+{{block page_js}}
+<script>
+ $(document).ready(function() {
+     $(".attendance-checkbox").change(function() {
+         var id_bits = this.id.split(",");
+         var new_attendance_data = {
+             attendance_id: id_bits[0],
+             class_day: id_bits[1],
+             student_id: id_bits[2],
+             class_id: id_bits[3],
+             present: this.checked
+         };
+
+         $.ajax({
+             url: "{{=URL('attendance', 'save_attendance_info')}}",
+             dataType: "json",
+             type: "POST",
+             data: {"data": new_attendance_data},
+             success: function(data) {
+                 /* This space intentionally left blank. */
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+     });
+ });
+</script>
+
+{{end}}

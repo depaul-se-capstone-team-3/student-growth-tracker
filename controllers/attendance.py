@@ -4,6 +4,8 @@ The attendance controller.
 """
 import datetime
 
+from gluon.contrib.simplejson import dumps, loads
+
 WEEKDAY_ABRV = ['M', 'Tu', 'W', 'Th', 'F']
 
 @auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
@@ -69,7 +71,7 @@ def index():
                                               (db.attendance.attendance_date<=month_end_date)))
 
     raw_attendance = {}
-    
+
     for student_attendance_info in results:
         attendance_record_id = student_attendance_info.attendance.id
         student_id = student_attendance_info.student.id
@@ -82,7 +84,7 @@ def index():
         raw_attendance[student_id][attendance_date] = (attendance_record_id, present)
 
     ordered_class_day_list = sorted(class_days.keys())
-    
+
     attendance = {}
     for student_id in raw_attendance.keys():
         attendance[student_id] = {}
@@ -95,6 +97,29 @@ def index():
                 class_list=class_list,
                 class_days=class_days,
                 attendance=attendance)
+
+def save_attendance_info():
+    """
+    Receives ``json`` data via ajax from the attendance table and
+    saves it back to the database.
+    """
+
+    attendance_id = request.vars.data.attendance_id
+    class_day = request.vars.data.class_day
+    student_id = request.vars.data.student_id
+    class_id = request.vars.data.class_id
+    present = request.vars.data.present
+
+    # if attendance_info[data[attendance_id]] != 'N/A':
+    #     record = db.attendance[attendance_info['attendance_id']]
+    #     record.update(present=attendance_info['attendance_id'])
+    # else:
+    #     new_id = db.attendance.insert(student_id=attendance_info['student_id'],
+    #                                   class_id=attendance_info['class_id'],
+    #                                   attendance_date=attendance_info['class_day'],
+    #                                   present=attendance_info['present'])
+
+    return dumps(dict()) #new_id=new_id))
 
 def first_weekday_of_month(year, month):
     first = datetime.date(year, month, 1)
@@ -126,7 +151,7 @@ def class_days_this_month(first_day, last_day):
         if wkdy < 5:
             dates[current] = (WEEKDAY_ABRV[wkdy], non_attendance.get(current))
         current = current + datetime.timedelta(days=1)
-    
+
     return dates
 
 def months_in_session():
