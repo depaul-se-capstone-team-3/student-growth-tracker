@@ -1,3 +1,31 @@
 {{extend 'layout.html'}}
 <h1>Assign Student to Class</h1>
-{{=BEAUTIFY(form)}}
+{{=form.custom.begin}}
+
+<div class="row">
+    <div class="col-sm-10">
+        <div class="container-fluid well" style ='background-color: #80ccff;'>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Student ID</h4>
+                    {{=form.custom.widget.Student}}
+                </div>
+                
+                <div class="col-sm-6">
+                    <h4>Class</h4>
+                    {{=form.custom.widget.Class}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <h4>&nbsp;</h4>
+                    {{=form.custom.submit}}
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+</div>
+{{=form.custom.end}}
