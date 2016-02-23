@@ -21,13 +21,31 @@
             <thead>
                 <tr>
                     <th>Student</th>
+
                     {{for date in sorted(class_days.keys()):}}
-                    <th>{{=date.day}}<br>{{=class_days[date][0]}}</th>
+
+                    <th>
+                        {{=date.day}}<br>
+                        {{=class_days[date][0]}}
+                    </th>
+
                     {{pass}}
+
                 </tr>
             </thead>
 
             <tbody>
+                <tr>
+                    <td>Select All</td>
+
+                    {{for i in range(len(class_days.keys())):}}
+                    <td>
+                        <input type="checkbox" id="sa_{{=i}}" name="sa_{{=i}}"
+                               data-checkbox-name="{{=i}}" class="selectall" />
+                    </td>
+                    {{pass}}
+                </tr>
+
                 {{ordered_class_day_list = sorted(class_days.keys())}}
 
                 {{for student in sorted(class_list.keys()):}}
@@ -38,16 +56,19 @@
                         {{=student}}
                     </td>
 
+                    {{i = 0}}
                     {{for class_day in ordered_class_day_list:}}
                     {{attendance_record_id, student_present = attendance[student_id][class_day]}}
                     <td>
-                        <input type="checkbox" class="attendance-checkbox"
-                               id="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
+                        <input type="checkbox" name="{{=i}}" class="attendance-checkbox"
+                               value="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
+                               data-select-all="sa_{{=i}}"
                                {{ if student_present:}}
                                checked="checked"
                                {{pass}}
                         />
                     </td>
+                    {{i += 1}}
                     {{pass}}
 
                 </tr>
@@ -61,16 +82,41 @@
 {{block page_js}}
 
 <script>
+
  $(document).ready(function() {
-     $(".attendance-checkbox").change(function() {
-         var checkbox = this;
-         var id_bits = checkbox.id.split(",");
+
+     // "Check all" checkbox.
+     $(":checkbox.selectall").on("click", function() {
+         var sel = ":checkbox[name=" + $(this).data("checkbox-name") + "]";
+         /* $(sel).each(function(index, element) {
+            $(element).prop("checked", $(this).prop("checked")).change();
+            }); */
+         $(sel).prop("checked", $(this).prop("checked")).trigger("change");
+     });
+
+     $(":checkbox.attendance-checkbox").on("click", function() {
+         var checkbox = $(this);
+         var selectall = checkbox.prop("checked");
+
+         if (selectall) {
+             $(":checkbox[name=" + checkbox.attr("name") + "]").each(function(i) {
+                 selectall = $(this).prop("checked");
+                 return selectall;
+             });
+         }
+     });
+
+     $(":checkbox.attendance-checkbox").on("change", function() {
+
+         var checkbox = $(this);
+         var value_bits = checkbox.prop("value").split(",");
+         // Move vvvv this into anonymous object directly after "data":.
          var new_attendance_data = {
-             attendance_id: id_bits[0],
-             class_day: id_bits[1],
-             student_id: id_bits[2],
-             class_id: id_bits[3],
-             present: this.checked
+             attendance_id: value_bits[0],
+             class_day: value_bits[1],
+             student_id: value_bits[2],
+             class_id: value_bits[3],
+             present: checkbox.prop("checked")
          };
 
          $.ajax({
@@ -81,15 +127,17 @@
              success: function(data) {
                  var new_id = data['new_id'];
                  if(new_id != null) {
-                     id_bits[0] = new_id;
-                     checkbox.id = id_bits.join(',')
+                         value_bits[0] = new_id;
+                         checkbox.val(value_bits.join(','));
                  }
              },
              error: function(jqxhr, status, error) {
                  alert("Status: " + status + "\nError: " + error);
              }
          });
+
      });
+
  });
 </script>
 

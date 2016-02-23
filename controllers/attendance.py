@@ -127,7 +127,9 @@ def first_weekday_of_month(year, month):
     return first
 
 def last_weekday_of_month(year, month):
-    last = datetime.date(year, month + 1, 1) - datetime.timedelta(days=1)
+    month_part = (month + 1) % 12
+    year_part = year + (month + 1) / 12
+    last = datetime.date(year_part, month_part, 1) - datetime.timedelta(days=1)
     if last.weekday() > 4:
         delta = 3 - (7 - last.weekday() % 7)
         last = last - datetime.timedelta(delta)
