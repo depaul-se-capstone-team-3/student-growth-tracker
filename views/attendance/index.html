@@ -1,33 +1,5 @@
 {{extend 'layout.html'}}
 
-{{block head}}
-<!-- Anything in this block will be added
-     to the html head section of the page. -->
-{{end}}
-
-<!--
-     # In the view
-     #
-     # Row headers: student names
-     # Column headers: day of the month
-     #                 weekday abbreviation
-     #
-     # for each student
-     #   for each day of the month:
-     #     if it is a non-attendance day:
-     #       display as "greyed out", no checkbox
-     #     else:
-     #       display checkbox
-     #       if present:
-     #         checkbox=checked
-     #       else:
-     #         checkbox=unchecked
-
-     Is it possible to have a table header that stays fixed while things scroll under it?
-     Like frozen rows in Excel.
-     I doubt it.
-   -->
-
 <h1>{{=date_header}} Attendance</h1>
 
 <div class="row">
@@ -45,11 +17,6 @@
     <div class="col-sm-12">
 
         <table class="table table-striped">
-
-            <!--
-                 I can probably add column highlighting with a
-                 colgroup and a class, and maybe some javascript.
-            -->
 
             <thead>
                 <tr>
@@ -92,10 +59,12 @@
 </div>
 
 {{block page_js}}
+
 <script>
  $(document).ready(function() {
      $(".attendance-checkbox").change(function() {
-         var id_bits = this.id.split(",");
+         var checkbox = this;
+         var id_bits = checkbox.id.split(",");
          var new_attendance_data = {
              attendance_id: id_bits[0],
              class_day: id_bits[1],
@@ -110,7 +79,11 @@
              type: "POST",
              data: {"data": new_attendance_data},
              success: function(data) {
-                 /* This space intentionally left blank. */
+                 var new_id = data['new_id'];
+                 if(new_id != null) {
+                     id_bits[0] = new_id;
+                     checkbox.id = id_bits.join(',')
+                 }
              },
              error: function(jqxhr, status, error) {
                  alert("Status: " + status + "\nError: " + error);

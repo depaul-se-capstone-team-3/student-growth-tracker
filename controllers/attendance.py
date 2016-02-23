@@ -26,8 +26,6 @@ def index():
         else:
             redirect(request.env.http_referer)
 
-    # class_roster = get_class_roster(auth.user_id, class_id)
-
     year = (request.args(1) is not None) and request.args(1, cast=int) or datetime.date.today().year
     month = (request.args(2) is not None) and request.args(2, cast=int) or datetime.date.today().month
 
@@ -108,18 +106,18 @@ def save_attendance_info():
     class_day = datetime.datetime.strptime(request.vars['data[class_day]'], '%Y-%m-%d')
     student_id = int(request.vars['data[student_id]'])
     class_id = int(request.vars['data[class_id]'])
-    present = bool(request.vars['data[present]'])
+    is_present = request.vars['data[present]'] == 'true'
+    new_id = None
 
     if attendance_id != 'N/A':
-        record = db.attendance[int(attendance_id)]
-        record.update(present=present)
+        db.attendance[int(attendance_id)] = dict(present=is_present)
     else:
         new_id = db.attendance.insert(student_id=student_id,
                                       class_id=class_id,
                                       attendance_date=class_day,
-                                      present=present)
+                                      present=is_present)
 
-    return dumps(dict()) #new_id=new_id))
+    return dumps(dict(new_id=new_id))
 
 def first_weekday_of_month(year, month):
     first = datetime.date(year, month, 1)
