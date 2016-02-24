@@ -3,7 +3,7 @@
 <h1>{{=date_header}} Attendance</h1>
 
 <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <select id="attendance_month" class="generic-widget form-control">
             {{for month in menu_months:}}
             <option value="{{=month}}"
@@ -88,23 +88,36 @@
      // "Check all" checkbox.
      $(":checkbox.selectall").on("click", function() {
          var sel = ":checkbox[name=" + $(this).data("checkbox-name") + "]";
-         /* $(sel).each(function(index, element) {
-            $(element).prop("checked", $(this).prop("checked")).change();
-            }); */
          $(sel).prop("checked", $(this).prop("checked")).trigger("change");
      });
 
      $(":checkbox.attendance-checkbox").on("click", function() {
          var checkbox = $(this);
-         var selectall = checkbox.prop("checked");
+         var checkbox_selected = checkbox.prop("checked");
+         var selectall = false;
 
-         if (selectall) {
-             $(":checkbox[name=" + checkbox.attr("name") + "]").each(function(i) {
-                 selectall = $(this).prop("checked");
-                 return selectall;
-             });
+         if (checkbox_selected) {
+             var name = $(this).attr("name");
+             selectall = all_boxes_ticked_in_column(name);
+             /* $(":checkbox[name=" + checkbox.attr("name") + "]").each(function(i) {
+                selectall = $(this).prop("checked");
+                return selectall;
+                }); */
          }
+
+         $(":checkbox[name='" + $(this).data('select-all') + "']").prop("checked", selectall);
      });
+
+     function all_boxes_ticked_in_column(name) {
+         var selectall = false;
+         var sel = ":checkbox[name=" + name + "]";
+         $(sel).each(function(index, element) {
+             selectall = $(this).prop("checked");
+             return selectall;
+         });
+
+         return selectall;
+     }
 
      $(":checkbox.attendance-checkbox").on("change", function() {
 
