@@ -12,6 +12,10 @@ WEEKDAY_ABRV = ['M', 'Tu', 'W', 'Th', 'F']
 def index():
     """
     Attendance information for all of a teacher's classes.
+
+    Something we might want to add:
+    Save the class ID and date into a session variable.
+    If the class ID changes, use the saved date.
     """
 
     class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
@@ -127,8 +131,8 @@ def first_weekday_of_month(year, month):
     return first
 
 def last_weekday_of_month(year, month):
-    month_part = (month + 1) % 12
-    year_part = year + (month + 1) / 12
+    month_part = (month % 12) + 1
+    year_part = year + (month / 12)
     last = datetime.date(year_part, month_part, 1) - datetime.timedelta(days=1)
     if last.weekday() > 4:
         delta = 3 - (7 - last.weekday() % 7)
@@ -165,7 +169,7 @@ def months_in_session():
     current = open_date
 
     while current < close_date:
-        months.append(current.strftime('%B, %Y'))
+        months.append((current.strftime('%Y/%m'), current.strftime('%B, %Y')))
         new_month = (current.month % 12) + 1
         new_year = current.year + (current.month / 12)
         current = current.replace(year=new_year, month=new_month)

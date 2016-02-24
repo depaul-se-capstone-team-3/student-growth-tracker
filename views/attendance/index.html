@@ -6,8 +6,8 @@
     <div class="col-sm-3">
         <select id="attendance_month" class="generic-widget form-control">
             {{for month in menu_months:}}
-            <option value="{{=month}}"
-                    {{if month == date_header:}}selected{{pass}}>{{=month}}</option>
+            <option value="{{=month[0]}}"
+                    {{if month[1] == date_header:}}selected{{pass}}>{{=month[1]}}</option>
             {{pass}}
         </select>
     </div>
@@ -151,6 +151,12 @@
          var name = $(this).data("checkbox-name");
          var selected = all_boxes_ticked_in_column(name);
          $(this).prop("checked", selected);
+     });
+
+     // Attendance month menu action.
+     $("select#attendance_month").change(function() {
+         var date_part = $(this).val();
+         window.location.replace("{{=URL('attendance', 'index', args=[class_id])}}" + "/" + date_part);
      });
 
  });
