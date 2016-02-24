@@ -99,10 +99,6 @@
          if (checkbox_selected) {
              var name = $(this).attr("name");
              selectall = all_boxes_ticked_in_column(name);
-             /* $(":checkbox[name=" + checkbox.attr("name") + "]").each(function(i) {
-                selectall = $(this).prop("checked");
-                return selectall;
-                }); */
          }
 
          $(":checkbox[name='" + $(this).data('select-all') + "']").prop("checked", selectall);
@@ -149,6 +145,14 @@
              }
          });
 
+     });
+
+     // If all of the boxes in the column are ticked,
+     // then the "select all" box should be ticked as well.
+     $(":checkbox.selectall").each(function(index, element) {
+         var name = $(this).data("checkbox-name");
+         var selected = all_boxes_ticked_in_column(name);
+         $(this).prop("checked", selected);
      });
 
  });
