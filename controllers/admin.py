@@ -359,3 +359,43 @@ def parent_student():
                 view_data[key][1].append(student.first_name + " " + student.last_name)
 
     return dict(view_data = view_data)
+
+
+def detail():
+    grade_level = (request.args(0) != None) and request.args(0, cast=int) or None
+    content_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    content_name = db(db.contentarea.id == content_id).select(db.contentarea.name)
+
+    standard_query = ((db.classes.grade_level == grade_level)&
+                      (db.classes.id == db.student_classes.class_id)&
+                      (db.student.id == db.student_classes.student_id)&
+                      (db.student.id == db.student_grade.student_id)&
+                      (db.grade.id == db.student_grade.grade_id)&
+                      (db.grade.id == db.grade_standard.grade_id)&
+                      (db.standard.id == db.grade_standard.standard_id)&
+                      (db.classes.id == db.class_grade.class_id)&
+                      (db.grade.id == db.class_grade.grade_id)&
+                      (db.standard.content_area == db.contentarea.id)&
+                      (db.contentarea.id == content_id))
+
+    standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score)
+
+    standard_dict = {}
+    for row in standard_list:
+        if row.standard.id in standard_dict.keys():
+            if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
+                max_score = standard_dict[row.standard.id][0] + row.grade.score
+                student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
+                standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+        else:
+            standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+
+    detail_data = {}
+    for key in standard_dict.keys():
+        detail_data[key] = [standard_dict[key][2], standard_dict[key][3], round(standard_dict[key][1]/standard_dict[key][0]*100,2)]
+
+    sorted_detail_data = collections.OrderedDict(sorted(detail_data.items()))
+    detail_data = sorted_detail_data
+
+    return dict(content_name=content_name, grade_level=grade_level, content_id=content_id, detail_data=detail_data )
