@@ -10,6 +10,14 @@ def index():
 
     return dict()
 
+def index_grid():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    return dict()
+
 def classes_create():
     if auth.has_membership(1, auth.user_id):
         pass
