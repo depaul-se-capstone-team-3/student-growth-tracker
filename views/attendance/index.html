@@ -119,20 +119,18 @@
 
          var checkbox = $(this);
          var value_bits = checkbox.prop("value").split(",");
-         // Move vvvv this into anonymous object directly after "data":.
-         var new_attendance_data = {
-             attendance_id: value_bits[0],
-             class_day: value_bits[1],
-             student_id: value_bits[2],
-             class_id: value_bits[3],
-             present: checkbox.prop("checked")
-         };
 
          $.ajax({
              url: "{{=URL('attendance', 'save_attendance_info')}}",
              dataType: "json",
              type: "POST",
-             data: {"data": new_attendance_data},
+             data: {
+                 attendance_id: value_bits[0],
+                 class_day: value_bits[1],
+                 student_id: value_bits[2],
+                 class_id: value_bits[3],
+                 present: checkbox.prop("checked")
+             },
              success: function(data) {
                  var new_id = data['new_id'];
                  if(new_id != null) {

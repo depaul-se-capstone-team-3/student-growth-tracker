@@ -102,11 +102,11 @@ def save_attendance_info():
     saves it back to the database.
     """
 
-    attendance_id = request.vars['data[attendance_id]']
-    class_day = datetime.datetime.strptime(request.vars['data[class_day]'], '%Y-%m-%d')
-    student_id = int(request.vars['data[student_id]'])
-    class_id = int(request.vars['data[class_id]'])
-    is_present = request.vars['data[present]'] == 'true'
+    attendance_id = request.vars.attendance_id
+    class_day = datetime.datetime.strptime(request.vars.class_day, '%Y-%m-%d')
+    student_id = int(request.vars.student_id)
+    class_id = int(request.vars.class_id)
+    is_present = request.vars.present == 'true'
     new_id = None
 
     if attendance_id != 'N/A':
