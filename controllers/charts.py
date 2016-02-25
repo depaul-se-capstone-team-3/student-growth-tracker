@@ -218,6 +218,94 @@ def admin_standard_overview_bar():
     return dict(overview_data = overview_data, key=key)
 
 
+def parent_index_line():
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    student_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    student_query = ((db.student.id == student_id)&
+                     (db.student.id == db.student_grade.student_id)&
+                     (db.student_grade.grade_id == db.grade.id)&
+                     (db.classes.id == class_id)&
+                     (db.classes.id == db.class_grade.class_id)&
+                     (db.class_grade.grade_id == db.grade.id))
+    student_assignment = db(student_query).select(db.grade.id, db.grade.name, db.grade.score, db.student_grade.student_score)
+
+    assignment_dict = {}
+    for row in student_assignment:
+        if row.student_grade.student_score != 0:
+            assignment_dict[row.grade.id] = [row.grade.name, round(row.student_grade.student_score / row.grade.score * 100, 2), get_assignment_class_average(class_id,row.grade.id)]
+        elif row.student_grade.student_score == 0:
+            assignment_dict[row.grade.id] = [row.grade.name, 0, get_assignment_class_average(class_id,row.grade.id)]
+
+    sorted_assignment_dict = collections.OrderedDict(sorted(assignment_dict.items()))
+    assignment_dict = sorted_assignment_dict
+
+    return dict(assignment_dict=assignment_dict)
+
+
+def student_index_line():
+    class_id = (request.args(0) != None) and request.args(0, cast=int) or None
+    student_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    query = ((db.classes.id == class_id) &
+             (db.class_grade.class_id == db.classes.id) &
+             (db.class_grade.grade_id == db.grade.id) &
+             (db.grade.id == db.student_grade.grade_id ) &
+             (db.student_grade.student_id == db.student.id ) &
+             (db.student.id == student_id) &
+             (db.grade.due_date != None))
+
+    student_assignment = db(query).select(db.grade.id, db.grade.name, db.grade.score, db.student_grade.student_score)
+
+    assignment_dict = {}
+    for row in student_assignment:
+        if row.student_grade.student_score != 0:
+            assignment_dict[row.grade.id] = [row.grade.name, round(row.student_grade.student_score / row.grade.score * 100, 2), get_assignment_class_average(class_id,row.grade.id)]
+        elif row.student_grade.student_score == 0:
+            assignment_dict[row.grade.id] = [row.grade.name, 0, get_assignment_class_average(class_id,row.grade.id)]
+
+    sorted_assignment_dict = collections.OrderedDict(sorted(assignment_dict.items()))
+    assignment_dict = sorted_assignment_dict
+
+    return dict(assignment_dict=assignment_dict)
+
+
+def admin_standard_overview_detail_bar():
+    grade_level = (request.args(0) != None) and request.args(0, cast=int) or None
+    content_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    standard_query = ((db.classes.grade_level == grade_level)&
+                      (db.classes.id == db.student_classes.class_id)&
+                      (db.student.id == db.student_classes.student_id)&
+                      (db.student.id == db.student_grade.student_id)&
+                      (db.grade.id == db.student_grade.grade_id)&
+                      (db.grade.id == db.grade_standard.grade_id)&
+                      (db.standard.id == db.grade_standard.standard_id)&
+                      (db.classes.id == db.class_grade.class_id)&
+                      (db.grade.id == db.class_grade.grade_id)&
+                      (db.standard.content_area == db.contentarea.id)&
+                      (db.contentarea.id == content_id))
+
+    standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score)
+
+    standard_dict = {}
+    for row in standard_list:
+        if row.standard.id in standard_dict.keys():
+            if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
+                max_score = standard_dict[row.standard.id][0] + row.grade.score
+                student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
+                standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+        else:
+            standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+
+    detail_data = {}
+    for key in standard_dict.keys():
+        detail_data[key] = [standard_dict[key][2], standard_dict[key][3], round(standard_dict[key][1]/standard_dict[key][0]*100,2)]
+
+    sorted_detail_data = collections.OrderedDict(sorted(detail_data.items()))
+    detail_data = sorted_detail_data
+
+    return dict(detail_data=detail_data)
 
 
 def chart():

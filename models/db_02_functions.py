@@ -302,6 +302,26 @@ def get_student_assignment_list(student_id, class_id):
 
     return (assignment_list)
 
+def get_assignment_class_average(class_id, assignment_id):
+    query = ((db.classes.id == class_id)&
+             (db.classes.id == db.class_grade.class_id)&
+             (db.grade.id == db.class_grade.grade_id)&
+             (db.grade.id == assignment_id)&
+             (db.grade.id == db.student_grade.grade_id))
+    average_query = db(query).select(db.grade.id, db.grade.score, db.student_grade.student_score)
+
+    total_score = 0
+    student_score = 0
+    for row in average_query:
+        total_score = total_score + row.grade.score
+        student_score = student_score + row.student_grade.student_score
+
+
+    return(round(student_score / total_score * 100, 2))
+
+
+
+
 def get_class_name(class_id):
     """
     Return a string containing class's name when giving ``class_id``

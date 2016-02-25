@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-12">
+        <canvas id="admin_standard_overview_detail_bar" width="1100" height="400"></canvas>
+    </div>
+</div>
+
+<script src="{{=URL('static', 'js/Chart.js')}}"></script>
+<script>
+
+ var barChartData  = {
+     labels: [
+          {{for data in detail_data:}}
+          "{{=XML(detail_data[data][1])}}",
+          {{pass}}
+     ],
+     datasets: [
+         {
+             label: "Standards",
+             fillColor: "rgba(151,187,205,0.5)",
+             strokeColor: "rgba(151,187,205,0.8)",
+             highlightFill: "rgba(151,187,205,0.75)",
+             highlightStroke: "rgba(151,187,205,1)",
+             data: [
+                 {{for data in detail_data:}}
+                 {{=format(detail_data[data][2],'.2f')}},
+                 {{pass}}
+             ]
+         }
+     ]
+ };
+
+ var barChartOptions = {responsive: true,
+                        scaleLabel : "<%= value + ' %'   %>",
+                        scaleOverride: true,
+                        scaleSteps: 10,
+                        scaleStepWidth: 5,
+                        scaleStartValue: 50,
+                        barValueSpacing:70,
+                        barDatasetSpacing:20,
+                       };
+
+ var barChartContext = $("#admin_standard_overview_detail_bar").get(0).getContext("2d");
+ var myBarChart = new Chart(barChartContext).Bar(barChartData, barChartOptions);
+
+
+</script>
