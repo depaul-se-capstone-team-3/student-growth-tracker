@@ -2,35 +2,28 @@
 
 
 <div class="container">
+
     <div class="row"> <!-- class average -->
-        <div class="col-md-12">
+        <div class="col-md-4">
             <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
             <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('classes', 'pdf_overview', args = [class_id])}}'">Download PDF</button>
-
         </div>
     </div>
-</div>
-<br>
-<br>
-<div class="container">
-    <div class="col-md-6" align="center">
-      <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_pie.load', args=2)}}</div>  -->
-        <div class="row">{{=LOAD('charts', 'class_overview_percent_range_pie.load', args=class_id)}}</div>
-      <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_assignment_range_pie.load', args=2)}}</div> -->
+
+    <div class="row">
+        <div class="col-md-6" align="center">
+            <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_pie.load', args=2)}}</div>  -->
+            <div class="row">{{=LOAD('charts', 'class_overview_percent_range_pie.load', args=class_id)}}</div>
+            <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_assignment_range_pie.load', args=2)}}</div> -->
+        </div>
+
+        <div class="col-md-6" align="center"> <!-- average  breakdown -->
+            <div class="row"><h3>Class Average: &nbsp{{=average}} %</h3></div>
+            <div class="row"><h3>Total Students: &nbsp{{=total_students}}</h3></div>
+            <div class="row"><h3>Total Assignments: &nbsp{{=total_grades}}</h3></div>
+        </div>
+
     </div>
-
-    <div class="col-md-6" align="center"> <!-- average  breakdown -->
-        <div class="row"><h3>Class Average: &nbsp{{=average}} %</h3></div>
-        <div class="row"><h3>Total Students: &nbsp{{=total_students}}</h3></div>
-        <div class="row"><h3>Total Assignments: &nbsp{{=total_grades}}</h3></div>
-    </div>
-
-</div>
-<br>
-<br>
-
-<div class="container">
-
 
     <div class="row"> <!-- tables (standards performance and assignments due soon) -->
 
