@@ -16,6 +16,8 @@ def index():
     Something we might want to add:
     Save the class ID and date into a session variable.
     If the class ID changes, use the saved date.
+
+    Also, maybe the mobile view only shows 5 days. Or 10?
     """
 
     class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
