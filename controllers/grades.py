@@ -87,14 +87,88 @@ def create():
 
 @auth.requires_login()
 def edit():
+    """
+    Edit a grade.
+
+    This is horribly redundant. We should probably see if we can
+    combine it with the ``create`` function.
+
+    And it probably really needs to be refactored.
+    """
     if auth.has_membership(2, auth.user_id):
         pass
     else:
-        redirect(URL('default','index'))
-    try:
-        record = request.vars[0]
-        form = SQLFORM(db.student_grade, record)
-    except:
-        record = 0
-        form = SQLFORM(db.student_grade, record)
-    return dict(form=form)
+        redirect(URL('classes','index'))
+
+    record_id = (request.args(0) is not None) and request.args(0, cast=int) or None
+
+    if not record_id:
+        redirect(URL('classes', 'index'))
+
+    class_info = db((db.grade.id==record_id) &
+                    (db.grade.id==db.class_grade.grade_id)).select(
+                        db.class_grade.class_id,
+                        db.grade.name).first()
+
+    class_id = class_info.class_grade.class_id
+    grade_name = class_info.grade.name
+
+    selected_standards_rows = db((db.grade.id==record_id) &
+                                 (db.grade.id==db.grade_standard.grade_id)).select(
+                                     db.grade_standard.standard_id)
+
+    selected_standards = []
+    for standard in selected_standards_rows:
+        selected_standards.append(standard.standard_id)
+
+    standards_query = ((db.classes.id==class_id) &
+                       (db.classes.content_area==db.contentarea.id) &
+                       (db.standard.content_area==db.contentarea.id))
+
+    # Creating the drop down menu for Standard.
+    standards = db(standards_query).select(db.standard.id,
+                                           db.standard.short_name,
+                                           db.standard.reference_number)
+
+    options = []
+    for row in standards:
+        text = '%s - %s' % (row.reference_number, row.short_name)
+        options.append(OPTION(text, _value=row.id))
+
+    standards_menu = SELECT(options, _name='standards', _multiple='multiple',
+                            _class='generic-widget form-control',
+                            _id='standards', value=selected_standards)
+
+    form = SQLFORM(db.grade, record_id)
+    # Insert the SELECT object at the end of the form.
+    form.insert(-1, standards_menu)
+
+    # Processing the form
+    if form.validate():
+        session.flash = 'Grade updated.'
+
+        # If only one item is selected, form.vars.standards is a string.
+        # If multiple items are selected, form.vars.standards is a
+        # list of strings.
+        if type(form.vars.standards) is not ListType:
+            selected_standards = [form.vars.standards]
+        else:
+            selected_standards = form.vars.standards
+
+        db.grade[record_id] = dict(name=form.vars.name,
+                                   display_date=form.vars.display_date,
+                                   date_assigned=form.vars.date_assigned,
+                                   due_date=form.vars.due_date,
+                                   grade_type=form.vars.grade_type,
+                                   score=form.vars.score)
+
+        # Delete any old standards maps.
+        mapped_standards = db(db.grade_standard.grade_id==record_id).delete()
+
+        for standard_id in selected_standards:
+            db.grade_standard.insert(grade_id=record_id,
+                                     standard_id=standard_id)
+
+        redirect(URL('classes', 'index', args=[class_id]))
+
+    return dict(form=form, standards=standards_menu)
