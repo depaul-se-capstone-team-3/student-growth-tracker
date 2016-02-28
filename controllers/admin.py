@@ -1,7 +1,22 @@
 # -*- coding: utf-8 -*-
 # try something like
 import collections
-
+from reportlab.lib.enums import TA_JUSTIFY
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import *
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from operator import itemgetter
+import collections
+from cStringIO import StringIO
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics import renderPDF
+from reportlab.graphics.charts.legends import Legend
+from reportlab.graphics.widgets.grids import ShadedRect
+from reportlab.graphics.shapes import Drawing
 def index():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -193,8 +208,10 @@ def standard_overview():
         grade_list.append(row.grade_level)
     grade_list = list(set(grade_list))
     #print(grade_list)
-
+    content_ids={}
+    content_names={}
     overview_data = {}
+    content_area_all = {}
     for grade in grade_list:
         standard_query = ((db.classes.grade_level == grade)&
                           (db.classes.id == db.student_classes.class_id)&
@@ -207,8 +224,8 @@ def standard_overview():
                           (db.grade.id == db.class_grade.grade_id)&
                           (db.standard.content_area == db.contentarea.id))
 
-        standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score)
-
+        standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score, db.contentarea.id, db.contentarea.name)
+        content_area = {}
         standard_dict = {}
         for row in standard_list:
             if row.standard.id in standard_dict.keys():
@@ -217,12 +234,14 @@ def standard_overview():
                     student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
                     standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
             else:
+                content_area[row.contentarea.id]= row.contentarea.name
                 standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
-
+        content_area_all[grade] = content_area
         overview_data[grade] = standard_dict
-
-
-    return dict(overview_data = overview_data)
+        #content_names[grade] = content_name
+        #content_ids[grade]= content_id
+    #need content Name and contentID list
+    return dict(overview_data = overview_data, content_area_all = content_area_all)
 
 
 def class_list():
@@ -407,3 +426,204 @@ def detail():
     detail_data = sorted_detail_data
 
     return dict(content_name=content_name, grade_level=grade_level, content_id=content_id, detail_data=detail_data )
+
+
+
+def pdf_overview():
+
+    #get arguments passed from previous page
+    grade = (request.args(0) != None) and request.args(0, cast=int) or None
+    content_area_id = (request.args(1) != None) and request.args(1, cast=int) or None
+
+    #get a pdf from the helper function
+    pdf = create_single_grade_pdf(grade,content_area_id)
+    return pdf
+
+def create_single_grade_pdf(grade,content_area_id):
+    '''--Variables--'''
+    school_level = []
+    Story=[]
+    Elements=[]
+    contentarea_name = ""
+    buff = StringIO()
+    formatted_time = time.ctime()
+    minimum = 100
+    standard_averages=[[]]
+    standard_table=[]
+    
+    content_areas = []
+    
+    '''------'''
+    styles = getSampleStyleSheet()
+    HeaderStyle = styles["Heading1"]
+
+    #get the Content Area Name
+    query = ((content_area_id == db.contentarea.id))
+    results = db(query).select(db.contentarea.name)
+    for row in results:
+        contentarea_name = row.name
+
+
+    #Create the name for the PDf being returned
+    pdfName = "Grade_"+str(grade)+"_"+contentarea_name+"_SR"+".pdf"
+
+    #set up the response headers so the browser knows to return a PDF document
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] ='attachment;filename=%s;'%pdfName
+    doc = SimpleDocTemplate(buff,pagesize=letter,rightMargin=72,leftMargin=72,topMargin=72,bottomMargin=18)
+    doc.title=pdfName
+
+    #Set up some styles
+    styles=getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+    styles.add(ParagraphStyle(name='Indent', rightIndent=3))
+    styles.add(ParagraphStyle(name = 'Title2',
+                                  parent = styles['Normal'],
+                                  fontName = 'DejaVuSansCondensed',
+                                  fontSize = 18,
+                                  leading = 22,
+                                  #alignment = TA_LEFT,
+                                  spaceAfter = 6),
+                                  alias = 'title2')
+
+
+    #Time-Stamp
+    ptext = '<font size=12>%s</font>' % formatted_time
+    Story.append(Paragraph(ptext, styles["Normal"]))
+    Story.append(Spacer(1, 12))
+    Elements.extend(ptext)
+
+    #Administrator
+    ptext='<font size=12><b>Administrator</b></font>'
+    Story.append(Paragraph(ptext, styles["Justify"]))
+    Story.append(Spacer(1, 12))
+    Elements.extend(ptext)
+
+    #Grade Number and Content Area
+    ptext = '<font size=12><b>Grade %s %s Standards Report</b></font>'%(grade, contentarea_name)
+    Story.append(Paragraph(ptext, styles["Justify"]))
+    Story.append(Spacer(1, 7))
+    Elements.extend(ptext)
+    Story.append(Spacer(1,40))
+
+    #Graph Title
+    ptext = '<font size=15><b>Standards Progress</b></font>'
+    Story.append(Paragraph(ptext, styles["title"]))
+
+
+    i = 0
+    #get all the standards for a specific grade and content area
+    standard_query = standard_query = ((db.classes.grade_level == grade)&
+                      (db.classes.id == db.student_classes.class_id)&
+                      (db.student.id == db.student_classes.student_id)&
+                      (db.student.id == db.student_grade.student_id)&
+                      (db.grade.id == db.student_grade.grade_id)&
+                      (db.grade.id == db.grade_standard.grade_id)&
+                      (db.standard.id == db.grade_standard.standard_id)&
+                      (db.classes.id == db.class_grade.class_id)&
+                      (db.grade.id == db.class_grade.grade_id)&
+                      (db.standard.content_area == db.contentarea.id)&
+                      (db.contentarea.id == content_area_id))
+
+    standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score, db.contentarea.name)
+    standard_ref_list=[]
+    #Setup the Dictionary of standard averages
+    standard_dict = {}
+    for row in standard_list:
+        if row.standard.id in standard_dict.keys():
+            if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
+                max_score = standard_dict[row.standard.id][0] + row.grade.score
+                student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
+                standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+        else:
+            standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+
+    standard_table = []
+    standard_averages=[[]]
+
+    #set up the 2D list of Standard Averages
+    for standard in sorted(standard_dict.keys()):
+        standard_ref_list.append(standard_dict[standard][2])
+        standard_table.append([])
+        current_avg = (standard_dict[standard][1]/standard_dict[standard][0])*100
+        if minimum > current_avg:
+            minimum = current_avg
+        standard_table[i].append(standard_dict[standard][3]+": "+format((standard_dict[standard][1]/standard_dict[standard][0])*100,'.2f')+"%")
+        standard_averages[0].append(int(round((standard_dict[standard][1]/standard_dict[standard][0])*100)))
+        i+=1
+    sorted(standard_table,key=lambda l:l[0])
+
+    '''---Graph---'''
+    drawing = Drawing(600, 200)
+    data = standard_averages
+    bc = VerticalBarChart()
+
+    #location in the document (x,y)
+    bc.x = 10
+    bc.y = 30
+
+    #width and height of the graph
+    bc.height = 225
+    bc.width = 400
+    bc.data = data
+    bc.categoryAxis.drawGridLast=True
+    bc.categoryAxis.gridStart=0
+    bc.categoryAxis.gridStrokeLineCap = 2
+    bc.categoryAxis.gridEnd=3
+    #bc.barLabels = 
+
+    #Update colors of the bars in the graph
+    bc.bars.symbol = ShadedRect()
+    bc.bars.symbol.fillColorStart = colors.lightblue
+    bc.bars.symbol.fillColorEnd = colors.lightblue
+    bc.bars.symbol.strokeWidth = 0
+
+
+    #this draws a line at the top of the graph to close it. 
+    bc.strokeColor = colors.black
+
+    #Y-axis min, max, and steps.
+    if minimum != 100:
+        bc.valueAxis.valueMin = minimum -10
+    else:
+        bc.valueAxis.valueMin = 50
+    bc.valueAxis.valueMax = 100
+    bc.valueAxis.valueStep = 5
+
+    #where to anchor the origin of the graph
+    bc.categoryAxis.labels.boxAnchor = 'ne'
+
+    #Locations of labels for the X-axis
+    bc.categoryAxis.labels.dx = 2
+    bc.categoryAxis.labels.dy = -2
+
+    bc.barLabels.nudge = -10
+    bc.barLabelFormat = '%0.2f%%'
+    bc.barLabels.dx = 0
+    bc.barLabels.dy = 0
+    #The angle of the lables for the X-axis
+    bc.categoryAxis.labels.angle = 30
+    #List of the categories to place on the X-axis
+    bc.categoryAxis.categoryNames = standard_ref_list
+    drawing.add(bc)
+    '''------'''
+    '''--Graph Legend--'''
+    #Graph Legend
+    legend = Legend()
+    legend.alignment = 'right'
+    legend.x = 420
+    legend.y = 150
+    legend.deltax = 60
+    legend.dxTextSpace = 10
+    legend.columnMaximum = 4
+
+    legend.colorNamePairs = [(colors.lightblue, 'grade average')]
+    drawing.add(legend, 'legend')
+    drawing_title = "Bar Graph"
+    Story.append(drawing)
+
+    #build PDF document and return it
+    doc.build(Story)
+    pdf = buff.getvalue()
+    buff.close()
+    return pdf
