@@ -1,19 +1,20 @@
 {{extend 'layout.html'}}
-<h1>Create Teacher</h1>
+<body style="background-color:lightgrey;">
+<h1 style="text-align:center">Create Teacher</h1>
 {{=form.custom.begin}}
 
 <div class="row">
-    <div class="col-sm-10">
-        <div class="container-fluid well" style ='background-color: #80ccff;'>
+    <div class="col-xs-12">
+        <div class="container well" style ='background-color: #373735;'>
 
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>First Name</h4>
+                    <h4 style='color: #ffffff;'>First Name</h4>
                     {{=form.custom.widget.first_name}}
                 </div>
                 
                 <div class="col-sm-6">
-                    <h4>Last Name</h4>
+                    <h4 style='color: #ffffff;'>Last Name</h4>
                     {{=form.custom.widget.last_name}}
                 </div>
             </div>
@@ -21,28 +22,28 @@
             <div class="row">
 
                 <div class="col-sm-12">
-                    <h4>Email</h4>
+                    <h4 style='color: #ffffff;'>Email</h4>
                     {{=form.custom.widget.email}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>Username</h4>
+                    <h4 style='color: #ffffff;'>Username</h4>
                     {{=form.custom.widget.username}}
                 </div>
 
 
                 <div class="col-sm-6">
-                    <h4>Password</h4>
+                    <h4 style='color: #ffffff;'>Password</h4>
                     {{=form.custom.widget.password}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>Account Type (do not change)</h4>
+                    <h4 style='color: #ffffff;'> Account Type (do not change)</h4>
                     {{=form.custom.widget.Account_Type}}
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                 </div>
                 <div class="col-sm-2">
                     <h4>&nbsp;</h4>
@@ -55,3 +56,4 @@
     </div>
 </div>
 {{=form.custom.end}}
+</body>

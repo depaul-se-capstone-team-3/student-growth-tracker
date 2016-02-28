@@ -1,19 +1,20 @@
 {{extend 'layout.html'}}
-<h1>Assign Teacher to Class</h1>
+<body style="background-color:lightgrey;">
+<h1 style="text-align:center">Assign Teacher to Class</h1>
 {{=form.custom.begin}}
 
 <div class="row">
-    <div class="col-sm-10">
-        <div class="container-fluid well" style ='background-color: #80ccff;'>
+    <div class="col-sm-12">
+        <div class="container well" style ='background-color: #373735;'>
 
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>Teacher</h4>
+                    <h4 style='color: #ffffff;'>Teacher</h4>
                     {{=form.custom.widget.Teacher}}
                 </div>
                 
                 <div class="col-sm-6">
-                    <h4>Class</h4>
+                    <h4 style='color: #ffffff;'>Class</h4>
                     {{=form.custom.widget.Class}}
                 </div>
             </div>
@@ -29,3 +30,4 @@
     </div>
 </div>
 {{=form.custom.end}}
+</body>

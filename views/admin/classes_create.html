@@ -1,19 +1,20 @@
 {{extend 'layout.html'}}
-<h1>Add Class</h1>
+<body style="background-color:lightgrey;">
+<h1 style="text-align:center">Add Class</h1>
 {{=form.custom.begin}}
 
 <div class="row">
-    <div class="col-sm-10">
-        <div class="container-fluid well" style ='background-color: #80ccff;'>
+    <div class="col-sm-12">
+        <div class="container well" style ='background-color: #373735;'>
 
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>Name</h4>
+                    <h4 style='color: #ffffff;'>Name</h4>
                     {{=form.custom.widget.name}}
                 </div>
                 
                 <div class="col-sm-6">
-                    <h4>Grade Level</h4>
+                    <h4 style='color: #ffffff;'>Grade Level</h4>
                     {{=form.custom.widget.grade_level}}
                 </div>
             </div>
@@ -21,20 +22,20 @@
             <div class="row">
 
                 <div class="col-sm-6">
-                    <h4>Start Date</h4>
+                    <h4 style='color: #ffffff;'>Start Date</h4>
                     {{=form.custom.widget.start_date}}
                 </div>
                 <div class="col-sm-6">
-                    <h4>End Date</h4>
+                    <h4 style='color: #ffffff;'>End Date</h4>
                     {{=form.custom.widget.end_date}}
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>Content Area</h4>
+                    <h4 style='color: #ffffff;'>Content Area</h4>
                     {{=form.custom.widget.content_area}}
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                 </div>
                 <div class="col-sm-2">
                     <h4>&nbsp;</h4>
@@ -47,3 +48,4 @@
     </div>
 </div>
 {{=form.custom.end}}
+</body>
