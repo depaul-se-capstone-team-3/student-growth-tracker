@@ -54,9 +54,10 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <h4>&nbsp;</h4>
                     {{=form.custom.submit}}
+                    <button id="cancel">Cancel</button>
                 </div>
             </div>
 
@@ -65,3 +66,15 @@
     <div class="col-sm-2"></div>
 </div>
 {{=form.custom.end}}
+
+{{block page_js}}
+
+<script>
+ $(document).ready(function() {
+     $(":button#cancel").click(function() {
+         window.location.href="{{=URL('classes', 'index', args = [class_id])}}";
+     });
+ });
+</script>
+
+{{end}}

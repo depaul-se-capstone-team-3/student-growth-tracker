@@ -145,8 +145,6 @@ def edit():
 
     # Processing the form
     if form.validate():
-        session.flash = 'Grade updated.'
-
         # If only one item is selected, form.vars.standards is a string.
         # If multiple items are selected, form.vars.standards is a
         # list of strings.
@@ -171,4 +169,4 @@ def edit():
 
         redirect(URL('classes', 'index', args=[class_id]))
 
-    return dict(form=form, standards=standards_menu)
+    return dict(form=form, standards=standards_menu, class_id=class_id)

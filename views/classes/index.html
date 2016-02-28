@@ -144,7 +144,7 @@
      return columns;
  }
 
- function build_headers(grade_names, due_dates, points) {
+ function build_headers(grade_ids, grade_names, due_dates, points) {
      var headers = [''];
      max_scores.push(0.0);
 
@@ -161,8 +161,9 @@
          }
 
          grade_name = grade_name + grade_names[i].substring(start_index);
+         edit_link = "<a href=\"{{=URL('grades', 'edit')}}/" + grade_ids[i] + "\">edit</a>";
 
-         headers.push(grade_name + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
+         headers.push(grade_name + '<br>' + edit_link + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
          max_scores.push(points[i]);
      }
 
@@ -170,10 +171,10 @@
  }
 
  function set_table(data) {
-     table_data = data.slice(3); // table_data is the global data structure for the data.
+     table_data = data.slice(4); // table_data is the global data structure for the data.
      options.data = table_data;
      options.renderer = testRenderer;
-     options.colHeaders = build_headers(data[0], data[1], data[2])
+     options.colHeaders = build_headers(data[0], data[1], data[2], data[3])
      options.columns = set_visible_columns(table_data[0]);
  }
 

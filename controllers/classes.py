@@ -103,17 +103,35 @@ def student_grades():
 
     assignments = []
 
-    class_assignments = get_class_assignments(teacher_id, class_id, standard_id)
+    query = (teacher_classes_query(teacher_id, class_id) &
+             (db.classes.id==db.class_grade.class_id) &
+             (db.class_grade.grade_id==db.grade.id))
+
+    if standard_id:
+        query &= ((db.grade.id==db.grade_standard.grade_id) &
+                  (db.grade_standard.standard_id==standard_id))
+
+    class_assignments = db(query).select(db.grade.id,
+                                         db.grade.name,
+                                         db.grade.score,
+                                         db.grade.due_date,
+                                         orderby=db.grade.due_date)
+
+
+    # class_assignments = get_class_assignments(teacher_id, class_id, standard_id)
+    grade_id_row = [None, None]
     hdr_row = [None, None]
     date_row = [None, None]
     score_row = [None, None]
     
     for assignment in class_assignments:
+        grade_id_row += [None, assignment.id]
         hdr_row += [None, assignment.name]
         due_date = assignment.due_date and assignment.due_date.strftime(DATE_FORMAT) or None
         date_row += [None, due_date]
         score_row += [None, assignment.score]
 
+    assignments.append(grade_id_row)
     assignments.append(hdr_row)
     assignments.append(date_row)
     assignments.append(score_row)
