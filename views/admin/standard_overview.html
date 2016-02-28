@@ -15,18 +15,15 @@
                         </td>
                         <td></td>
                     </tr>
+                {{for id in content_area_all[key]:}}
                     <tr class="collapse {{=str(key)}}collapsed">
-                        <tr class="collapse {{=str(key)}}collapsed" height="400" align="right">
-                            <td width="900">{{=LOAD('charts', 'admin_standard_overview_bar.load', args=key)}}</td>
-                            <td></td>
+                            <td>{{=content_area_all[key][id]}}</td>
+                            <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('admin', 'detail', args = [key,id])}}'">Details</button></td>
+                            <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('admin', 'pdf_overview', args = [key,id])}}'">Download PDF</button></td>
                         </tr>
+                    </tr>
+                    {{pass}}
 
-                        {{for data in overview_data[key]:}}
-                        <tr class="collapse {{=str(key)}}collapsed">
-                            <td class="{{=get_contextual_classes(float(overview_data[key][data][1] / overview_data[key][data][0]*100.0))}}"> {{=overview_data[key][data][2]}} &nbsp&nbsp&nbsp {{=overview_data[key][data][3]}}</td>
-                            <td class="{{=get_contextual_classes(float(overview_data[key][data][1] / overview_data[key][data][0]*100.0))}}"> {{=format(overview_data[key][data][1] / overview_data[key][data][0] * 100.0, ".2f")}} &nbsp%</td>
-                        </tr>
-                        {{pass}}
 
                     </tr>
 
