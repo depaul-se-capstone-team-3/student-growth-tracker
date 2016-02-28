@@ -11,34 +11,49 @@
         <h1 class="class-name">{{=class_name}}</h1>
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-12">
-       <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('grades', 'create', args = [class_id,auth.user_id])}}'">Create a new Assignment</button>
-    </div>
+
+<div class="row options-row">
     
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <form>
-            <div class="row options-row">
-                <div class="col-sm-12">
-                    Filter by standard: 
-                    <select id="standards-menu">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12"><h3>Filter by standard:</h3></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <form>
+                    <select id="standards-menu" class="generic-widget form-control">
                         <option value="-1">All</option>
                         {{for standard in standards:}}
-                        <option value="{{=standard.id}}">{{=standard.short_name}}: {{=standard.reference_number}}</option>
+                        <option value="{{=standard.id}}">
+                            {{=standard.short_name}}: {{=standard.reference_number}}
+                        </option>
                         {{pass}}
                     </select>
-                </div>
+                </form>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="student_grades" class="dataTable hot-scrollable"></div>
-                </div>
+
+            <div class="col-sm-4">
+                <button type="button" id="new-assignment"
+                        class="btn btn-default pull-right">
+                    <span class="text-success">Create a new Assignment</span>
+                </button>
             </div>
-        </form>
+
+        </div>
     </div>
+
 </div>
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <!-- This needs to refresh when the window resizes. -->
+        <div id="student_grades" class="dataTable hot-scrollable"></div>
+    </div>
+
+</div>
+
 
 {{block page_js}}
 
@@ -129,7 +144,7 @@
      return columns;
  }
 
- function build_headers(grade_names, due_dates, points) {
+ function build_headers(grade_ids, grade_names, due_dates, points) {
      var headers = [''];
      max_scores.push(0.0);
 
@@ -146,8 +161,9 @@
          }
 
          grade_name = grade_name + grade_names[i].substring(start_index);
+         edit_link = "<a href=\"{{=URL('grades', 'edit')}}/" + grade_ids[i] + "\">edit</a>";
 
-         headers.push(grade_name + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
+         headers.push(grade_name + '<br>' + edit_link + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
          max_scores.push(points[i]);
      }
 
@@ -155,10 +171,10 @@
  }
 
  function set_table(data) {
-     table_data = data.slice(3); // table_data is the global data structure for the data.
+     table_data = data.slice(4); // table_data is the global data structure for the data.
      options.data = table_data;
      options.renderer = testRenderer;
-     options.colHeaders = build_headers(data[0], data[1], data[2])
+     options.colHeaders = build_headers(data[0], data[1], data[2], data[3])
      options.columns = set_visible_columns(table_data[0]);
  }
 
@@ -192,6 +208,12 @@
  });
  
  load_data({{=class_id}}, $("select#standards-menu option:selected").val());
+
+ $(document).ready(function() {
+     $("button#new-assignment").click(function() {
+         window.location.href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}";
+     });
+ });
 
 </script>
 
