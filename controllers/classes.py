@@ -547,3 +547,28 @@ def create_single_class_pdf(teacher_name, class_id,class_name, class_average, to
     pdf = buff.getvalue()
     buff.close()
     return pdf
+
+
+def view_notifications():
+    teacher_id = auth.user_id # Cache the user id of the logged-in teacher
+                              # to make it easier to access and recognize.
+
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
+
+    ############################################################################
+    ## This should go into a function.
+    if not class_id:
+        response.flash = T("Class Does Not Exist")
+        session.flash = T("Class does not exist.")
+
+        # Redirect to previous link if via link, else redirect to main page.
+        if (request.env.http_referer==None):
+            redirect(URL('default', 'index'))
+        else:
+            redirect(request.env.http_referer)
+    
+    notifications_query = (db.notifications.class_id == class_id)
+    notifications = db(notifications_query).select(db.notifications.student_id,
+                                                   db.notifications.date,
+                                                   db.notifications.warning_text)
+    return dict (notifications=notifications)
