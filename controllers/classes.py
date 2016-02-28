@@ -103,8 +103,7 @@ def student_grades():
 
     assignments = []
 
-    query = (teacher_classes_query(teacher_id, class_id) &
-             (db.classes.id==db.class_grade.class_id) &
+    query = ((db.class_grade.class_id==class_id) &
              (db.class_grade.grade_id==db.grade.id))
 
     if standard_id:
