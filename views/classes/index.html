@@ -34,12 +34,13 @@
             </div>
 
             <div class="col-sm-4">
-                <button type="button" id="new-assignment"
-                        class="btn btn-default pull-right">
-                    <span class="text-success">Create a new Assignment</span>
-                </button>
-            </div>
+                <div class="btn-group btn-group-justified" role="group">
 
+                    <a href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}"
+                       id="new-assignment" class="btn btn-default">New Assignment</a>
+
+                </div>
+            </div>
         </div>
     </div>
 
@@ -208,12 +209,6 @@
  });
  
  load_data({{=class_id}}, $("select#standards-menu option:selected").val());
-
- $(document).ready(function() {
-     $("button#new-assignment").click(function() {
-         window.location.href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}";
-     });
- });
 
 </script>
 
