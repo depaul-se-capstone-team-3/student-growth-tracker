@@ -1,6 +1,14 @@
 {{extend 'layout.html'}}
-{{background = URL('static','images/growth.jpeg')}}
-<body style="background-color:darkgrey;">
+
+{{block head}}
+<style>
+    body {
+        background-image: url("{{=URL('static','images/background.jpg')}}");
+        background-color: #ccc;
+    }
+</style>
+{{end}}
+
 <h2>
 {{=T('Sign Up') if request.args(0) == 'register' else T('Student Growth Tracker Log In') if request.args(0) == 'login' else T(request.args(0).replace('_',' ').title())}}
 </h2>

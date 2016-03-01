@@ -135,6 +135,7 @@
      for(var i = 3; i < row.length; i += 2) {
          columns.push({
              data: i,
+             format: '0.00',
              allowInvalid: false,
              validator: function(value, callback) {
                  if($.isNumeric(value) && value >= 0) {callback(true);}
