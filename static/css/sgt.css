@@ -1,4 +1,10 @@
 
+#attendance-table > tbody > tr:first-child {
+    background-color: #cfccc8;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
 .hot-scrollable {
     width: 100%;
     height: 750px;
