@@ -271,6 +271,13 @@ def overview():
     sorted_standard_dict = collections.OrderedDict(sorted(standard_dict.items()))
     standard_dict = sorted_standard_dict
 
+    notifi_query = ((db.notifications.class_id == class_id)&
+                    (db.notifications.student_id == db.student.id)&
+                    (db.student.user_id == db.auth_user.id))
+
+
+    notifi = db(notifi_query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.notifications.warning_text)
+
     return dict(class_name=class_name,
                 class_id=class_id,
                 total_students=total_students,
@@ -280,7 +287,8 @@ def overview():
                 average=average,
                 standard_dict=standard_dict,
                 due_soon=due_soon,
-                due_soon_amount=due_soon_amount)
+                due_soon_amount=due_soon_amount,
+                notifi=notifi)
 
 # @auth.requires(auth.has_membership('Teacher', auth.user_id),
 #                requires_login=True)
