@@ -64,4 +64,32 @@
     <!-- charts -->
     {{=LOAD('charts', 'class_overview_standard_bar.load', args=class_id)}}
 
+    <br>
+    <br>
+    <br>
+    <h1>Notifications</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <tr>
+                        <td><b>Name</b></td>
+                        <td><b>School ID</b></td>
+                        <td><b>Warning</b></td>
+                    </tr>
+                {{for row in notifi:}}
+                    <tr class="danger">
+                        <td>{{=row.auth_user.first_name}} {{=row.auth_user.last_name}}</td>
+                        <td>{{=row.student.school_id_number}}</td>
+                        <td>{{=row.notifications.warning_text}}</td>
+                    </tr>
+                {{pass}}
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </div>
