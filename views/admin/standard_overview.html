@@ -27,10 +27,6 @@
 
                     </tr>
 
-                <script>
-                        $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
-                        $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
-                </script>
 
                 {{pass}}
 
@@ -39,16 +35,16 @@
         </div>
     </div>
 </div>
-<style>
-    .btn{border:none;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase}
-    .btn-xs,.btn-group-xs>.btn{padding:1px 5px;font-size:18px;border-radius:3px}
-    
-    .btn-success {  color: #fff;  background-color: #94d194;  border-color: #4cae4c;}
-    .btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.open > .dropdown-toggle.btn-success {  color: #fff;  background-color: #449d44;  border-color: #398439;}
-    
-    .btn-warning { color: #fff; background-color: #f3bd72; border-color: #eea236;}
-    .btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.open > .dropdown-toggle.btn-warning { color: #fff; background-color: #ec971f; border-color: #d58512;}
-    
-    .btn-danger { color: #fff; background-color: #e48481; border-color: #d43f3a;}
-    .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger { color: #fff; background-color: #c9302c; border-color: #ac2925;}
-</style>
+
+{{block page_js}}
+<script>
+ /* This is probably unnecessary, as bootstrap has this functionality built-in. */
+ $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {
+     $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");
+ });
+
+ $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {
+     $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");
+ });
+</script>
+{{end}}

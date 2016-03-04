@@ -1,59 +1,64 @@
 {{extend 'layout.html'}}
-<body style="background-color:lightgrey;">
-<h1 style="text-align:center">Create Teacher</h1>
-{{=form.custom.begin}}
 
-<div class="row">
-    <div class="col-xs-12">
-        <div class="container well" style ='background-color: #373735;'>
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Create Teacher</h1>
+        </div>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>First Name</h4>
-                    {{=form.custom.widget.first_name}}
-                </div>
-                
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>Last Name</h4>
-                    {{=form.custom.widget.last_name}}
-                </div>
-            </div>
-            
-            <div class="row">
-
-                <div class="col-sm-12">
-                    <h4 style='color: #ffffff;'>Email</h4>
-                    {{=form.custom.widget.email}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>Username</h4>
-                    {{=form.custom.widget.username}}
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>Password</h4>
-                    {{=form.custom.widget.password}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'> Account Type (do not change)</h4>
-                    {{=form.custom.widget.Account_Type}}
-                </div>
-                <div class="col-sm-3">
-                </div>
-                <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
-                    {{=form.custom.submit}}
-                </div>
-            </div>
-        <div class="row">
-            <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+            <h3>Import teachers</h3>
+            {{=formcsv.custom.begin}}
+            {{=formcsv.custom.widget.file}}
+            <input type="submit" class="btn btn-sm btn-primary" value="Upload">
+            {{=formcsv.custom.end}}
         </div>
     </div>
+
+    {{=form.custom.begin}}
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>First Name</h4>
+            {{=form.custom.widget.first_name}}
+        </div>
+        
+        <div class="col-sm-6">
+            <h4>Last Name</h4>
+            {{=form.custom.widget.last_name}}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>Email</h4>
+            {{=form.custom.widget.email}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Username</h4>
+            {{=form.custom.widget.username}}
+        </div>
+
+        <div class="col-sm-6">
+            <h4>Password</h4>
+            {{=form.custom.widget.password}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4> Account Type (do not change)</h4>
+            {{=form.custom.widget.Account_Type}}
+        </div>
+        <div class="col-sm-2">
+            <input type="submit" class="btn btn-primary" value="Create Teacher">
+            {{#=form.custom.submit}}
+        </div>
+    </div>
+
 </div>
+
 {{=form.custom.end}}
-</body>

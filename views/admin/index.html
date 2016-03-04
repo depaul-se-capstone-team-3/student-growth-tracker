@@ -1,107 +1,84 @@
 {{extend 'layout.html'}}
-<body style="background-color:lightgrey;">
-<div class="row">
-    <div class="col-sm-12">
-        <div class="container well" style ='background-color: #373735;'>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <h2 class="text-center" style='color: #ffffff;'>Admin Tools</h2>
-                </div>
+<div class="container well">
 
-                <div class="col-sm-6">
-                    <h2 class="text-center" style='color: #ffffff;'>Admin Views</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{teacher_create = URL('admin','teacher_create')}}
-                    <a id="teacher_create" href="{{=teacher_create}}" class="btn btn-primary btn-block" role="button">Add a Teacher</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{teacher_list = URL('admin','teacher_list')}}
-                    <a id="teacher_list" href="{{=teacher_list}}" class="btn btn-primary btn-block" role="button">Teachers</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{student_create = URL('admin','student_create')}}
-                    <a id="student_create" href="{{=student_create}}" class="btn btn-info btn-block" role="button">Add a Student</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{student_list = URL('admin','student_list')}}
-                    <a id="student_list" href="{{=student_list}}" class="btn btn-info btn-block" role="button">Students</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{classes_create = URL('admin','classes_create')}}
-                    <a id="classes_create"href="{{=classes_create}}" class="btn btn-primary btn-block" role="button">Add a Class</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{classes_list = URL('admin','class_list')}}
-                    <a id="classes_list" href="{{=classes_list}}" class="btn btn-primary btn-block" role="button">Classes</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{parent_create = URL('admin','parent_create')}}
-                    <a id="parent_create" href="{{=parent_create}}" class="btn btn-info btn-block" role="button">Add a Parent</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{parent_list = URL('admin','parent_list')}}
-                    <a id="parent_list" href="{{=parent_list}}" class="btn btn-info btn-block" role="button">Parents</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{assign_teacher = URL('admin','assign_teacher_to_class')}}
-                    <a id="assign_teacher" href="{{=assign_teacher}}" class="btn btn-primary btn-block" role="button">Assign Teacher to Class</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{teacher_class_list = URL('admin','teacher_class')}}
-                    <a id="teacher_class_list" href="{{=teacher_class_list}}" class="btn btn-primary btn-block" role="button">Current Teachers' Classes</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{assign_student = URL('admin','assign_student_to_class')}}
-                    <a id="assign_student" href="{{=assign_student}}" class="btn btn-info btn-block" role="button">Assign Student to Class</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{student_class_list = URL('admin','student_class')}}
-                    <a id="student_class_list" href="{{=student_class_list}}" class="btn btn-info btn-block" role="button">Current Students' Classes</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{assign_parent = URL('admin','assign_parent_to_student')}}
-                    <a id="assign_parent" href="{{=assign_parent}}" class="btn btn-primary btn-block" role="button">Assign Parent to Student</a>
-                </div>
-
-                <div class="col-sm-6">
-                    {{parent_student_list = URL('admin','parent_student')}}
-                    <a id="parent_student_list" href="{{=parent_student_list}}" class="btn btn-primary btn-block" role="button">Current Parents' Students</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    {{standard_overview = URL('admin','standard_overview')}}
-                    <h2 class="text-center" style='color: #ffffff;'>Standards Views</h2>
-                    <a id="standard_overview" href="{{=standard_overview}}" class="btn btn-success btn-block" role="button">Building Standards Progress</a>
-                </div>
-                <div class="col-sm-6">
-                    {{activate_trend_detection = URL('notifications','detect_trends')}}
-                    <h2 class="text-center" style='color: #ffffff;'>Manual Tools</h2>
-                    <a id="activate_trend_detection" href="{{=activate_trend_detection}}" class="btn btn-warning btn-block" role="button">Activate Trend Detection</a>
-                </div>
-            </div>
+    <div class="row center">
+        <div class="col-sm-6"><h2>Admin Tools</h2></div>
+        <div class="col=sm-6"><h2>Admin Views</h2></div>
     </div>
-</div>
-</body>
+
+    <div class="row center">
+        <div class="col-sm-6 btn-group-vertical" role="group">
+
+                <a id="teacher_create" href="{{=URL('admin','teacher_create')}}"
+                   class="btn">Manage Teachers</a>
+
+                <a id="student_create" href="{{=URL('admin','student_create')}}"
+                   class="btn">Manage Students</a>
+
+                <a id="classes_create" href="{{=URL('admin','classes_create')}}"
+                   class="btn">Manage Classes</a>
+
+                <a id="parent_create" href="{{=URL('admin','parent_create')}}"
+                   class="btn">Manage Parents</a>
+
+                <a id="assign_teacher" href="{{=URL('admin','assign_teacher_to_class')}}"
+                   class="btn">Assign Teacher to Class</a>
+
+                <a id="assign_student" href="{{=URL('admin','assign_student_to_class')}}"
+                   class="btn">Assign Student to Class</a>
+
+                <a id="assign_parent" href="{{=URL('admin','assign_parent_to_student')}}"
+                   class="btn">Associate Parents with Students</a>
+                
+        </div>
+
+        <div class="col-sm-6 btn-group-vertical" role="group">
+
+                <a id="teacher_list" href="{{=URL('admin','teacher_list')}}"
+                   class="btn">Teachers</a>
+
+                <a id="student_list" href="{{=URL('admin','student_list')}}"
+                   class="btn">Students</a>
+
+                <a id="classes_list" href="{{=URL('admin','class_list')}}"
+                   class="btn">Classes</a>
+
+                <a id="parent_list" href="{{=URL('admin','parent_list')}}"
+                   class="btn">Parents</a>
+
+                <a id="teacher_class_list" href="{{=URL('admin','teacher_class')}}"
+                   class="btn">Current Teachers' Classes</a>
+
+                <a id="student_class_list" href="{{=URL('admin','student_class')}}"
+                   class="btn">Current Students' Classes</a>
+
+                <a id="parent_student_list" href="{{=URL('admin','parent_student')}}"
+                   class="btn">Current Parents' Students</a>
+
+        </div>
+    </div>
+
+    <div class="row center">
+        <div class="col-sm-6"><h2>Standards Views</h2></div>
+        <div class="col-sm-6"><h2>Manual Tools</h2></div>
+    </div>
+
+    <div class="row center">
+
+        <div class="col-sm-6 btn-group-vertical" role="group">
+
+            <a id="standard_overview" href="{{=URL('admin','standard_overview')}}"
+                    class="btn btn-success">Building Standards Progress</a>
+
+        </div>
+
+        <div class="col-sm-6 btn-group-vertical" role="group">
+
+            <a id="activate_trend_detection" href="{{=URL('notifications','detect_trends')}}"
+               class="btn btn-warning btn-block" role="button">Activate Trend Detection</a>
+
+        </div>
+    </div>
+
+</div> <!-- Container -->

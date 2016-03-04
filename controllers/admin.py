@@ -17,6 +17,8 @@ from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
 from reportlab.graphics.widgets.grids import ShadedRect
 from reportlab.graphics.shapes import Drawing
+
+
 def index():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -51,6 +53,42 @@ def teacher_create():
         pass
     else:
         redirect(URL('default','index'))
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
+
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
+
+    if formcsv.process().accepted:
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
+
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[1],
+                    last_name=row[2],
+                    email=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Teacher'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+        session.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    else:
+        response.flash = None
+        session.flash = None
+
+    # end handle upload csv
 
     query = ((db.auth_group.id == 2))
     role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
@@ -60,8 +98,7 @@ def teacher_create():
         id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
         db.auth_membership.insert(user_id = id, group_id = 2)
 
-    return dict(form=form)
-
+    return dict(form=form, formcsv=formcsv)
 
 
 def student_create():
@@ -88,8 +125,6 @@ def student_create():
                           parent_email = form.vars.Parent_Email)
 
     return dict(form=form)
-
-
 
 
 def parent_create():
@@ -207,7 +242,6 @@ def standard_overview():
     for row in grade:
         grade_list.append(row.grade_level)
     grade_list = list(set(grade_list))
-    #print(grade_list)
     content_ids={}
     content_names={}
     overview_data = {}
@@ -238,8 +272,7 @@ def standard_overview():
                 standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
         content_area_all[grade] = content_area
         overview_data[grade] = standard_dict
-        #content_names[grade] = content_name
-        #content_ids[grade]= content_id
+
     #need content Name and contentID list
     return dict(overview_data = overview_data, content_area_all = content_area_all)
 
@@ -368,11 +401,7 @@ def parent_student():
         if row.auth_user.id in parent_dict.keys():
             parent_dict[row.auth_user.id][3].append(row.parent_student.student_id)
         else:
-            #[id, first, last, [stuent]]
             parent_dict[row.auth_user.id] = [row.auth_user.id, row.auth_user.first_name, row.auth_user.last_name, [row.parent_student.student_id] ]
-
-    for i in parent_dict.keys():
-        print(parent_dict[i][3])
 
     view_data = {}
     for key in parent_dict.keys():
@@ -482,7 +511,6 @@ def create_single_grade_pdf(grade,content_area_id):
                                   fontName = 'DejaVuSansCondensed',
                                   fontSize = 18,
                                   leading = 22,
-                                  #alignment = TA_LEFT,
                                   spaceAfter = 6),
                                   alias = 'title2')
 
