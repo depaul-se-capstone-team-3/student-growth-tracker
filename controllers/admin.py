@@ -627,3 +627,26 @@ def create_single_grade_pdf(grade,content_area_id):
     pdf = buff.getvalue()
     buff.close()
     return pdf
+
+
+
+def settings():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    location_Field = Field("location", default="trend", writable=False)
+    form = SQLFORM.factory(location_Field, db.settings.setting, submit_button='Save Setting')
+    if form.accepts(request,session):
+        num = float(request.vars.setting)
+        db.settings.update_or_insert(db.settings.location=="trend", location = "trend", setting = num)
+        response.flash = 'New Threshold Set'
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'Please Enter Setting'
+
+    trend_num_query = db(db.settings.location == "trend").select(db.settings.setting)
+    trend_num = trend_num_query[0].setting
+    return dict(form=form, trend_num=trend_num)
