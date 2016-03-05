@@ -3,7 +3,6 @@
 def detect_trends_scheduler():
     trend_num_query = db(db.settings.location == "trend").select(db.settings.setting)
     trend_num = trend_num_query[0].setting
-    print (trend_num)
 
     notifi_query = (db.notifications.id >0)
     db(notifi_query).delete()
