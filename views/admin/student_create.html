@@ -1,82 +1,61 @@
 {{extend 'layout.html'}}
 
-<h1>Create Student</h1>
-{{=form.custom.begin}}
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="container well">
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-6">
 
             <div class="row">
-                <div class="col-sm-6">
-                    <h4>First Name</h4>
-                    {{=form.custom.widget.first_name}}
-                </div>
-                
-                <div class="col-sm-6">
-                    <h4>Last Name</h4>
-                    {{=form.custom.widget.last_name}}
-                </div>
+                <div class="col-sm-12"><h1>Add a student</h1></div>
             </div>
-            
+
+            {{=form.custom.begin}}
+
+            <div class="form-group">
+
+                <label for="no_table_first_name">First Name</label>
+                {{=form.custom.widget.first_name}}
+
+                <label for="no_table_last_name">Last Name</label>
+                {{=form.custom.widget.last_name}}
+
+                <label for="no_table_email">Email</label>
+                {{=form.custom.widget.email}}
+
+                <label for="no_table_username">Username</label>
+                {{=form.custom.widget.username}}
+
+                <label for="no_table_password">Password</label>
+                {{=form.custom.widget.password}}
+
+                <label for="no_table_school_id_number">School ID Number</label>
+                {{=form.custom.widget.School_ID_Number}}
+
+                <label for="no_table_grade_level">Grade Level</label>
+                {{=form.custom.widget.Grade_Level}}
+
+                <label for="no_table_home_address">Home Address</label>
+                {{=form.custom.widget.Home_Address}}
+
+                <label for="no_table_paren_email">Parent Email</label>
+                {{=form.custom.widget.Parent_Email}}
+
+            </div>
+
             <div class="row">
-
-                <div class="col-sm-12">
-                    <h4>Email</h4>
-                    {{=form.custom.widget.email}}
-                </div>
+                <div class="col-sm-12">{{=form.custom.submit}}</div>
             </div>
+
+            {{=form.custom.end}}
+
+        </div>
+
+        <div class="col-sm-6">
+
             <div class="row">
-                <div class="col-sm-6">
-                    <h4>Username</h4>
-                    {{=form.custom.widget.username}}
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h4>Password</h4>
-                    {{=form.custom.widget.password}}
-                </div>
+                <div class="col-sm-12"><h1>Import students from file</h1></div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>School ID Number</h4>
-                    {{=form.custom.widget.School_ID_Number}}
-                </div>
 
-
-                <div class="col-sm-6">
-                    <h4>Grade Level</h4>
-                    {{=form.custom.widget.Grade_Level}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Home Address</h4>
-                    {{=form.custom.widget.Home_Address}}
-                </div>
-
-
-                <div class="col-sm-6">
-                    <h4>Parent Email</h4>
-                    {{=form.custom.widget.Parent_Email}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Account Type (do not change)</h4>
-                    {{=form.custom.widget.Account_Type}}
-                </div>
-                <div class="col-sm-3">
-                </div>
-                <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
-                    {{=form.custom.submit}}
-                </div>
-            </div>
-        <div class="row">
-            <div class="col-sm-2"></div>
         </div>
     </div>
 </div>
-{{=form.custom.end}}
+

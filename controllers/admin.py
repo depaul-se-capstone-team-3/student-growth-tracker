@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-# try something like
+
+import csv
+import os
+
 import collections
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
@@ -60,7 +63,7 @@ def teacher_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.process().accepted:
+    if formcsv.vars and formcsv.process().accepted:
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
@@ -70,9 +73,10 @@ def teacher_create():
 
             for row in importreader:
                 uid = db.auth_user.insert(
-                    first_name=row[1],
-                    last_name=row[2],
-                    email=row[3],
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
                     password=CRYPT()(row[4])[0])
 
                 auth.add_membership(user_id=uid,
@@ -90,13 +94,18 @@ def teacher_create():
 
     # end handle upload csv
 
-    query = ((db.auth_group.id == 2))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    form = SQLFORM.factory(db.auth_user, role_field, submit_button='Create Teacher')
+    form = SQLFORM.factory(db.auth_user, submit_button='Add Teacher')
 
     if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 2)
+                uid = db.auth_user.insert(
+                    first_name=form.vars.first_name,
+                    last_name=form.vars.last_name,
+                    email=form.vars.email,
+                    username=form.vars.username,
+                    password=form.vars.password)
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Teacher'))
 
     return dict(form=form, formcsv=formcsv)
 
