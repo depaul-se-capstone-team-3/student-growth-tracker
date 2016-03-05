@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-
 def detect_trends_scheduler():
-    #    if auth.has_membership(1, auth.user_id):
-#        pass
-#    else:
-#        redirect(URL('default','index'))
+    trend_num_query = db(db.settings.location == "trend").select(db.settings.setting)
+    trend_num = trend_num_query[0].setting
+    print (trend_num)
+
     notifi_query = (db.notifications.id >0)
     db(notifi_query).delete()
 
@@ -42,11 +41,11 @@ def detect_trends_scheduler():
             average_values = [student.id, single_class.id, student_score, student_possible]
             student_average_values_list.append(average_values)
             student_average = student_score/student_possible
-            if (student_average < .75):
+            if (student_average < trend_num/100.0):
                 db.notifications.insert(student_id=student.id,
                                         class_id=single_class.id,
                                         date=datetime.datetime.now,
-                                        warning_text=("Student Grade is less than 75%."))
+                                        warning_text=("Student Grade is less than "+ str(trend_num) + "%."))
             if (student_missing_assignments > 5):
                 db.notifications.insert(student_id=student.id,
                                         class_id=single_class.id,
