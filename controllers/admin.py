@@ -55,6 +55,7 @@ def teacher_create():
         pass
     else:
         redirect(URL('default','index'))
+
     # begin handle upload csv
     upload_folder = os.path.join(request.folder, 'uploads')
 
@@ -62,7 +63,7 @@ def teacher_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.vars and formcsv.process().accepted:
+    if formcsv.process(formname='teacher_upload').accepted and formcsv.vars.file is not '':
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
@@ -84,27 +85,23 @@ def teacher_create():
             records_loaded = importreader.line_num - 1
 
         response.flash = 'Loaded %d records' % (records_loaded,)
-        session.flash = 'Loaded %d records' % (records_loaded,)
 
         os.remove(upload_file)
-    else:
-        response.flash = None
-        session.flash = None
-
     # end handle upload csv
 
+    # begin handle single insert
     form = SQLFORM.factory(db.auth_user, submit_button='Add Teacher')
 
-    if form.process().accepted:
-                uid = db.auth_user.insert(
-                    first_name=form.vars.first_name,
-                    last_name=form.vars.last_name,
-                    email=form.vars.email,
-                    username=form.vars.username,
-                    password=form.vars.password)
+    if form.process(formname='teacher_insert').accepted:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
 
-                auth.add_membership(user_id=uid,
-                                    group_id=auth.id_group('Teacher'))
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Teacher'))
+    # end handle single insert
 
     return dict(form=form, formcsv=formcsv)
 
