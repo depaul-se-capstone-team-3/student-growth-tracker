@@ -1,50 +1,47 @@
 {{extend 'layout.html'}}
 
-<h1>Add Class</h1>
-
-{{=form.custom.begin}}
-<div class="row">
-    <div class="col-sm-12">
-        <div class="container well">
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-6">
 
             <div class="row">
-                <div class="col-sm-6">
-                    <h4>Name</h4>
+                <div class="col-sm-12"><h1>Add a class</h1></div>
+            </div>
+
+            {{=form.custom.begin}}
+
+            <div class="form-group">
+
+                    <label for="no_table_">Name</label>
                     {{=form.custom.widget.name}}
-                </div>
-                
-                <div class="col-sm-6">
-                    <h4>Grade Level</h4>
-                    {{=form.custom.widget.grade_level}}
-                </div>
-            </div>
-            
-            <div class="row">
 
-                <div class="col-sm-6">
-                    <h4>Start Date</h4>
+                    <label for="no_table_">Grade Level</label>
+                    {{=form.custom.widget.grade_level}}
+
+                    <label for="no_table_">Start Date</label>
                     {{=form.custom.widget.start_date}}
-                </div>
-                <div class="col-sm-6">
-                    <h4>End Date</h4>
+
+                    <label for="no_table_">End Date</label>
                     {{=form.custom.widget.end_date}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Content Area</h4>
+
+                    <label for="no_table_">Content Area</label>
                     {{=form.custom.widget.content_area}}
-                </div>
-                <div class="col-sm-3">
-                </div>
-                <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
-                    {{=form.custom.submit}}
-                </div>
-            </div>            
-        <div class="row">
-            <div class="col-sm-2"></div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">{{=form.custom.submit}}</div>
+            </div>
+
+            {{=form.custom.end}}
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="row">
+                <div class="col-sm-12"><h1>Import classes from file</h1></div>
+            </div>
+
         </div>
     </div>
 </div>
-{{=form.custom.end}}

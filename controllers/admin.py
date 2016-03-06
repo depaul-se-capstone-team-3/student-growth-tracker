@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import collections
+from cStringIO import StringIO
 import csv
+from operator import itemgetter
 import os
 
-import collections
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import *
@@ -12,9 +14,6 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from operator import itemgetter
-import collections
-from cStringIO import StringIO
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
@@ -44,7 +43,7 @@ def classes_create():
     else:
         redirect(URL('default','index'))
 
-    form = SQLFORM.factory(db.classes, submit_button='Create Class')
+    form = SQLFORM.factory(db.classes, submit_button='Add Class')
     if form.process().accepted:
         db.classes.insert(**db.classes._filter_fields(form.vars))
 
@@ -116,22 +115,35 @@ def student_create():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_group.id == 3))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    school_id_field = Field("School_ID_Number")
-    grade_level_field = Field("Grade_Level")
-    home_field = Field("Home_Address")
-    parent_email_field = Field("Parent_Email")
-    form = SQLFORM.factory(db.auth_user, role_field, school_id_field, grade_level_field, home_field, parent_email_field, submit_button='Create Student')
+    form = SQLFORM.factory(db.auth_user, db.student)
 
-    if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 3)
-        db.student.insert(user_id = id,
-                          school_id_number = form.vars.School_ID_Number,
-                          grade_level = form.vars.Grade_Level,
-                          home_address = form.vars.Home_Address,
-                          parent_email = form.vars.Parent_Email)
+    # This is a work-around. `form.process` checks for foreign-key constraints,
+    # but since the auth_user record hasn't been created, the foreign key
+    # in the students table fails. Since we're manually inserting the records,
+    # databae integrity isn't an issue, so we can safely ignore the error.
+    form.process()
+    accepted = form.accepted
+    only_skippable_errors = form.errors and len(form.errors) == 1 \
+                            and form.errors.user_id == 'Value not in database'
+
+    if only_skippable_errors:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
+
+        db.student.insert(user_id=uid,
+                          school_id_number=form.vars.school_id_number,
+                          grade_level=form.vars.grade_level,
+                          home_address=form.vars.home_address,
+                          parent_email=form.vars.parent_email)
+
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Student'))
+
+    response.flash = None
+    session.flash = None
 
     return dict(form=form)
 
