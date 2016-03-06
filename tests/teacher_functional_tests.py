@@ -45,10 +45,10 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One').click() # Math One class overview
+        self.browser.find_element_by_id('class_details').click() # Math One class overview
 
         # The first 'h1' tag should have a link with text == class name.
-        header = self.browser.find_element_by_xpath('//h1/a').text
+        header = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('Math One', header)
 
     def test_teacher_can_view_class_details(self):
@@ -60,8 +60,8 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One').click() # Math One class overview
-        self.browser.find_element_by_link_text('Math One').click() # Math One class details
+        self.browser.find_element_by_id('class_details').click() # Math One class overview
+        self.browser.find_element_by_id('assignments').click() # Math One class details
 
         # The first 'h1' text should contain the class name.
         header = self.browser.find_element_by_tag_name('h1').text
@@ -76,8 +76,8 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One').click() # Math One class overview
-        self.browser.find_element_by_link_text('Math One').click() # Math One class details
+        self.browser.find_element_by_id('class_details').click() # Math One class overview
+        self.browser.find_element_by_id('assignments').click() # Math One class details
 
         # Find the div that should contain the table of grades.
         grade_container = self.browser.find_element_by_id('student_grades')
@@ -101,8 +101,8 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One').click() # Math One class overview
-        self.browser.find_element_by_link_text('Math One').click() # Math One class details
+        self.browser.find_element_by_id('class_details').click() # Math One class overview
+        self.browser.find_element_by_id('assignments').click() # Math One class details
 
         grade_container = self.browser.find_element_by_id('student_grades')
         grade_table = grade_container.find_element_by_tag_name('table')
@@ -178,7 +178,7 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One')
+        self.browser.find_element_by_id('class_details').click()
 
         # Navigate directly to the new assignment page.
         self.browser.get(self.server_url + 'grades/create/2/2')
@@ -216,7 +216,7 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One')
+        self.browser.find_element_by_id('class_details').click()
 
         # Navigate directly to the new assignment page.
         self.browser.get(self.server_url + 'grades/create/2/2')
@@ -254,8 +254,7 @@ class TeacherFunctionalTest(FunctionalTest):
         self.browser.get(self.server_url)
 
         self.log_in() # Gradebook
-        self.browser.find_element_by_link_text('Math One')
-
+        self.browser.find_element_by_id('class_details').click()
         # Navigate directly to the new assignment page.
         self.browser.get(self.server_url + 'grades/create/2/2')
 
