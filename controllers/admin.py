@@ -296,24 +296,35 @@ def assign_student_to_class():
     else:
         redirect(URL('default','index'))
 
-    student_query = ((db.student.id > 0))
-    student_field = Field("Student",  requires=IS_IN_DB(db(student_query), "student.id", '%(school_id_number)s', zero = None))
+    student_query = ((db.student.id > 0)&
+                    (db.student.user_id == db.auth_user.id))
+    students = db(student_query).select(db.student.id, db.student.school_id_number, db.auth_user.first_name, db.auth_user.last_name)
+
+    options = []
+    for row in students:
+        text = '%s %s  -  %s' % (row.auth_user.first_name, row.auth_user.last_name, row.student.school_id_number)
+        options.append(OPTION(text, _value=row.student.id))
+
+    name_id = SELECT(options, _name='students',
+                            _class='generic-widget form-control')
 
     class_query = ((db.classes.id > 0))
     class_field = Field("Class",  requires=IS_IN_DB(db(class_query), "classes.id", '%(name)s', zero = None))
 
-    form = SQLFORM.factory(student_field, class_field, submit_button='Assign To Class')
+    form = SQLFORM.factory(class_field, submit_button='Assign To Class')
+    form.insert(-1, name_id)
 
 
     if form.process().accepted:
-        row = db.student_classes(student_id = form.vars.Student, class_id = form.vars.Class)
+        row = db.student_classes(student_id = form.vars.students, class_id = form.vars.Class)
         if not row:
-            db.student_classes.insert(student_id = form.vars.Student, class_id = form.vars.Class)
+            db.student_classes.insert(student_id = form.vars.students, class_id = form.vars.Class)
         else:
-            response.flash = "Already Exist"
+            response.flash = "Student already in that class !"
             pass
 
-    return dict(form=form)
+    return dict(form=form, name_id=name_id)
+
 
 
 def assign_parent_to_student():
@@ -327,21 +338,31 @@ def assign_parent_to_student():
             (db.auth_membership.user_id == db.auth_user.id))
     parent_field = Field("Parent",  requires=IS_IN_DB(db(parent_query), "auth_user.id", '%(first_name)s'+' ' + '%(last_name)s', zero = None))
 
-    student_query = ((db.student.id > 0))
-    student_field = Field("Student",  requires=IS_IN_DB(db(student_query), "student.id", '%(school_id_number)s', zero = None))
+    student_query = ((db.student.id > 0)&
+                    (db.student.user_id == db.auth_user.id))
+    students = db(student_query).select(db.student.id, db.student.school_id_number, db.auth_user.first_name, db.auth_user.last_name)
 
-    form = SQLFORM.factory(parent_field, student_field, submit_button='Assign To Student')
+    options = []
+    for row in students:
+        text = '%s %s  -  %s' % (row.auth_user.first_name, row.auth_user.last_name, row.student.school_id_number)
+        options.append(OPTION(text, _value=row.student.id))
+
+    name_id = SELECT(options, _name='students',
+                            _class='generic-widget form-control')
+
+    form = SQLFORM.factory(parent_field, submit_button='Assign To Student')
+    form.insert(-1, name_id)
 
 
     if form.process().accepted:
-        row = db.parent_student(parent_id = form.vars.Parent, student_id = form.vars.Student)
+        row = db.parent_student(parent_id = form.vars.Parent, student_id = form.vars.students)
         if not row:
-            db.parent_student.insert(parent_id = form.vars.Parent , student_id = form.vars.Student)
+            db.parent_student.insert(parent_id = form.vars.Parent , student_id = form.vars.students)
         else:
             response.flash = "Already Exist"
             pass
 
-    return dict(form=form)
+    return dict(form=form, name_id=name_id)
 
 
 def standard_overview():
@@ -775,3 +796,26 @@ def create_single_grade_pdf(grade,content_area_id):
     pdf = buff.getvalue()
     buff.close()
     return pdf
+
+
+
+def settings():
+    if auth.has_membership(1, auth.user_id):
+        pass
+    else:
+        redirect(URL('default','index'))
+
+    location_Field = Field("location", default="trend", writable=False)
+    form = SQLFORM.factory(location_Field, db.settings.setting, submit_button='Save Setting')
+    if form.accepts(request,session):
+        num = float(request.vars.setting)
+        db.settings.update_or_insert(db.settings.location=="trend", location = "trend", setting = num)
+        response.flash = 'New Threshold Set'
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'Please Enter Setting'
+
+    trend_num_query = db(db.settings.location == "trend").select(db.settings.setting)
+    trend_num = trend_num_query[0].setting
+    return dict(form=form, trend_num=trend_num)
