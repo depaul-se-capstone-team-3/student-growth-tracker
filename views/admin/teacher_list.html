@@ -1,14 +1,14 @@
 {{extend 'layout.html'}}
-<body style="background-color:white;">
+
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
             <h1>Teacher List</h1>
             <table id='teacher_list_table' class="table table-striped table-condensed">
                 <tr>
-                    <td><h3><b>Name</b></h3></td>
-                    <td><h3><b>User Name</b></h3></td>
-                    <td><h3><b>Email</b></h3></td>
+                    <td><h3>Name</h3></td>
+                    <td><h3>User Name</h3></td>
+                    <td><h3>Email</h3></td>
                 </tr>
                 {{for row in teacher_list:}}
                     <tr>
@@ -21,7 +21,3 @@
         </div>
     </div>
 </div>
-</body>
-<style>
-.table td {text-align: center;}
-</style>
