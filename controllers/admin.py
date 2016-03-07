@@ -3,6 +3,7 @@
 import collections
 from cStringIO import StringIO
 import csv
+from datetime import datetime
 from operator import itemgetter
 import os
 
@@ -36,11 +37,49 @@ def classes_create():
     else:
         redirect(URL('default','index'))
 
-    form = SQLFORM.factory(db.classes, submit_button='Add Class')
-    if form.process().accepted:
-        db.classes.insert(**db.classes._filter_fields(form.vars))
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    return dict(form=form)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
+
+    if formcsv.process(formname='class_upload').accepted and formcsv.vars.file is not '':
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
+
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                content_area = db(db.contentarea.name==row[4]).select().first()
+                db.classes.insert(
+                    name=row[0],
+                    grade_level=int(row[1]),
+                    start_date=datetime.strptime(row[2], '%m-%d-%Y'),
+                    end_date=datetime.strptime(row[3], '%m-%d-%Y'),
+                    content_area=content_area)
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.classes, submit_button='Add Class')
+    if form.process(formname='class_insert').accepted:
+        db.classes.insert(
+            name=form.vars.name,
+            grade_level=form.vars.grade_level,
+            start_date=datetime.strptime(form.vars.start_date, '%B %d, %Y'),
+            end_date=datetime.strptime(form.vars.end_date, '%B %d, %Y'),
+            content_area=form.vars.content_area)
+    # end handle single insert
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def teacher_create():
