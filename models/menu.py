@@ -5,9 +5,8 @@
 ## Customize your APP title, subtitle and menus here
 #########################################################################
 
-response.logo = A('Student Growth Tracker',
-                  _class="navbar-brand",_href="http://www.web2py.com/",
-                  _id="web2py-logo")
+response.logo = A('Student Growth Tracker', _class="navbar-brand",
+                  _href=URL('default', 'index'), _id="web2py-logo")
 response.title = request.application.replace('_',' ').title()
 response.subtitle = ''
 
@@ -25,11 +24,11 @@ response.google_analytics_id = None
 #########################################################################
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), []),
-    (T('Grade Book'), False, URL('gradebook', 'index'), []),
-    (T('Classes'), False, URL('classes', 'index'), []),
-    (T('Content Area'), False, URL('contentarea', 'index'), []),
-    (T('Standards'), False, URL('stanadard', 'index'), [])
+    # (T('Manage User'), False, URL('manage_users', 'index'), []),
+    # (T('Grade Book'), False, URL('gradebook', 'index'), []),
+    # (T('Classes'), False, URL('classes', 'index'), []),
+    # (T('Content Area'), False, URL('contentarea', 'index'), []),
+    # (T('Standards'), False, URL('standards', 'index'), [])
 ]
 
 DEVELOPMENT_MENU = True
@@ -139,4 +138,7 @@ DEVELOPMENT_MENU = True
 #         ]
 # if DEVELOPMENT_MENU: _()
 
-if "auth" in locals(): auth.wikimenu() 
+if "auth" in locals(): auth.wikimenu()
+
+if __name__ == '__main__':
+    pass

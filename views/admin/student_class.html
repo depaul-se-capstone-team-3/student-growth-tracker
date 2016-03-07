@@ -1,0 +1,27 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Student - Class Relation</h1>
+            <table id='student_class_table' class="table table-striped table-condensed">
+                <tr>
+                    <td><h3><b>Student</b></h3></td>
+                    <td><h3><b>School ID</b></h3></td>
+                    <td><h3><b>In Class(es)</b></h3></td>
+                </tr>
+                {{for key in view_data.keys():}}
+                    <tr>
+                        <td>{{=view_data[key][0] + " " + view_data[key][1] }}</td>
+                        <td>{{=view_data[key][2]}}</td>
+                        <td align="left">
+                        {{for i in view_data[key][4]:}}
+                        {{=i}}</br>
+                        {{pass}}
+                        </td>
+                    </tr>
+                {{pass}}
+            </table>
+        </div>
+    </div>
+</div>

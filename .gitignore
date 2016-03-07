@@ -1,22 +1,30 @@
-# The files under these directories are volatile
-# and should not be tracked.
+# The files under these directories are volatile and should not be tracked.
+bower_components/
 cache/
 databases/
-docs/_build
+docs/_build/
 errors/
 sessions/
 static/docs/
 static/fonts/
 uploads/
 
-*.bak
+
+# Ignore everything in the private directory.
+private/**
+# Except the appconfig.ini file.
+!private/apconfig.ini
+
 
 # Do not track local logs.
 progress.log
+
 
 # Ignore unneeded python files
 **/*.pyc
 .pythonhistory
 
+
 # Ignore temp files.
 **/#*
+**/*bak*

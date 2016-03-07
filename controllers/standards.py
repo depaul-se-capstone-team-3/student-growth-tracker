@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 # try something like
 #def index(): return dict(message="hello from create.py")
-
+@auth.requires_login()
 def index():
-    standards = db().select(db.standards.id, db.standards.refNum, db.standards.shortName, db.standards.description, orderby=db.standards.refNum)
-    return dict(standards=standards)
+    standard = SQLFORM.smartgrid(db.standard)
+    return dict(standard=standard)
 
-
+@auth.requires_login()
 def create():
-    form = SQLFORM(db.standards).process(next=URL('index'))
+    form = SQLFORM(db.standard).process(next=URL('index'))
     return dict(form=form)
-
-def show():
-    grid = SQLFORM.grid(db.standards.id)
-    return dict(grid=grid)

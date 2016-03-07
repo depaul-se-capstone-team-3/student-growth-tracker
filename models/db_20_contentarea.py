@@ -2,6 +2,10 @@
 
 db.define_table(
     'contentarea',
-    Field('name', required=True, requires=IS_NOT_EMPTY()),
-    #needs additional validator to check if in DB.
-    Field('standard', 'reference standard'))
+    #requires=IS_NOT_EMPTY removed from name constraints due to bug.
+    Field('name', required=True),
+    Field('description'),
+    format = '%(name)s')
+
+if __name__ == '__main__':
+    pass

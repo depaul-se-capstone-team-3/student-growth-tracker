@@ -6,6 +6,7 @@
  Student Growth Tracker
 ========================
 
+
 .. rubric:: *Add the mission statement here*
 
 Student Growth Tracker is an enhanced gradebook application that allows educators
@@ -22,11 +23,16 @@ Authors
 =======
 
 
-* Lawrence Graves <http://github.com/Larry-Graves>
+* `Lawrence Graves <http://github.com/Larry-Graves>`_
 * `Allan Guan <https://github.com/forevaufo>`_
->>>>>>> upstream/master
-* `Bryan Patzke <https://github.com/bpatzke>`_
+* `Bryan Patzke <https://github.com/bpatzke>`_ |travis-ci-bp-result|
 * Joesph Richard
+
+
+.. |travis-ci-bp-result| image:: https://travis-ci.org/bpatzke/student-growth-tracker.svg?branch=master
+   :target: https://travis-ci.org/bpatzke/student-growth-tracker
+   :align: middle
+
 
 .. _setup_tutorial:
 

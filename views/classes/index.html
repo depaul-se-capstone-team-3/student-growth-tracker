@@ -1,0 +1,216 @@
+{{extend 'layout.html'}}
+
+{{block head}}
+<!-- Anything in this block will be added
+     to the html head section of the page. -->
+<link rel="stylesheet" media="screen" href="{{=URL('static', 'js/dist/handsontable.full.css')}}">
+{{end}}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h1 class="class-name">{{=class_name}}</h1>
+    </div>
+</div>
+
+<div class="row options-row">
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12"><h3>Filter by standard:</h3></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <form>
+                    <select id="standards-menu" class="generic-widget form-control">
+                        <option value="-1">All</option>
+                        {{for standard in standards:}}
+                        <option value="{{=standard.id}}">
+                            {{=standard.short_name}}: {{=standard.reference_number}}
+                        </option>
+                        {{pass}}
+                    </select>
+                </form>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="btn-group btn-group-justified" role="group">
+
+                    <a href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}"
+                       id="new-assignment" class="btn btn-default">New Assignment</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <!-- This needs to refresh when the window resizes. -->
+        <div id="student_grades" class="dataTable hot-scrollable"></div>
+    </div>
+
+</div>
+
+
+{{block page_js}}
+
+<script src="{{=URL('static', 'js/dist/handsontable.full.js')}}"></script>
+<script type="text/javascript">
+
+ // Data binding as a reference.
+ // When you change the data, you can update the view by rendering it.
+ // http://docs.handsontable.com/0.20.0/tutorial-data-binding.html
+
+ var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
+     Handsontable.renderers.NumericRenderer.apply(this, arguments);
+     if ((col > 0)) {
+         delta = 0.001;
+         new_value = parseFloat(value);
+         max_score = parseFloat(max_scores[col]);
+         student_score = parseFloat(value);
+         percent_score = student_score / max_score;
+         
+         if ((percent_score - delta) < 0.0) {
+             td.style.backgroundColor = '#cceeff'
+         }
+         else if (percent_score >= 0.90) {
+             td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
+         }
+         else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
+             td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
+         }
+         else if (percent_score < 0.70) {
+             td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
+         }
+     }
+ };
+ 
+ var container = document.getElementById("student_grades");
+ var hot = undefined;
+ var table_data = undefined;
+ var max_scores = [];
+ var font_size = 14; // By observation. Not accurate, but it will do for now.
+ var column_width = 125;
+
+ var options = {
+     minSpareRows: 0,
+     fixedColumnsLeft: 1,
+     colWidths: column_width,
+     rowHeaders: false,
+     contextMenu: true,
+
+     afterChange: function(change, source) {
+         if(source === "loadData") {return;}
+
+         var new_data = hot.getData();
+
+         $.ajax({
+             url: "{{=URL('classes', 'save_student_grades', args=[class_id])}}",
+             dataType: "json",
+             type: "POST",
+             data: {"data": new_data},
+             success: function(data) {
+                 // Reset the table data array.
+                 table_data = undefined;
+                 table_data = new_data;
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+     }
+ };
+ 
+ function set_visible_columns(row) {
+     // The first visible column is column 1.
+     // It contains the student's name, and should not be editable.
+     var columns = [{data: 1, type: "text", readOnly: true}];
+
+     // The remainder of the visible columns contain grade data.
+     // The cells should only accept numeric values.
+     for(var i = 3; i < row.length; i += 2) {
+         columns.push({
+             data: i,
+             format: '0.00',
+             allowInvalid: false,
+             validator: function(value, callback) {
+                 if($.isNumeric(value) && value >= 0) {callback(true);}
+                 else {callback(false);}
+             },
+         });
+     }
+     return columns;
+ }
+
+ function build_headers(grade_ids, grade_names, due_dates, points) {
+     var headers = [''];
+     max_scores.push(0.0);
+
+     for(var i = 3; i < grade_names.length; i += 2) {
+         var grade_name = '';
+         var min_chars = 10
+         var start_index = 0;
+         var current_index = grade_names[i].indexOf(' ', start_index + min_chars);
+
+         while (current_index != -1) {
+             grade_name = grade_name + grade_names[i].substring(start_index, current_index) + '<br>';
+             start_index = current_index;
+             current_index = grade_names[i].indexOf(' ', start_index + min_chars);
+         }
+
+         grade_name = grade_name + grade_names[i].substring(start_index);
+         edit_link = "<a href=\"{{=URL('grades', 'edit')}}/" + grade_ids[i] + "\">edit</a>";
+
+         headers.push(grade_name + '<br>' + edit_link + '<br>Due: ' + due_dates[i] + '<br>Points: ' + points[i]);
+         max_scores.push(points[i]);
+     }
+
+     return headers;
+ }
+
+ function set_table(data) {
+     table_data = data.slice(4); // table_data is the global data structure for the data.
+     options.data = table_data;
+     options.renderer = testRenderer;
+     options.colHeaders = build_headers(data[0], data[1], data[2], data[3])
+     options.columns = set_visible_columns(table_data[0]);
+ }
+
+ // Fix this so that class_id is included in the URL via python.
+ // We don't need to pass around something that is effectively
+ // hard-coded in the page.
+ function load_data(class_id, standard_id) {
+     var url = "{{=URL('classes', 'student_grades')}}/" + class_id;
+
+     if (standard_id !== "-1") {
+         url += "/" + standard_id;
+     }
+
+     $.ajax({
+         url: url,
+         dataType: "json",
+         type: "GET",
+         success: function(data) {
+             $("#student_grades").empty();
+             set_table(data);
+             hot = new Handsontable(container, options);
+         },
+         error: function(jqxhr, status, error) {
+             alert("Status: " + status + "\nError: " + error);
+         }
+     });
+ }
+ 
+ $("select#standards-menu").change(function() {
+     load_data({{=class_id}}, $(this).val());
+ });
+ 
+ load_data({{=class_id}}, $("select#standards-menu option:selected").val());
+
+</script>
+
+{{end}}

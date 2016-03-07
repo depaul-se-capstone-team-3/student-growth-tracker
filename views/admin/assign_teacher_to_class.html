@@ -1,0 +1,29 @@
+{{extend 'layout.html'}}
+
+{{=form.custom.begin}}
+
+<h1>Assign Teacher to Class</h1>
+
+<div class="container-fluid well">
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Teacher</h4>
+            {{=form.custom.widget.Teacher}}
+        </div>
+        
+        <div class="col-sm-6">
+            <h4>Class</h4>
+            {{=form.custom.widget.Class}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2">
+            {{=form.custom.submit}}
+        </div>
+    </div>
+
+</div>
+
+{{=form.custom.end}}

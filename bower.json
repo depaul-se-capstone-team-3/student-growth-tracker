@@ -1,0 +1,24 @@
+{
+  "name": "student_growth_tracker",
+  "homepage": "https://github.com/bpatzke/student-growth-tracker",
+  "authors": [
+    "Bryan Patzke <projects@2bpencil.com>"
+  ],
+  "description": "SE Capstone project",
+  "main": "student-growth-tracker.json",
+  "moduleType": [],
+  "keywords": [
+    "web2py"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "handsontable": "~0.19.0"
+  }
+}

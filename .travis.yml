@@ -1,0 +1,49 @@
+language: python
+
+python:
+    - '2.7'
+
+env:
+    - DB=sqlite
+
+before_install:
+    - npm install -g bower
+
+install:
+    - cd ~
+    - git clone https://github.com/web2py/web2py.git ./web2py
+    - pip install pydal
+    - pip install selenium
+    - pip install reportlab
+    - cd ~/web2py/applications
+    - git clone https://github.com/bpatzke/student-growth-tracker.git ./student_growth_tracker
+    - cd student_growth_tracker
+    - bower install handsontable#0.19.0
+    - cp -r bower_components/handsontable/dist ./static/js/
+    - cd private
+    - curl -s --ftp-pasv -u sgtdata@2bpencil.com:yT~xR#k0X8Di ftp://143.95.66.41/data.tar.gz > data.tar.gz
+    - tar -xzf data.tar.gz
+    - cd ~/web2py
+    - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
+    - sleep 3
+    - curl -s http://127.0.0.1:8000/student_growth_tracker/ > /dev/null
+    - sleep 3
+    - PID=$(<./httpserver.pid)
+    - kill -SIGTERM $PID
+
+before_script:
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 3
+
+script:
+    - python web2py.py -S student_growth_tracker -M -R applications/student_growth_tracker/tests/testRunner.py
+    - python web2py.py --no-banner --nogui -a bob -i 127.0.0.1 -p 8000 &
+    - sleep 3
+    - cd applications/student_growth_tracker/
+    - python -m unittest tests.teacher_functional_tests
+    - python -m unittest tests.student_functional_tests
+    - python -m unittest tests.parent_functional_tests
+    - cd ~/web2py
+    - PID=$(<./httpserver.pid)
+    - kill -SIGTERM $PID

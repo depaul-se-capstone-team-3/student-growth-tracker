@@ -1,0 +1,165 @@
+{{extend 'layout.html'}}
+
+<h1>{{=date_header}} Attendance</h1>
+
+<div class="row">
+    <div class="col-sm-3">
+        <select id="attendance_month" class="generic-widget form-control">
+            {{for month in menu_months:}}
+            <option value="{{=month[0]}}"
+                    {{if month[1] == date_header:}}selected{{pass}}>{{=month[1]}}</option>
+            {{pass}}
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+
+        <table id="attendance-table" class="table table-striped">
+
+            <thead>
+                <tr>
+                    <th></th>
+
+                    {{for date in sorted(class_days.keys()):}}
+
+                    <th>
+                        {{=date.day}}<br>
+                        {{=class_days[date][0]}}
+                    </th>
+
+                    {{pass}}
+
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Select All</td>
+
+                    {{for i in range(len(class_days.keys())):}}
+                    <td>
+                        <input type="checkbox" id="sa_{{=i}}" name="sa_{{=i}}"
+                               data-checkbox-name="{{=i}}" class="selectall" />
+                    </td>
+                    {{pass}}
+                </tr>
+
+                {{ordered_class_day_list = sorted(class_days.keys())}}
+
+                {{for student in sorted(class_list.keys()):}}
+                {{student_id = class_list[student]}}
+                <tr>
+
+                    <td>
+                        {{=student}}
+                    </td>
+
+                    {{i = 0}}
+                    {{for class_day in ordered_class_day_list:}}
+                    {{attendance_record_id, student_present = attendance[student_id][class_day]}}
+                    <td>
+                        <input type="checkbox" name="{{=i}}" class="attendance-checkbox"
+                               value="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
+                               data-select-all="sa_{{=i}}"
+                               {{ if student_present:}}
+                               checked="checked"
+                               {{pass}}
+                        />
+                    </td>
+                    {{i += 1}}
+                    {{pass}}
+
+                </tr>
+                {{pass}}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{{block page_js}}
+
+<script>
+
+ $(document).ready(function() {
+
+     // "Check all" checkbox.
+     $(":checkbox.selectall").on("click", function() {
+         var sel = ":checkbox[name=" + $(this).data("checkbox-name") + "]";
+         $(sel).prop("checked", $(this).prop("checked")).trigger("change");
+     });
+
+     $(":checkbox.attendance-checkbox").on("click", function() {
+         var checkbox = $(this);
+         var checkbox_selected = checkbox.prop("checked");
+         var selectall = false;
+
+         if (checkbox_selected) {
+             var name = $(this).attr("name");
+             selectall = all_boxes_ticked_in_column(name);
+         }
+
+         $(":checkbox[name='" + $(this).data('select-all') + "']").prop("checked", selectall);
+     });
+
+     function all_boxes_ticked_in_column(name) {
+         var selectall = false;
+         var sel = ":checkbox[name=" + name + "]";
+         $(sel).each(function(index, element) {
+             selectall = $(this).prop("checked");
+             return selectall;
+         });
+
+         return selectall;
+     }
+
+     $(":checkbox.attendance-checkbox").on("change", function() {
+
+         var checkbox = $(this);
+         var value_bits = checkbox.prop("value").split(",");
+
+         $.ajax({
+             url: "{{=URL('attendance', 'save_attendance_info')}}",
+             dataType: "json",
+             type: "POST",
+             data: {
+                 attendance_id: value_bits[0],
+                 class_day: value_bits[1],
+                 student_id: value_bits[2],
+                 class_id: value_bits[3],
+                 present: checkbox.prop("checked")
+             },
+             success: function(data) {
+                 var new_id = data['new_id'];
+                 if(new_id != null) {
+                         value_bits[0] = new_id;
+                         checkbox.val(value_bits.join(','));
+                 }
+             },
+             error: function(jqxhr, status, error) {
+                 alert("Status: " + status + "\nError: " + error);
+             }
+         });
+
+     });
+
+     // If all of the boxes in the column are ticked,
+     // then the "select all" box should be ticked as well.
+     $(":checkbox.selectall").each(function(index, element) {
+         var name = $(this).data("checkbox-name");
+         var selected = all_boxes_ticked_in_column(name);
+         $(this).prop("checked", selected);
+     });
+
+     // Attendance month menu action.
+     $("select#attendance_month").change(function() {
+         var date_part = $(this).val();
+         window.location.replace("{{=URL('attendance', 'index', args=[class_id])}}" + "/" + date_part);
+     });
+
+ });
+</script>
+
+{{end}}

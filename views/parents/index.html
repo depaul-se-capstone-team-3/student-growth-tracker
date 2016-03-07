@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{=parent_name}}</h1>
+            <h2>Student: {{=name}}</h2>
+            <h3>{{=class_name}}</h3>
+            <div>
+                <button type="button" class="btn btn-default btn-xs"
+                        onclick="window.location.href='{{=URL('parents', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">
+                    Download Student Report
+                </button>
+            </div>
+            <table id="student_grade_table" class="table">
+                <tr>
+                    <td><b>Assignment Name</b></td>
+                    <td></td>
+                    <td><div class="text-center"><b>Score</b></div></td>
+                    <td></td>
+                    <td><div class="text-center"><b>Due</b></div></td>
+                </tr>
+            {{for row in assignment_data:}}
+                <tr>
+                    <td>{{=row[0]}}</td>
+                    <td></td>
+                    <td class="{{=get_contextual_classes(row[3])}}"><div class="text-center">{{=row[1]}} / {{=row[2]}}</div></td>
+                    <td></td>
+                    <td class="{{=row[5]}}"><div class="text-center">{{=row[4]}}</div></td>
+                </tr>
+            {{pass}}
+
+            </table>
+            <div class="col-sm-12">
+                    {{=LOAD('charts', 'parent_index_line.load', args=[class_id,student_id])}}
+            </div>
+        </div>
+    </div>
+</div>

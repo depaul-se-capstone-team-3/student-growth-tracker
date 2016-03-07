@@ -1,0 +1,25 @@
+{{extend 'layout.html'}}
+<body style="background-color:lightgrey;">
+<h1 style="text-align:center">Trend Detection Settings</h1>
+{{=form.custom.begin}}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="container well" style ='background-color: #373735;'>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4 style='color: #ffffff;'>Trend Detection Threshold</h4>
+                    {{=form.custom.widget.setting}}
+                    <h6 style='color: #ffffff;'>Current threshold at {{=trend_num}}%</h6>
+                </div>
+            </div>
+
+               <div class="col-sm-2">
+                    <h4>&nbsp;</h4>
+                    {{=form.custom.submit}}
+                </div>
+        </div>
+    </div>
+</div>
+{{=form.custom.end}}
+</body>
