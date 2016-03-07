@@ -4,9 +4,6 @@ def detect_trends_scheduler():
     trend_num_query = db(db.settings.location == "trend").select(db.settings.setting)
     trend_num = trend_num_query[0].setting
 
-    notifi_query = (db.notifications.id >0)
-    db(notifi_query).delete()
-
     students_query = (db.student.id> 0)
     students = db(students_query).select(db.student.id)
     student_count = 0
@@ -43,12 +40,12 @@ def detect_trends_scheduler():
             if (student_average < trend_num/100.0):
                 db.notifications.insert(student_id=student.id,
                                         class_id=single_class.id,
-                                        date=datetime.datetime.now,
+                                        date=datetime.datetime.today().date(),
                                         warning_text=("Student Grade is less than "+ str(trend_num) + "%."))
             if (student_missing_assignments > 5):
                 db.notifications.insert(student_id=student.id,
                                         class_id=single_class.id,
-                                        date=datetime.datetime.now,
+                                        date=datetime.datetime.today().date(),
                                         warning_text=("Student is missing excessive grades."))
     session.flash="Trend Database Populated with New Warnings."
     #returns are largely still for testing purposes

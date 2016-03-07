@@ -273,10 +273,12 @@ def overview():
 
     notifi_query = ((db.notifications.class_id == class_id)&
                     (db.notifications.student_id == db.student.id)&
-                    (db.student.user_id == db.auth_user.id))
+                    (db.student.user_id == db.auth_user.id)&
+                   (db.notifications.date == datetime.datetime.today().date()) )
 
 
-    notifi = db(notifi_query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.notifications.warning_text)
+    notifi = db(notifi_query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.notifications.warning_text, db.notifications.date)
+
 
     return dict(class_name=class_name,
                 class_id=class_id,
@@ -597,3 +599,17 @@ def view_notifications():
                                                    db.notifications.date,
                                                    db.notifications.warning_text)
     return dict (notifications=notifications)
+
+
+def detail_notifications():
+    teacher_id = auth.user_id # Cache the user id of the logged-in teacher
+                              # to make it easier to access and recognize.
+
+    class_id = (request.args(0) is not None) and request.args(0, cast=int) or None
+
+    query = ((db.notifications.class_id == class_id)&
+            (db.notifications.student_id == db.student.id)&
+            (db.student.user_id == db.auth_user.id))
+    notifi_query = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.student.school_id_number, db.notifications.warning_text, db.notifications.date, orderby=db.student.school_id_number)
+
+    return dict(notifi_query=notifi_query)

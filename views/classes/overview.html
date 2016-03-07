@@ -7,9 +7,10 @@
         <div class="col-md-4">
             <h1>{{=A(class_name, _href=URL('classes', 'index', args=[class_id]))}}</h1>
             <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('classes', 'pdf_overview', args = [class_id])}}'">Download PDF</button>
+            <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='{{=URL('classes', 'detail_notifications', args = [class_id])}}'">Detail Notifications</button>
         </div>
     </div>
-
+    <br>
     <div class="row">
         <div class="col-md-6" align="center">
             <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_pie.load', args=2)}}</div>  -->
