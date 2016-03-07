@@ -1,32 +1,27 @@
 {{extend 'layout.html'}}
-<body style="background-color:lightgrey;">
-<h1 style="text-align:center">Assign Parent to Student</h1>
+
 {{=form.custom.begin}}
 
-<div class="row">
-    <div class="col-xs">
-        <div class="container well" style ='background-color: #373735;'>
+<h1>Assign Parent to Student</h1>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>Parent</h4>
-                    {{=form.custom.widget.Parent}}
-                </div>
-                
-                <div class="col-sm-6">
-                    <h4 style='color: #ffffff;'>Student - School ID</h4>
-                    {{=name_id}}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
-                    {{=form.custom.submit}}
-                </div>
-            </div>
-        <div class="row">
-            <div class="col-sm-2"></div>
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-6">
+            <h4>Parent</h4>
+            {{=form.custom.widget.Parent}}
+        </div>
+        
+        <div class="col-sm-6">
+            <h4>Student - School ID</h4>
+            {{=form.custom.widget.Student}}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2">
+            {{=form.custom.submit}}
         </div>
     </div>
 </div>
+
 {{=form.custom.end}}

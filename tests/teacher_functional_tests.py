@@ -112,7 +112,7 @@ class TeacherFunctionalTest(FunctionalTest):
 
         # Check that the "Create new assignment" button takes us to
         # the create assignment page.
-        new_assignment_button = self.browser.find_element_by_xpath("//div[@class='col-sm-4']/button")
+        new_assignment_button = self.browser.find_element_by_id('new-assignment')
         new_assignment_button.click()
 
         # Make sure we've landed on the create grade page.

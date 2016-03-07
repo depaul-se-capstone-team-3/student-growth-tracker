@@ -7,7 +7,8 @@ db.define_table(
     Field('home_address','string'),
     Field('parent_email','string'),
     format = '%(user_id)s')
-db.classes.id.readable = db.classes.id.writable = False
+db.student.id.readable = db.student.id.writable = False
+db.student.user_id.readable = db.student.user_id.writable = False
 
 db.define_table(
     'parent_student',

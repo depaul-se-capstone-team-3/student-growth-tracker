@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-# try something like
+
 import collections
+from cStringIO import StringIO
+import csv
+from datetime import datetime
+from operator import itemgetter
+import os
+
 from reportlab.lib.enums import TA_JUSTIFY
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import *
@@ -9,14 +15,13 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from operator import itemgetter
-import collections
-from cStringIO import StringIO
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.legends import Legend
 from reportlab.graphics.widgets.grids import ShadedRect
 from reportlab.graphics.shapes import Drawing
+
+
 def index():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -25,13 +30,6 @@ def index():
 
     return dict()
 
-def index_grid():
-    if auth.has_membership(1, auth.user_id):
-        pass
-    else:
-        redirect(URL('default','index'))
-
-    return dict()
 
 def classes_create():
     if auth.has_membership(1, auth.user_id):
@@ -39,11 +37,49 @@ def classes_create():
     else:
         redirect(URL('default','index'))
 
-    form = SQLFORM.factory(db.classes, submit_button='Create Class')
-    if form.process().accepted:
-        db.classes.insert(**db.classes._filter_fields(form.vars))
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    return dict(form=form)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
+
+    if formcsv.process(formname='class_upload').accepted and formcsv.vars.file is not '':
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
+
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                content_area = db(db.contentarea.name==row[4]).select().first()
+                db.classes.insert(
+                    name=row[0],
+                    grade_level=int(row[1]),
+                    start_date=datetime.strptime(row[2], '%m-%d-%Y'),
+                    end_date=datetime.strptime(row[3], '%m-%d-%Y'),
+                    content_area=content_area)
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.classes, submit_button='Add Class')
+    if form.process(formname='class_insert').accepted:
+        db.classes.insert(
+            name=form.vars.name,
+            grade_level=form.vars.grade_level,
+            start_date=datetime.strptime(form.vars.start_date, '%B %d, %Y'),
+            end_date=datetime.strptime(form.vars.end_date, '%B %d, %Y'),
+            content_area=form.vars.content_area)
+    # end handle single insert
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def teacher_create():
@@ -52,16 +88,54 @@ def teacher_create():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_group.id == 2))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    form = SQLFORM.factory(db.auth_user, role_field, submit_button='Create Teacher')
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 2)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
 
-    return dict(form=form)
+    if formcsv.process(formname='teacher_upload').accepted and formcsv.vars.file is not '':
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
 
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Teacher'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.auth_user, submit_button='Add Teacher')
+
+    if form.process(formname='teacher_insert').accepted:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
+
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Teacher'))
+    # end handle single insert
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def student_create():
@@ -70,26 +144,66 @@ def student_create():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_group.id == 3))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    school_id_field = Field("School_ID_Number")
-    grade_level_field = Field("Grade_Level")
-    home_field = Field("Home_Address")
-    parent_email_field = Field("Parent_Email")
-    form = SQLFORM.factory(db.auth_user, role_field, school_id_field, grade_level_field, home_field, parent_email_field, submit_button='Create Student')
+    form = SQLFORM.factory(db.auth_user, db.student)
 
-    if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 3)
-        db.student.insert(user_id = id,
-                          school_id_number = form.vars.School_ID_Number,
-                          grade_level = form.vars.Grade_Level,
-                          home_address = form.vars.Home_Address,
-                          parent_email = form.vars.Parent_Email)
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    return dict(form=form)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
 
+    if formcsv.process(formname='student_upload').accepted and not formcsv.vars.file:
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
 
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                db.student.insert(user_id=uid,
+                                  school_id_number=row[5],
+                                  grade_level=row[6],
+                                  home_address=row[7],
+                                  parent_email=row[8])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Student'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    if form.process(formname='student_insert').accepted:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
+
+        db.student.insert(user_id=uid,
+                          school_id_number=form.vars.school_id_number,
+                          grade_level=form.vars.grade_level,
+                          home_address=form.vars.home_address,
+                          parent_email=form.vars.parent_email)
+
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Student'))
+    # end handle upload csv
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def parent_create():
@@ -98,17 +212,54 @@ def parent_create():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_group.id == 4))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    form = SQLFORM.factory(db.auth_user, role_field, submit_button='Create Parent')
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 4)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
 
-    return dict(form=form)
+    if formcsv.process(formname='parent_upload').accepted and formcsv.vars.file is not '':
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
 
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
 
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Parent'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.auth_user, submit_button='Add Parent')
+
+    if form.process(formname='parent_insert').accepted:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
+
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Parent'))
+    # end handle upload csv
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def assign_teacher_to_class():
@@ -137,8 +288,6 @@ def assign_teacher_to_class():
 
 
     return dict(form=form)
-
-
 
 
 def assign_student_to_class():
@@ -175,6 +324,7 @@ def assign_student_to_class():
             pass
 
     return dict(form=form, name_id=name_id)
+
 
 
 def assign_parent_to_student():
@@ -215,7 +365,6 @@ def assign_parent_to_student():
     return dict(form=form, name_id=name_id)
 
 
-
 def standard_overview():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -228,7 +377,6 @@ def standard_overview():
     for row in grade:
         grade_list.append(row.grade_level)
     grade_list = list(set(grade_list))
-    #print(grade_list)
     content_ids={}
     content_names={}
     overview_data = {}
@@ -259,8 +407,7 @@ def standard_overview():
                 standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
         content_area_all[grade] = content_area
         overview_data[grade] = standard_dict
-        #content_names[grade] = content_name
-        #content_ids[grade]= content_id
+
     #need content Name and contentID list
     return dict(overview_data = overview_data, content_area_all = content_area_all)
 
@@ -289,6 +436,7 @@ def class_list():
 
     return dict(class_list_data = class_list_data)
 
+
 def teacher_list():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -301,6 +449,7 @@ def teacher_list():
     teacher_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
 
     return dict(teacher_list = teacher_list)
+
 
 def student_list():
     if auth.has_membership(1, auth.user_id):
@@ -317,6 +466,7 @@ def student_list():
 
     return dict(student_list = student_list)
 
+
 def parent_list():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -329,6 +479,7 @@ def parent_list():
     parent_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
 
     return dict(parent_list = parent_list)
+
 
 def teacher_class():
     if auth.has_membership(1, auth.user_id):
@@ -350,6 +501,7 @@ def teacher_class():
 
 
     return dict(view_data = view_data)
+
 
 def student_class():
     if auth.has_membership(1, auth.user_id):
@@ -375,6 +527,7 @@ def student_class():
 
     return dict(view_data = view_data)
 
+
 def parent_student():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -389,9 +542,7 @@ def parent_student():
         if row.auth_user.id in parent_dict.keys():
             parent_dict[row.auth_user.id][3].append(row.parent_student.student_id)
         else:
-            #[id, first, last, [stuent]]
             parent_dict[row.auth_user.id] = [row.auth_user.id, row.auth_user.first_name, row.auth_user.last_name, [row.parent_student.student_id] ]
-
 
     view_data = {}
     for key in parent_dict.keys():
@@ -447,7 +598,6 @@ def detail():
     return dict(content_name=content_name, grade_level=grade_level, content_id=content_id, detail_data=detail_data )
 
 
-
 def pdf_overview():
 
     #get arguments passed from previous page
@@ -457,6 +607,7 @@ def pdf_overview():
     #get a pdf from the helper function
     pdf = create_single_grade_pdf(grade,content_area_id)
     return pdf
+
 
 def create_single_grade_pdf(grade,content_area_id):
     '''--Variables--'''
@@ -501,7 +652,6 @@ def create_single_grade_pdf(grade,content_area_id):
                                   fontName = 'DejaVuSansCondensed',
                                   fontSize = 18,
                                   leading = 22,
-                                  #alignment = TA_LEFT,
                                   spaceAfter = 6),
                                   alias = 'title2')
 
