@@ -6,10 +6,13 @@
             <h1>{{=parent_name}}</h1>
             <h2>Student: {{=name}}</h2>
             <h3>{{=class_name}}</h3>
+            <div>
+                <button type="button" class="btn btn-default btn-xs"
+                        onclick="window.location.href='{{=URL('parents', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">
+                    Download Student Report
+                </button>
+            </div>
             <table id="student_grade_table" class="table">
-                <tr>
-                    <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('parents', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">Download Student Report</button></td>
-                </tr>
                 <tr>
                     <td><b>Assignment Name</b></td>
                     <td></td>
