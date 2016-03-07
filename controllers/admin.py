@@ -29,13 +29,6 @@ def index():
 
     return dict()
 
-def index_grid():
-    if auth.has_membership(1, auth.user_id):
-        pass
-    else:
-        redirect(URL('default','index'))
-
-    return dict()
 
 def classes_create():
     if auth.has_membership(1, auth.user_id):
@@ -114,16 +107,47 @@ def student_create():
 
     form = SQLFORM.factory(db.auth_user, db.student)
 
-    # This is a work-around. `form.process` checks for foreign-key constraints,
-    # but since the auth_user record hasn't been created, the foreign key
-    # in the students table fails. Since we're manually inserting the records,
-    # databae integrity isn't an issue, so we can safely ignore the error.
-    form.process()
-    accepted = form.accepted
-    only_skippable_errors = form.errors and len(form.errors) == 1 \
-                            and form.errors.user_id == 'Value not in database'
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    if only_skippable_errors:
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
+
+    if formcsv.process(formname='student_upload').accepted and not formcsv.vars.file:
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
+
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                db.student.insert(user_id=uid,
+                                  school_id_number=row[5],
+                                  grade_level=row[6],
+                                  home_address=row[7],
+                                  parent_email=row[8])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Student'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    if form.process(formname='student_insert').accepted:
         uid = db.auth_user.insert(first_name=form.vars.first_name,
                                   last_name=form.vars.last_name,
                                   email=form.vars.email,
@@ -138,11 +162,9 @@ def student_create():
 
         auth.add_membership(user_id=uid,
                             group_id=auth.id_group('Student'))
+    # end handle upload csv
 
-    response.flash = None
-    session.flash = None
-
-    return dict(form=form)
+    return dict(form=form, formcsv=formcsv)
 
 
 def parent_create():
@@ -151,17 +173,54 @@ def parent_create():
     else:
         redirect(URL('default','index'))
 
-    query = ((db.auth_group.id == 4))
-    role_field = Field('Account_Type', requires=IS_IN_DB(db(query), 'auth_group.id', '%(role)s', zero = None))
-    form = SQLFORM.factory(db.auth_user, role_field, submit_button='Create Parent')
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
 
-    if form.process().accepted:
-        id = db.auth_user.insert(**db.auth_user._filter_fields(form.vars))
-        db.auth_membership.insert(user_id = id, group_id = 4)
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
 
-    return dict(form=form)
+    if formcsv.process(formname='parent_upload').accepted and formcsv.vars.file is not '':
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
 
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
 
+            for row in importreader:
+                uid = db.auth_user.insert(
+                    first_name=row[0],
+                    last_name=row[1],
+                    email=row[2],
+                    username=row[3],
+                    password=CRYPT()(row[4])[0])
+
+                auth.add_membership(user_id=uid,
+                                    group_id=auth.id_group('Parent'))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.auth_user, submit_button='Add Parent')
+
+    if form.process(formname='parent_insert').accepted:
+        uid = db.auth_user.insert(first_name=form.vars.first_name,
+                                  last_name=form.vars.last_name,
+                                  email=form.vars.email,
+                                  username=form.vars.username,
+                                  password=form.vars.password)
+
+        auth.add_membership(user_id=uid,
+                            group_id=auth.id_group('Parent'))
+    # end handle upload csv
+
+    return dict(form=form, formcsv=formcsv)
 
 
 def assign_teacher_to_class():
@@ -192,8 +251,6 @@ def assign_teacher_to_class():
     return dict(form=form)
 
 
-
-
 def assign_student_to_class():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -218,6 +275,7 @@ def assign_student_to_class():
             pass
 
     return dict(form=form)
+
 
 def assign_parent_to_student():
     if auth.has_membership(1, auth.user_id):
@@ -245,7 +303,6 @@ def assign_parent_to_student():
             pass
 
     return dict(form=form)
-
 
 
 def standard_overview():
@@ -319,6 +376,7 @@ def class_list():
 
     return dict(class_list_data = class_list_data)
 
+
 def teacher_list():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -331,6 +389,7 @@ def teacher_list():
     teacher_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
 
     return dict(teacher_list = teacher_list)
+
 
 def student_list():
     if auth.has_membership(1, auth.user_id):
@@ -347,6 +406,7 @@ def student_list():
 
     return dict(student_list = student_list)
 
+
 def parent_list():
     if auth.has_membership(1, auth.user_id):
         pass
@@ -359,6 +419,7 @@ def parent_list():
     parent_list = db(query).select(db.auth_user.first_name, db.auth_user.last_name, db.auth_user.username, db.auth_user.email)
 
     return dict(parent_list = parent_list)
+
 
 def teacher_class():
     if auth.has_membership(1, auth.user_id):
@@ -380,6 +441,7 @@ def teacher_class():
 
 
     return dict(view_data = view_data)
+
 
 def student_class():
     if auth.has_membership(1, auth.user_id):
@@ -404,6 +466,7 @@ def student_class():
     view_data = sorted_view_data
 
     return dict(view_data = view_data)
+
 
 def parent_student():
     if auth.has_membership(1, auth.user_id):
@@ -475,7 +538,6 @@ def detail():
     return dict(content_name=content_name, grade_level=grade_level, content_id=content_id, detail_data=detail_data )
 
 
-
 def pdf_overview():
 
     #get arguments passed from previous page
@@ -485,6 +547,7 @@ def pdf_overview():
     #get a pdf from the helper function
     pdf = create_single_grade_pdf(grade,content_area_id)
     return pdf
+
 
 def create_single_grade_pdf(grade,content_area_id):
     '''--Variables--'''
