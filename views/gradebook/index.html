@@ -7,10 +7,12 @@
             <table class="table">
                 {{for row in class_data:}}
                   <tr class="{{=get_contextual_classes(float(row[3]))}}">
-                    <td><h3>{{=A(row[0], _href=URL('classes', 'overview', args=[row[1]]))}}</h3></td>
-                    <td><h3>{{=row[2]}}</h3></td>
-                    <td><h3>{{=row[3]}} %</h3></td>
+                    <td style="vertical-align: middle"><h3>{{=row[0]}}</h3></td>
+                      <td style="vertical-align: middle"><button id="class_details" type="button"  class="btn btn-primary btn-sm" onclick="window.location.href='{{=URL('classes', 'overview', args = [row[1]])}}'">Class Details</button></td>
+                      <td style="vertical-align: middle"><h3>{{=row[2]}}</h3></td>
+                      <td style="vertical-align: middle"><h3>{{=row[3]}} %</h3></td>
                   </tr>
+
                 {{pass}}
             </table>
         </div>
