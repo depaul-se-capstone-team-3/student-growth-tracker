@@ -1,49 +1,23 @@
-/* #bulk-upload { */
-/*     text-align: baseline; */
-/*     vertical-align: baseline; */
-/* } */
-
-/* input[type="file"] { */
-/*     display: inline; */
-/* } */
+/*
+    Style sheet for the Student Growth Tracker application. 
+*/
 
 /* .btn { */
 /*     margin-top: 5px; */
 /* } */
 
-/* div.btn-group-vertical a { */
-/*     color: #efefef; */
-/*     font-size: 1em; */
-/* } */
+div.btn-group-vertical a {
+    color: #efefef;
+    font-size: 1em;
+}
 
-/* div.btn-group-vertical > a:nth-child(even) { */
-/*     background-color: #1b8dbb; */
-/* } */
+div.btn-group-vertical > a.btn-primary:nth-child(even) {
+    background-color: #1b8dbb;
+}
 
-/* div.btn-group-vertical > a:nth-child(odd) { */
-/*     background-color: #244363; */
-/* } */
-
-/* .btn-file { */
-/*     position: relative; */
-/*     overflow: hidden; */
-/* } */
-
-/* .btn-file input[type=file] { */
-/*     position: absolute; */
-/*     top: 0; */
-/*     right: 0; */
-/*     min-width: 100%; */
-/*     min-height: 100%; */
-/*     font-size: 100px; */
-/*     text-align: right; */
-/*     filter: alpha(opacity=0); */
-/*     opacity: 0; */
-/*     outline: none; */
-/*     background: white; */
-/*     cursor: inherit; */
-/*     display: block; */
-/* } */
+div.btn-group-vertical > a.btn-primary:nth-child(odd) {
+    background-color: #244363;
+}
 
 #attendance-table > tbody > tr:first-child {
     background-color: #cfccc8;
@@ -69,4 +43,17 @@
     font-size: 1.5em;
     font-weight: bold;
     padding: 50px 10px 10px 0px;
+}
+
+.process-step {
+    margin-top: 15px;
+}
+
+.well-clear {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid #fff;
+  border-radius: 4px;
 }
