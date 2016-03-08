@@ -44,7 +44,7 @@ def classes_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.process(formname='class_upload').accepted and formcsv.vars.file is not '':
+    if formcsv.process(formname='class_upload').accepted and formcsv.vars.file:
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
@@ -95,7 +95,7 @@ def teacher_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.process(formname='teacher_upload').accepted and formcsv.vars.file is not '':
+    if formcsv.process(formname='teacher_upload').accepted and formcsv.vars.file:
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
@@ -153,7 +153,7 @@ def student_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.process(formname='student_upload').accepted and not formcsv.vars.file:
+    if formcsv.process(formname='student_upload').accepted and formcsv.vars.file:
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
@@ -219,7 +219,7 @@ def parent_create():
         Field('file', 'upload', uploadfolder=upload_folder),
         submit_button='Upload')
 
-    if formcsv.process(formname='parent_upload').accepted and formcsv.vars.file is not '':
+    if formcsv.process(formname='parent_upload').accepted and formcsv.vars.file:
         upload_file = os.path.join(upload_folder, formcsv.vars.file)
         records_loaded = 0
 
