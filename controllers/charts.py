@@ -227,7 +227,10 @@ def parent_index_line():
                      (db.student_grade.grade_id == db.grade.id)&
                      (db.classes.id == class_id)&
                      (db.classes.id == db.class_grade.class_id)&
-                     (db.class_grade.grade_id == db.grade.id))
+                     (db.class_grade.grade_id == db.grade.id)&
+                     (db.grade.due_date != None)&
+                     (db.grade.due_date <= datetime.datetime.now()))
+
     student_assignment = db(student_query).select(db.grade.id, db.grade.name, db.grade.score, db.student_grade.student_score)
 
     assignment_dict = {}
@@ -253,7 +256,8 @@ def student_index_line():
              (db.grade.id == db.student_grade.grade_id ) &
              (db.student_grade.student_id == db.student.id ) &
              (db.student.id == student_id) &
-             (db.grade.due_date != None))
+             (db.grade.due_date != None)&
+            (db.grade.due_date <= datetime.datetime.now()))
 
     student_assignment = db(query).select(db.grade.id, db.grade.name, db.grade.score, db.student_grade.student_score)
 
