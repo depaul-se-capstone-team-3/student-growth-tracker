@@ -51,6 +51,7 @@
 </div>
 
 {{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
 <script>
  /* This is probably unnecessary, as bootstrap has this functionality built-in. */
  $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {
@@ -61,8 +62,5 @@
      $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");
  });
 
- $().ready(function() {
-     $("button").removeClass("btn-default");
- });
 </script>
 {{end}}
