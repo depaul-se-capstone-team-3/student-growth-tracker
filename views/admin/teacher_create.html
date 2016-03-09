@@ -34,7 +34,9 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12">{{=form.custom.submit}}</div>
+                <div class="col-sm-12">
+                    {{=form.custom.submit}}
+                </div>
             </div>
 
             {{=form.custom.end}}
@@ -78,3 +80,7 @@
         </div>
     </div>
 </div>
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+{{end}}

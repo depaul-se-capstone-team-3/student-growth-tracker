@@ -2,9 +2,44 @@
     Style sheet for the Student Growth Tracker application. 
 */
 
-/* .btn { */
-/*     margin-top: 5px; */
-/* } */
+body {
+    background-color: #efefef;
+}
+
+a {
+    color: #5b8db3;
+}
+
+.btn-default {
+    background-color: #4c4c4c;
+    color: #efefef;
+    border-color: #333;
+}
+
+.btn-default:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #191919;
+}
+
+.navbar-inverse {
+    background-color: #333;
+    border-color: #191919;
+}
+
+.footer {
+    background-color: #333;
+}
+
+.panel-info {
+    border-color: #ccc;
+}
+
+.panel-info > .panel-heading {
+    background-color: #334d61;
+    color: #efefef;
+    border-color: #193347;
+}
 
 div.btn-group-vertical a {
     color: #efefef;
@@ -19,10 +54,36 @@ div.btn-group-vertical > a.btn-primary:nth-child(odd) {
     background-color: #244363;
 }
 
+#web2py-logo {
+    color: #9D9D9D;
+}
+
+.handsontable th {
+    background-color: #7e7e7e;
+    color: #efefef;
+}
+
+.handsontable th a {
+    color: #a6d8fe;
+}
+
+.handsontable td.success {
+    background-color: #dff0d8;
+}
+
+.handsontable td.warning {
+    background-color: #fcf8e3;
+}
+
+.handsontable td.danger {
+    background-color: #f2dede;
+}
+
 #attendance-table > tbody > tr:first-child {
-    background-color: #cfccc8;
-    font-weight: bold;
-    font-size: 1.1em;
+    background-color: #7e7e7e; /* #cfccc8;*/
+    color: #efefef;
+    /* font-weight: bold; */
+    font-size: 1.2em;
 }
 
 .hot-scrollable {
@@ -53,7 +114,7 @@ div.btn-group-vertical > a.btn-primary:nth-child(odd) {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid #fff;
+  background-color: unset;
+  border: 1px solid unset;
   border-radius: 4px;
 }

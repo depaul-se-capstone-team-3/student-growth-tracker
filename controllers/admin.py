@@ -144,8 +144,6 @@ def student_create():
     else:
         redirect(URL('default','index'))
 
-    form = SQLFORM.factory(db.auth_user, db.student)
-
     # begin handle upload csv
     upload_folder = os.path.join(request.folder, 'uploads')
 
@@ -186,6 +184,9 @@ def student_create():
     # end handle upload csv
 
     # begin handle single insert
+    form = SQLFORM.factory(db.auth_user, db.student,
+                           submit_button='Add Student')
+
     if form.process(formname='student_insert').accepted:
         uid = db.auth_user.insert(first_name=form.vars.first_name,
                                   last_name=form.vars.last_name,
