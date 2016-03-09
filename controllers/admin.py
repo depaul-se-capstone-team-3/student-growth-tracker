@@ -374,43 +374,64 @@ def standard_overview():
 
     grade_query = ((db.classes.grade_level))
     grade = db(grade_query).select(db.classes.grade_level)
+
     grade_list = []
+
     for row in grade:
         grade_list.append(row.grade_level)
+
     grade_list = list(set(grade_list))
+
     content_ids={}
     content_names={}
     overview_data = {}
     content_area_all = {}
+
     for grade in grade_list:
-        standard_query = ((db.classes.grade_level == grade)&
-                          (db.classes.id == db.student_classes.class_id)&
-                          (db.student.id == db.student_classes.student_id)&
-                          (db.student.id == db.student_grade.student_id)&
-                          (db.grade.id == db.student_grade.grade_id)&
-                          (db.grade.id == db.grade_standard.grade_id)&
-                          (db.standard.id == db.grade_standard.standard_id)&
-                          (db.classes.id == db.class_grade.class_id)&
-                          (db.grade.id == db.class_grade.grade_id)&
+        standard_query = ((db.classes.grade_level == grade) &
+                          (db.classes.id == db.student_classes.class_id) &
+                          (db.student.id == db.student_classes.student_id) &
+                          (db.student.id == db.student_grade.student_id) &
+                          (db.grade.id == db.student_grade.grade_id) &
+                          (db.grade.id == db.grade_standard.grade_id) &
+                          (db.standard.id == db.grade_standard.standard_id) &
+                          (db.classes.id == db.class_grade.class_id) &
+                          (db.grade.id == db.class_grade.grade_id) &
                           (db.standard.content_area == db.contentarea.id))
 
-        standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score, db.contentarea.id, db.contentarea.name)
+        standard_list = db(standard_query).select(
+            db.standard.id,
+            db.standard.short_name,
+            db.standard.reference_number,
+            db.student_grade.student_score,
+            db.grade.score,
+            db.contentarea.id,
+            db.contentarea.name)
+
         content_area = {}
         standard_dict = {}
+
         for row in standard_list:
             if row.standard.id in standard_dict.keys():
                 if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
                     max_score = standard_dict[row.standard.id][0] + row.grade.score
                     student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
-                    standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+                    standard_dict[row.standard.id] = [max_score,
+                                                      student_score,
+                                                      row.standard.reference_number,
+                                                      row.standard.short_name]
             else:
                 content_area[row.contentarea.id]= row.contentarea.name
-                standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+                standard_dict[row.standard.id] = [row.grade.score,
+                                                  row.student_grade.student_score,
+                                                  row.standard.reference_number,
+                                                  row.standard.short_name]
+
         content_area_all[grade] = content_area
         overview_data[grade] = standard_dict
 
     #need content Name and contentID list
-    return dict(overview_data = overview_data, content_area_all = content_area_all)
+    return dict(overview_data=overview_data, content_area_all=content_area_all)
 
 
 def class_list():

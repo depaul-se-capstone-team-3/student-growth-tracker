@@ -1,33 +1,47 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12"><h1>Standards Overview</h1></div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12">
-            <h1>Standard Overview</h1>
 
             <table class="table">
                 {{for key in overview_data:}}
-                    <tr>
-                        <td>
-                            <button class="btn btn-xs btn-{{=key}}" data-toggle="collapse"  data-target=".{{=str(key)}}collapsed">
-                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=str(key)}}collapsed" ></i></button>&nbsp&nbsp
-                            <span class="h3">Grade {{=key}}</span>
-                        </td>
-                        <td></td>
-                    </tr>
+                <tr>
+                    <td>
+                        <h3>
+                            <button class="btn btn-primary btn-xs btn-{{=key}}"
+                                    data-toggle="collapse"
+                                    data-target=".{{=str(key)}}collapsed">
+                                <span class="glyphicon glyphicon-small glyphicon-folder-close"
+                                   id ="{{=str(key)}}collapsed"></span>
+                            </button>
+                            Grade {{=key}}
+                        </h3>
+                    </td>
+                </tr>
                 {{for id in content_area_all[key]:}}
-                    <tr class="collapse {{=str(key)}}collapsed">
-                            <td>{{=content_area_all[key][id]}}</td>
-                            <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('admin', 'detail', args = [key,id])}}'">Details</button></td>
-                            <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('admin', 'pdf_overview', args = [key,id])}}'">Download PDF</button></td>
-                        </tr>
-                    </tr>
-                    {{pass}}
-
-
-                    </tr>
-
-
+                <tr class="collapse {{=str(key)}}collapsed">
+                    <td>{{=content_area_all[key][id]}}</td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-primary btn-xs"
+                                onclick="window.location.href='{{=URL('admin', 'detail', args = [key,id])}}'">
+                            Details
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button"
+                                class="btn btn-primary btn-xs"
+                                onclick="window.location.href='{{=URL('admin', 'pdf_overview', args = [key,id])}}'">
+                            Download PDF
+                        </button>
+                    </td>
+                </tr>
+                {{pass}}
                 {{pass}}
 
             </table>
@@ -45,6 +59,10 @@
 
  $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {
      $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");
+ });
+
+ $().ready(function() {
+     $("button").removeClass("btn-default");
  });
 </script>
 {{end}}
