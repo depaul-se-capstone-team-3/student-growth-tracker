@@ -1,15 +1,19 @@
 {{extend 'layout.html'}}
 
-<h1>Assign Student to Class</h1>
-
 <div class="container-fluid well">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Assign Student to Class</h1>
+        </div>
+    </div>
 
     {{=form.custom.begin}}
 
     <div class="row form-group">
         <div class="col-sm-6">
-            <label for="no_table_Student">Student</label>
-            {{=form.custom.widget.Student}}
+            <label for="students">Student</label>
+            {{=name_id}}
         </div>
         
         <div class="col-sm-6">

@@ -1,8 +1,13 @@
 {{extend 'layout.html'}}
 
-<h1>Assign Parent to Student</h1>
-
 <div class="container-fluid well">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>Assign Parent to Student</h1>
+        </div>
+    </div>
+
     {{=form.custom.begin}}
 
     <div class="row form-group">
@@ -13,7 +18,7 @@
         
         <div class="col-sm-6">
             <label for="no_table_Student">Student</label>
-            {{=form.custom.widget.Student}}
+            {{=name_id}}
         </div>
     </div>
 

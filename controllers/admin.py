@@ -299,29 +299,42 @@ def assign_student_to_class():
 
     student_query = ((db.student.id > 0)&
                     (db.student.user_id == db.auth_user.id))
-    students = db(student_query).select(db.student.id, db.student.school_id_number, db.auth_user.first_name, db.auth_user.last_name)
+    students = db(student_query).select(db.student.id,
+                                        db.student.school_id_number,
+                                        db.auth_user.first_name,
+                                        db.auth_user.last_name)
 
     options = []
     for row in students:
-        text = '%s %s  -  %s' % (row.auth_user.first_name, row.auth_user.last_name, row.student.school_id_number)
+        text = '%s %s  -  %s' % (row.auth_user.first_name,
+                                 row.auth_user.last_name,
+                                 row.student.school_id_number)
         options.append(OPTION(text, _value=row.student.id))
 
-    name_id = SELECT(options, _name='students',
-                            _class='generic-widget form-control')
+    name_id = SELECT(options,
+                     _id='students',
+                     _name='students',
+                     _class='generic-widget form-control')
 
     class_query = ((db.classes.id > 0))
-    class_field = Field("Class",  requires=IS_IN_DB(db(class_query), "classes.id", '%(name)s', zero = None))
+    class_field = Field("Class",
+                        requires=IS_IN_DB(db(class_query),
+                                          "classes.id",
+                                          '%(name)s',
+                                          zero = None))
 
     form = SQLFORM.factory(class_field, submit_button='Assign To Class')
     form.insert(-1, name_id)
 
 
     if form.process().accepted:
-        row = db.student_classes(student_id = form.vars.students, class_id = form.vars.Class)
+        row = db.student_classes(student_id=form.vars.students,
+                                 class_id=form.vars.Class)
         if not row:
-            db.student_classes.insert(student_id = form.vars.students, class_id = form.vars.Class)
+            db.student_classes.insert(student_id=form.vars.students,
+                                      class_id=form.vars.Class)
         else:
-            response.flash = "Student already in that class !"
+            response.flash = "Student already in that class!"
             pass
 
     return dict(form=form, name_id=name_id)
