@@ -44,7 +44,10 @@ var pieChartData = [
     }
 ]
 
- var pieChartOptions = {animateRotate : true};
+ var pieChartOptions = {animateRotate : true,
+                       legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><br><span style=\"background-color:<%=segments[i].fillColor%>\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<%if(segments[i].label){%><%=segments[i].label%><%}%><%}%></ul>"
+
+};
  var averageBreakdownContext = $("#averageBreakdown").get(0).getContext("2d");
  var myPieChart = new Chart(averageBreakdownContext).Pie(pieChartData, pieChartOptions);
  document.getElementById('js-legend').innerHTML = myPieChart.generateLegend();
