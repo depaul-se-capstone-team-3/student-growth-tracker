@@ -365,6 +365,55 @@ def assign_parent_to_student():
     return dict(form=form, name_id=name_id)
 
 
+@auth.requires(auth.has_membership('Administrator', auth.user_id),
+               requires_login=True)
+def standard_import():
+
+    # begin handle upload csv
+    upload_folder = os.path.join(request.folder, 'uploads')
+
+    formcsv = SQLFORM.factory(
+        Field('file', 'upload', uploadfolder=upload_folder),
+        submit_button='Upload')
+
+    if formcsv.process(formname='standard_upload').accepted and formcsv.vars.file:
+        upload_file = os.path.join(upload_folder, formcsv.vars.file)
+        records_loaded = 0
+
+        with open(upload_file, 'rb') as csvfile:
+            importreader = csv.reader(csvfile)
+            importreader.next()  # Skip header row.
+
+            for row in importreader:
+                content_area = db(db.contentarea.name==row[3]).select().first()
+                db.standard.insert(
+                    reference_number=row[0],
+                    short_name=row[1],
+                    description=row[2],
+                    content_area=content_area,
+                    grade_level=int(row[4]))
+
+            records_loaded = importreader.line_num - 1
+
+        response.flash = 'Loaded %d records' % (records_loaded,)
+
+        os.remove(upload_file)
+    # end handle upload csv
+
+    # begin handle single insert
+    form = SQLFORM.factory(db.standard, submit_button='Add Standard')
+    if form.process(formname='standard_insert').accepted:
+        db.standard.insert(
+            reference_number=form.vars.reference_number,
+            short_name=form.vars.short_name,
+            description=form.vars.description,
+            content_area=form.vars.content_area,
+            grade_level=form.vars.grade_level)
+    # end handle single insert
+
+    return dict(form=form, formcsv=formcsv)
+    
+
 def standard_overview():
     if auth.has_membership(1, auth.user_id):
         pass

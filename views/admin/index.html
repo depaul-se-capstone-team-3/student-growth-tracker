@@ -60,13 +60,16 @@
     </div>
 
     <div class="row center">
-        <div class="col-sm-6"><h2>Standards Views</h2></div>
+        <div class="col-sm-6"><h2>Standards</h2></div>
         <div class="col-sm-6"><h2>Manual Tools</h2></div>
     </div>
 
     <div class="row center">
 
         <div class="col-sm-6 btn-group-vertical" role="group">
+
+            <a id="standard_creaet" href="{{=URL('admin','standard_import')}}"
+               class="btn btn-success">Import Standards</a>
 
             <a id="standard_overview" href="{{=URL('admin','standard_overview')}}"
                     class="btn btn-success">Building Standards Progress</a>
