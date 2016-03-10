@@ -26,6 +26,9 @@
                 </tr>
             {{pass}}
             </table>
+            <br>
+            <h3>Student Scores vs. Class Averages</h3>
+            <br>
             <div class="col-sm-12">
                     {{=LOAD('charts', 'student_index_line.load', args=[class_id,student_id])}}
             </div>
