@@ -10,6 +10,10 @@ a {
     color: #5b8db3;
 }
 
+table.table-padded-cols > tbody > tr > td:nth-child(3) {
+    border-left: 1px solid #ddd;
+}
+
 .btn-default {
     background-color: #4c4c4c;
     color: #efefef;
