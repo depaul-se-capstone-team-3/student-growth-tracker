@@ -9,10 +9,13 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
-            <h3>
-                {{=class_name}}
-                <button type="button" class="btn btn-default btn-xs"
+        <div class="col-sm-6">
+            <h3>{{=class_name}}</h3>
+        </div>
+
+        <div class="col-sm-6 text-right">
+            <h3> <!-- The h3 is a hack. Fix it. -->
+                <button type="button" class="btn btn-primary btn-xs"
                         onclick="window.location.href='{{=URL('parents', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">
                     Download Student Report
                 </button>
@@ -49,3 +52,4 @@
     </div>
 </div>
 
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
