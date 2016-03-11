@@ -1,24 +1,28 @@
 {{extend 'layout.html'}}
 
-<h1>Trend Detection Settings</h1>
-{{=form.custom.begin}}
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <h1>Trend Detection Settings</h1>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="container well">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h4>Trend Detection Threshold</h4>
-                    {{=form.custom.widget.setting}}
-                    <h6>Current threshold at {{=trend_num}}%</h6>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-sm-4">
+            {{=form.custom.begin}}
 
-               <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
-                    {{=form.custom.submit}}
-                </div>
+            <label for="settings">Trend Detection Threshold</label>
+            {{=form.custom.widget.setting}}
+
+            <h6>Current threshold at {{=trend_num}}%</h6>
+
+            {{=form.custom.submit}}
+
+            {{=form.custom.end}}
         </div>
     </div>
 </div>
-{{=form.custom.end}}
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+{{end}}
