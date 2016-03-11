@@ -98,10 +98,6 @@ blockquote small::before, blockquote .small::before {
     content: "";
 }
 
-well well {
-    background-color: #9d9d9d;
-}
-
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -111,13 +107,9 @@ well well {
     color: #9d9d9d;
 }
 
-.handsontable th {
-    background-color: #7e7e7e;
-    color: #efefef;
-}
-
-.handsontable th a {
-    color: #a6d8fe;
+.handsontable th, .handsontable tbody tr td:first-child {
+    background-color: #cfccc8;
+    color: #333;
 }
 
 .handsontable td.success {
@@ -132,16 +124,15 @@ well well {
     background-color: #f2dede;
 }
 
-#attendance-table > tbody > tr:first-child {
-    background-color: #7e7e7e; /* #cfccc8;*/
+#attendance-table tbody tr:first-child {
+    background-color: #7e7e7e;
     color: #efefef;
-    /* font-weight: bold; */
     font-size: 1.2em;
 }
 
 .hot-scrollable {
     width: 100%;
-    height: 750px;
+    height: 500px;
     overflow: hidden;
 }
 
