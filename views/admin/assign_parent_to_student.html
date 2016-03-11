@@ -1,27 +1,36 @@
 {{extend 'layout.html'}}
 
-{{=form.custom.begin}}
-
-<h1>Assign Parent to Student</h1>
-
 <div class="container-fluid well">
+
     <div class="row">
+        <div class="col-sm-12">
+            <h1>Associate Parents with Students</h1>
+        </div>
+    </div>
+
+    {{=form.custom.begin}}
+
+    <div class="row form-group">
         <div class="col-sm-6">
-            <h4>Parent</h4>
+            <label for="no_table_Parent">Parent</label>
             {{=form.custom.widget.Parent}}
         </div>
         
         <div class="col-sm-6">
-            <h4>Student - School ID</h4>
+            <label for="no_table_Student">Student</label>
             {{=name_id}}
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-12">
             {{=form.custom.submit}}
         </div>
     </div>
+
+    {{=form.custom.end}}
 </div>
 
-{{=form.custom.end}}
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+{{end}}

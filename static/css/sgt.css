@@ -1,31 +1,69 @@
-/* #bulk-upload { */
-/*     text-align: baseline; */
-/*     vertical-align: baseline; */
-/* } */
+/*
+    Style sheet for the Student Growth Tracker application. 
+*/
 
-/* input[type="file"] { */
-/*     display: inline; */
-/* } */
+body {
+    background-color: #efefef;
+}
 
-/* .btn { */
-/*     margin-top: 5px; */
-/* } */
+a {
+    color: #5b8db3;
+}
+
+table.table-padded-cols > tbody > tr > td:nth-child(3) {
+    border-left: 1px solid #ddd;
+}
+
+.btn-default {
+    background-color: #4c4c4c;
+    color: #efefef;
+    border-color: #333;
+}
+
+.btn-default:hover {
+    background-color: #333;
+    color: #fff;
+    border-color: #191919;
+}
+
+.navbar-inverse {
+    background-color: #333;
+    border-color: #191919;
+}
+
+.footer {
+    background-color: #333;
+}
+
+.panel-info {
+    border-color: #ccc;
+}
+
+.panel-info > .panel-heading {
+    background-color: #334d61;
+    color: #efefef;
+    border-color: #193347;
+}
 
 div.btn-group-vertical a {
     color: #efefef;
     font-size: 1em;
 }
 
-div.btn-group-vertical > a:nth-child(even) {
+div.btn-group-vertical > a.btn-primary:nth-child(odd) {
     background-color: #1b8dbb;
 }
 
-div.btn-group-vertical > a:nth-child(odd) {
+div.btn-group-vertical > a.btn-primary:nth-child(even) {
     background-color: #244363;
 }
 
 blockquote {
     background-color: #dedede;
+}
+
+blockquote.blockquote-sm {
+    font-size: 14px;
 }
 
 blockquote.blockquote {
@@ -60,31 +98,45 @@ blockquote small::before, blockquote .small::before {
     content: "";
 }
 
+well well {
+    background-color: #9d9d9d;
+}
+
 .btn-file {
     position: relative;
     overflow: hidden;
 }
 
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
+#web2py-logo {
+    color: #9d9d9d;
+}
+
+.handsontable th {
+    background-color: #7e7e7e;
+    color: #efefef;
+}
+
+.handsontable th a {
+    color: #a6d8fe;
+}
+
+.handsontable td.success {
+    background-color: #dff0d8;
+}
+
+.handsontable td.warning {
+    background-color: #fcf8e3;
+}
+
+.handsontable td.danger {
+    background-color: #f2dede;
 }
 
 #attendance-table > tbody > tr:first-child {
-    background-color: #cfccc8;
-    font-weight: bold;
-    font-size: 1.1em;
+    background-color: #7e7e7e; /* #cfccc8;*/
+    color: #efefef;
+    /* font-weight: bold; */
+    font-size: 1.2em;
 }
 
 .hot-scrollable {
@@ -105,4 +157,21 @@ blockquote small::before, blockquote .small::before {
     font-size: 1.5em;
     font-weight: bold;
     padding: 50px 10px 10px 0px;
+}
+
+.process-step {
+    margin-top: 15px;
+}
+
+.well-clear {
+  min-height: 20px;
+  padding: 19px;
+  margin-bottom: 20px;
+  background-color: unset;
+  border: 1px solid unset;
+  border-radius: 4px;
+}
+
+#pie-chart-holder {
+    padding-left: 40px;
 }

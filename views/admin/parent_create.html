@@ -1,32 +1,36 @@
 {{extend 'layout.html'}}
 
-<div class="container-fluid well">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-6 well">
 
             <div class="row">
                 <div class="col-sm-12"><h1>Add a parent</h1></div>
             </div>
 
-            {{=form.custom.begin}}
+            <div class="row">
+                <div class="col-sm-10">
+                    {{=form.custom.begin}}
 
-            <div class="form-group">
+                    <div class="form-group">
 
-                <label for="no_table_first_name">First Name</label>
-                {{=form.custom.widget.first_name}}
-                
-                <label for="no_table_last_name">Last Name</label>
-                {{=form.custom.widget.last_name}}
+                        <label for="no_table_first_name">First Name</label>
+                        {{=form.custom.widget.first_name}}
 
-                <label for="no_table_email">Email</label>
-                {{=form.custom.widget.email}}
+                        <label for="no_table_last_name">Last Name</label>
+                        {{=form.custom.widget.last_name}}
 
-                <label for="no_table_username">Username</label>
-                {{=form.custom.widget.username}}
+                        <label for="no_table_email">Email</label>
+                        {{=form.custom.widget.email}}
 
-                <label for="no_table_password">Password</label>
-                {{=form.custom.widget.password}}
+                        <label for="no_table_username">Username</label>
+                        {{=form.custom.widget.username}}
 
+                        <label for="no_table_password">Password</label>
+                        {{=form.custom.widget.password}}
+
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -36,21 +40,38 @@
             {{=form.custom.end}}
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-6 well-clear">
 
             <div class="row">
-                <div class="col-sm-12"><h1>Import parents from file</h1></div>
+                <div class="col-sm-11 col-sm-offset-1"><h1>
+					Import parents
+                </h1></div>
             </div>
 
             {{=formcsv.custom.begin}}
 
-            <div class="form-group">
-                <label for="no_table_file">Select a file to upload.</label>
-                {{=formcsv.custom.widget.file}}
+            <div class="row process-step">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <h4>Step ONE:</h4>
+                </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-12">{{=formcsv.custom.submit}}</div>
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{=formcsv.custom.widget.file}}
+                </div>
+            </div>
+
+            <div class="row process-step">
+                <div class="col-sm-10 col-sm-offset-2">
+                    <h4>Step TWO:</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-4">
+                    {{=formcsv.custom.submit}}
+                </div>
             </div>
             
             {{=formcsv.custom.end}}
@@ -58,3 +79,7 @@
         </div>
     </div>
 </div>
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+{{end}}

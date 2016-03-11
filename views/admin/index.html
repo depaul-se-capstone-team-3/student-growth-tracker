@@ -1,106 +1,76 @@
 {{extend 'layout.html'}}
 
-<div class="container well">
+<div class="container-fluid well">
 
     <div class="row center">
-        <div class="col-sm-6"><h2>Admin Tools</h2></div>
-        <div class="col=sm-6"><h2>Admin Views</h2></div>
-    </div>
 
-    <div class="row center">
-        <div class="col-sm-6 btn-group-vertical" role="group">
+        <div class="col-xs-12 col-sm-4 btn-group-vertical" role="group">
+            <h2>Standards</h2>
 
-                <a id="teacher_create" href="{{=URL('admin','teacher_create')}}"
-                   class="btn">Manage Teachers</a>
+            <a id="standard_overview" href="{{=URL('admin','standard_overview')}}"
+               class="btn btn-primary">Building Standards Progress</a>
 
-                <a id="student_create" href="{{=URL('admin','student_create')}}"
-                   class="btn">Manage Students</a>
+            <a id="standard_creaet" href="{{=URL('admin','standard_import')}}"
+               class="btn btn-primary">Import Standards</a>
 
-                <a id="classes_create" href="{{=URL('admin','classes_create')}}"
-                   class="btn">Manage Classes</a>
+        </div>
 
-                <a id="parent_create" href="{{=URL('admin','parent_create')}}"
-                   class="btn">Manage Parents</a>
+        <div class="col-xs-12 col-sm-4 btn-group-vertical" role="group">
+            <h2>Tools</h2>
 
-                <a id="assign_teacher" href="{{=URL('admin','assign_teacher_to_class')}}"
-                   class="btn">Assign Teacher to Class</a>
+            <a id="activate_trend_detection" href="{{=URL('notifications','detect_trends')}}"
+               class="btn btn-primary" role="button">Activate Trend Detection</a>
 
-                <a id="assign_student" href="{{=URL('admin','assign_student_to_class')}}"
-                   class="btn">Assign Student to Class</a>
+            <a id="settings" href="{{=URL('admin','settings')}}"
+               class="btn btn-primary" role="button">Trend Detection Settings</a>
 
-                <a id="assign_parent" href="{{=URL('admin','assign_parent_to_student')}}"
-                   class="btn">Associate Parents with Students</a>
+            <a id="teacher_create" href="{{=URL('admin','teacher_create')}}"
+               class="btn btn-primary">Manage Teachers</a>
+
+            <a id="student_create" href="{{=URL('admin','student_create')}}"
+               class="btn btn-primary">Manage Students</a>
+
+            <a id="classes_create" href="{{=URL('admin','classes_create')}}"
+               class="btn btn-primary">Manage Classes</a>
+
+            <a id="parent_create" href="{{=URL('admin','parent_create')}}"
+               class="btn btn-primary">Manage Parents</a>
+
+            <a id="assign_teacher" href="{{=URL('admin','assign_teacher_to_class')}}"
+               class="btn btn-primary">Assign Teacher to Class</a>
+
+            <a id="assign_student" href="{{=URL('admin','assign_student_to_class')}}"
+               class="btn btn-primary">Assign Student to Class</a>
+
+            <a id="assign_parent" href="{{=URL('admin','assign_parent_to_student')}}"
+               class="btn btn-primary">Associate Parents with Students</a>
                 
         </div>
 
-        <div class="col-sm-6 btn-group-vertical" role="group">
+        <div class="col-xs-12 col-sm-4 btn-group-vertical" role="group">
+            <h2>Views</h2>
+            
+            <a id="teacher_list" href="{{=URL('admin','teacher_list')}}"
+               class="btn btn-primary">Teachers</a>
 
-                <a id="teacher_list" href="{{=URL('admin','teacher_list')}}"
-                   class="btn">Teachers</a>
+            <a id="student_list" href="{{=URL('admin','student_list')}}"
+               class="btn btn-primary">Students</a>
 
-                <a id="student_list" href="{{=URL('admin','student_list')}}"
-                   class="btn">Students</a>
+            <a id="classes_list" href="{{=URL('admin','class_list')}}"
+               class="btn btn-primary">Classes</a>
 
-                <a id="classes_list" href="{{=URL('admin','class_list')}}"
-                   class="btn">Classes</a>
+            <a id="parent_list" href="{{=URL('admin','parent_list')}}"
+               class="btn btn-primary">Parents</a>
 
-                <a id="parent_list" href="{{=URL('admin','parent_list')}}"
-                   class="btn">Parents</a>
+            <a id="teacher_class_list" href="{{=URL('admin','teacher_class')}}"
+               class="btn btn-primary">Current Teachers' Classes</a>
 
-                <a id="teacher_class_list" href="{{=URL('admin','teacher_class')}}"
-                   class="btn">Current Teachers' Classes</a>
+            <a id="student_class_list" href="{{=URL('admin','student_class')}}"
+               class="btn btn-primary">Current Students' Classes</a>
 
-                <a id="student_class_list" href="{{=URL('admin','student_class')}}"
-                   class="btn">Current Students' Classes</a>
+            <a id="parent_student_list" href="{{=URL('admin','parent_student')}}"
+               class="btn btn-primary">Current Parents' Students</a>
 
-                <a id="parent_student_list" href="{{=URL('admin','parent_student')}}"
-                   class="btn">Current Parents' Students</a>
-
-        </div>
-    </div>
-
-    <div class="row center">
-        <div class="col-sm-6"><h2>Standards</h2></div>
-        <div class="col-sm-6"><h2>Manual Tools</h2></div>
-    </div>
-
-    <div class="row center">
-
-        <div class="col-sm-6 btn-group-vertical" role="group">
-
-            <a id="standard_creaet" href="{{=URL('admin','standard_import')}}"
-               class="btn btn-success">Import Standards</a>
-
-            <a id="standard_overview" href="{{=URL('admin','standard_overview')}}"
-                    class="btn btn-success">Building Standards Progress</a>
-
-        </div>
-
-        <div class="col-sm-6 btn-group-vertical" role="group">
-
-            <a id="activate_trend_detection" href="{{=URL('notifications','detect_trends')}}"
-               class="btn btn-warning btn-block" role="button">Activate Trend Detection</a>
-
-        </div>
-    </div>
-
-    <div class="row center">
-        <div class="col-sm-6"><h2>Settings</h2></div>
-        <div class="col-sm-6">&nbsp;</div>
-    </div>
-
-    <div class="row center">
-
-        <div class="col-sm-6 btn-group-vertical" role="group">
-
-            <a id="settings" href="{{=URL('admin','settings')}}"
-               class="btn btn-danger" role="button">Trend Detection Settings</a>
-
-        </div>
-
-        <div class="col-sm-6 btn-group-vertical" role="group">
-            <!-- Empty button group for future expansion. -->
-            &nbsp;
         </div>
     </div>
 

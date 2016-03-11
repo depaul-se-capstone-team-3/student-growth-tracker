@@ -67,6 +67,7 @@
 
  var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
      Handsontable.renderers.NumericRenderer.apply(this, arguments);
+
      if ((col > 0)) {
          delta = 0.001;
          new_value = parseFloat(value);
@@ -74,17 +75,14 @@
          student_score = parseFloat(value);
          percent_score = student_score / max_score;
          
-         if ((percent_score - delta) < 0.0) {
-             td.style.backgroundColor = '#cceeff'
-         }
-         else if (percent_score >= 0.90) {
-             td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
+         if (percent_score >= 0.90) {
+             td.className = "htNumeric success";
          }
          else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
-             td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
+             td.className = "htNumeric warning";
          }
          else if (percent_score < 0.70) {
-             td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
+             td.className = "htNumeric danger";
          }
      }
  };
