@@ -222,7 +222,7 @@ def get_contextual_classes(point):
     """
     if ( point >= 90):
         return 'success'
-    elif ( (point >= 70) & (point < 89) ):
+    elif ( (point >= 70) & (point < 90) ):
         return 'warning'
     else:
         return 'danger'
