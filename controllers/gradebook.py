@@ -42,14 +42,6 @@ def index():
 
     return dict(class_data=class_data)
 
-# This should go under manage - assuming this is a school/district maanged tool,
-# teachers won't add classes to their gradebooks.
-@auth.requires_login()
-def create():
-    """generate form for new gradebook entry, redirect to index"""
-    form = SQLFORM(db.gradebook).process(next=URL('index'))
-    return dict(form=form)
-
 @auth.requires_login()
 def overview():
     '''THIS METHOD IS NOT DOING ANYTHING RIGHT NOW. CONSIDER DELETING?'''
