@@ -15,36 +15,27 @@ var pieChartData = [
     {
         value: {{=pie_data[90]}},
         color: "#d2eac8",
-        highlight: "#86c76b",
+        highlight: "#93c54b",
         label: "90% - 100% ",
     },
     {
         value: {{=pie_data[80]}},
-        color:"#d5ebf6",
-        highlight: "#57afdb",
-        label: "80% - 89% "
+        color:"#faf3d1",
+        highlight: "#f0ad4e",
+        label: "70% - 89% "
     },
     {
         value: {{=pie_data[70]}},
-        color:"#faf3d1",
-        highlight: "#ebcf47",
-        label: "70% - 79% "
-    },
-    {
-        value: {{=pie_data[60]}},
-        color:"#f2f2f2",
-        highlight: "#999999",
-        label: "60% - 69% "
-    },
-    {
-        value: {{=pie_data[50]}},
         color:"#f1dada",
-        highlight: "#c76b6b",
-        label: "Below 60% "
+        highlight: "#d9534f",
+        label: "Below 70% "
     }
 ]
 
- var pieChartOptions = {animateRotate : true};
+ var pieChartOptions = {animateRotate : true,
+                       legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><br><span style=\"background-color:<%=segments[i].fillColor%>\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<%if(segments[i].label){%><%=segments[i].label%><%}%><%}%></ul>"
+
+};
  var averageBreakdownContext = $("#averageBreakdown").get(0).getContext("2d");
  var myPieChart = new Chart(averageBreakdownContext).Pie(pieChartData, pieChartOptions);
  document.getElementById('js-legend').innerHTML = myPieChart.generateLegend();

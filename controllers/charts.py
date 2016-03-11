@@ -78,20 +78,14 @@ def class_overview_percent_range_pie():
     pie_data[90] = 0
     pie_data[80] = 0
     pie_data[70] = 0
-    pie_data[60] = 0
-    pie_data[50] = 0
     for key in assignment_query.keys():
         average = assignment_query[key][0] / assignment_query[key][1] *100
         if average >= 90:
             pie_data[90] = pie_data[90]+1
-        elif average >= 80 and average < 90:
+        elif average >= 70 and average < 90:
             pie_data[80] = pie_data[80]+1
-        elif average >= 70 and average < 80:
-            pie_data[70] = pie_data[70]+1
-        elif average >= 60 and average < 70:
-            pie_data[60] = pie_data[60]+1
         else:
-            pie_data[50] = pie_data[50]+1
+            pie_data[70] = pie_data[70]+1
 
     return dict(pie_data=pie_data)
 
