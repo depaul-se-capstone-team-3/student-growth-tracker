@@ -24,6 +24,42 @@ div.btn-group-vertical > a:nth-child(odd) {
     background-color: #244363;
 }
 
+blockquote {
+    background-color: #dedede;
+}
+
+blockquote.blockquote {
+    border-width: 6px;
+    border-color: #ccc;
+    border-radius: 3px;
+}
+
+blockquote.blockquote-reverse {
+    border-width: 6px;
+    border-color: #ccc;
+    border-radius: 3px;
+}
+
+blockquote.blockquote-success {
+    border-color: #7fd25d;
+}
+
+blockquote.blockquote-warning {
+    border-color: #eecb3d;
+}
+
+blockquote.blockquote-danger {
+    border-color: #c14747;
+}
+
+blockquote small, blockquote .small {
+    display: inline;
+}
+
+blockquote small::before, blockquote .small::before {
+    content: "";
+}
+
 .btn-file {
     position: relative;
     overflow: hidden;
