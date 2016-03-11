@@ -1,15 +1,16 @@
 <div class="row">
-    <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4" id="js-legend" class="chart-legend">2</div>
-            <div class="col-md-4"></div>
+    <div class="col-sm-12">
+        <div id="js-legend" class="chart-legend"></div>
     </div>
-    <br>
+</div>
+
+<div class="row">
     <div class="col-md-12">
         <canvas id="student_index_line" width="1000" height="400"></canvas>
     </div>
 </div>
 
+{{block page_js}}
 <script src="{{=URL('static', 'js/Chart.js')}}"></script>
 <script>
 
@@ -65,3 +66,4 @@ var data = {
  document.getElementById('js-legend').innerHTML = myLineChart.generateLegend();
 
 </script>
+{{end}}
