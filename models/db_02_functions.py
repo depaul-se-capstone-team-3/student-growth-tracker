@@ -222,7 +222,7 @@ def get_contextual_classes(point):
     """
     if ( point >= 90):
         return 'success'
-    elif ( (point >= 80) & (point < 89) ):
+    elif ( (point >= 70) & (point < 89) ):
         return 'warning'
     else:
         return 'danger'
@@ -366,6 +366,7 @@ def student_standards_query(student_id, class_id):
     (db.student_grade.student_id == student_id)&
     (db.grade.id == db.student_grade.grade_id))
     return query
+
 
 ################################################
 if __name__ == '__main__':
