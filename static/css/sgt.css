@@ -50,11 +50,11 @@ div.btn-group-vertical a {
     font-size: 1em;
 }
 
-div.btn-group-vertical > a.btn-primary:nth-child(even) {
+div.btn-group-vertical > a.btn-primary:nth-child(odd) {
     background-color: #1b8dbb;
 }
 
-div.btn-group-vertical > a.btn-primary:nth-child(odd) {
+div.btn-group-vertical > a.btn-primary:nth-child(even) {
     background-color: #244363;
 }
 
