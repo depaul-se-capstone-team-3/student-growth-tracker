@@ -68,26 +68,24 @@
 
         <div class="col-sm-6 btn-group-vertical" role="group">
 
-            <a id="import-standards" href="#" class="btn btn-primary">
-                Import Standards
-            </a>
+            <a id="standard_creaet" href="{{=URL('admin','standard_import')}}"
+               class="btn btn-primary">Import Standards</a>
 
             <a id="standard_overview" href="{{=URL('admin','standard_overview')}}"
-               class="btn btn-success">Building Standards Progress</a>
+               class="btn btn-primary">Building Standards Progress</a>
 
         </div>
 
         <div class="col-sm-6 btn-group-vertical" role="group">
 
             <a id="activate_trend_detection" href="{{=URL('notifications','detect_trends')}}"
-               class="btn btn-warning btn-block" role="button">Activate Trend Detection</a>
+               class="btn btn-primary" role="button">Activate Trend Detection</a>
 
         </div>
     </div>
 
     <div class="row center">
         <div class="col-sm-6"><h2>Settings</h2></div>
-        <div class="col-sm-6">&nbsp;</div>
     </div>
 
     <div class="row center">
@@ -95,13 +93,8 @@
         <div class="col-sm-6 btn-group-vertical" role="group">
 
             <a id="settings" href="{{=URL('admin','settings')}}"
-               class="btn btn-danger" role="button">Trend Detection Settings</a>
+               class="btn btn-primary" role="button">Trend Detection Settings</a>
 
-        </div>
-
-        <div class="col-sm-6 btn-group-vertical" role="group">
-            <!-- Empty button group for future expansion. -->
-            &nbsp;
         </div>
     </div>
 

@@ -1,4 +1,10 @@
 <div class="row">
+    <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" id="js-legend" class="chart-legend"></div>
+            <div class="col-md-4"></div>
+    </div>
+    <br>
     <div class="col-md-12">
         <canvas id="parent_index_line" width="1000" height="400"></canvas>
     </div>
@@ -46,11 +52,17 @@ var data = {
 };
 
  var lineChartOptions = {responsive: true,
-                         multiTooltipTemplate:"<%= datasetLabel%> <%= value %>% "
+                         multiTooltipTemplate:"<%= datasetLabel%> <%= value %>% ",
+                         legendTemplate : '<% for (var i=0; i<datasets.length; i++) { %>'
+                    +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
+                    +'<span style=\"background-color:<%=datasets[i].pointColor%>\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;'
+                    +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
+                +'<% } %>'
                        };
 
  var lineChartContext = $("#parent_index_line").get(0).getContext("2d");
  var myLineChart = new Chart(lineChartContext).Line(data, lineChartOptions);
+ document.getElementById('js-legend').innerHTML = myLineChart.generateLegend();
 
 
 </script>
