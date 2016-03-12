@@ -21,7 +21,7 @@
                 <!-- Class name - currently a link. -->
                 {{=overview_data[key][0]}} — Grade: {{=overview_data[key][1]}}%
 
-                <button id="class_details" type="button"
+                <button id="class-details-{{=key}}" type="button"
                         class="btn btn-primary btn-xs pull-right"
                         onclick="window.location.href='{{=URL('students', 'index', args=[key])}}'">
                     Class Details

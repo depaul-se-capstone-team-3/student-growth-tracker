@@ -40,7 +40,7 @@
 
                             {{=class_key}} — {{=class_dict[class_key][0]}}%
 
-                            <button type="button"
+                            <button id="class-{{=j}}" type="button"
                                     class="btn btn-primary btn-xs pull-right"
                                     onclick="window.location.href='{{=URL('parents', 'index', args=[class_dict[class_key][2], student])}}'">
                                 Class Details

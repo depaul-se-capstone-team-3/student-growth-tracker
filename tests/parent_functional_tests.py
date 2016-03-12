@@ -46,7 +46,7 @@ class ParentFunctionalTest(unittest.TestCase):
 
         self.log_in()
 
-        math_one_link = self.browser.find_element_by_link_text('Math One')
+        math_one_link = self.browser.find_element_by_id('class-1')
         math_one_link.click()
 
         header = self.browser.find_element_by_tag_name('h3').text
@@ -61,7 +61,7 @@ class ParentFunctionalTest(unittest.TestCase):
         self.assertIn('Parent One Student Overview', header)
         
         #go to detail view for first class
-        self.browser.find_element_by_link_text('Language Arts One').click()
+        self.browser.find_element_by_id('class-0').click()
         
         #check to make sure Parent, Student, and Class are as expected
         header = self.browser.find_element_by_tag_name('h1').text
