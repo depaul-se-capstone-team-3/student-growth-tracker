@@ -75,7 +75,7 @@ def create():
 
         redirect(URL('classes', 'index', args=[class_id]))
 
-    return dict(form=form, standards=standards_menu)
+    return dict(form=form, standards=standards_menu, class_id=class_id)
 
 @auth.requires_login()
 def edit():

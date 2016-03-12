@@ -39,6 +39,7 @@
                     <label for="grade_score">Score</label>
                     {{=form.custom.widget.score}}
                 </div>
+
                 <div class="col-sm-4">
                     <label for="grade_grade_type">Grade Type</label>
                     {{=form.custom.widget.grade_type}}
@@ -69,6 +70,7 @@
  $(document).ready(function() {
      $(":button#cancel").click(function() {
          window.location.href="{{=URL('classes', 'index', args = [class_id])}}";
+         return false;
      });
  });
 </script>

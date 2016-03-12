@@ -4,58 +4,88 @@
     <div class="row">
         <div class="col-sm-12">
             <h1>{{=parent_name}} Student Overview</h1>
-
-            <table class="table">
-                {{j = 0}}
-                {{for student in full_dict.keys():}}
-                    {{class_dict = full_dict[student][1]}}
-                    {{i = 0}}
-                    {{total_average = 0}}
-                    {{for key in class_dict.keys():}}
-                        {{temp_average = float(class_dict[key][0])}}
-                        {{total_average = total_average + temp_average}}
-                        {{i = i + 1}}
-                    {{pass}}
-                {{total_average = total_average/i}}
-                {{# code below figures out colors based on input values}}
-                <tr class="collapse-group">
-                    <td><h3>{{=str(full_dict[student][0])}}</h3></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                {{for class_key in class_dict.keys():}}
-                <tr class="{{=get_contextual_classes(float(class_dict[class_key][0]))}}">
-                    <td>
-                        {{# code below figures out the button color based on input values}}
-                        <button class="btn btn-xs btn-{{=get_contextual_classes(float(class_dict[class_key][0]))}}" data-toggle="collapse"  data-target=".{{=j}}">
-                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=j}}" ></i></button>&nbsp&nbsp
-                        <span class="h3">{{=A(class_key, _href=URL('parents', 'index', args=[class_dict[class_key][2], student]))}}</span>
-                    </td>
-                    <td></td>
-                    <td><span class="h3">{{=class_dict[class_key][0]}} %</span></td>
-                </tr>
-                {{standards = class_dict[class_key][1]}}
-                {{z = 0}}
-                {{key_list = []}}
-                {{for standard in standards:}}
-                    {{z = z + 1}}
-                    {{key_list.append(standard)}}
-                {{pass}}
-                {{key_list.sort()}}
-                {{x = 0}}
-                {{for standard in key_list:}}
-                <tr class="collapse {{=j}}">
-                    <td>{{=str(standards[standard][2])}} {{=str(standards[standard][3])}}</td>
-                    <td>{{=format((standards[standard][1]/standards[standard][0] * 100), '.2f')}} %</td>
-                </tr>
-                {{pass}}
-                {{j = j + 1}}
-                {{pass}}
-                {{pass}}
-
-            </table>
         </div>
     </div>
+
+    {{j = 0}}
+
+    {{for student in full_dict.keys():}}
+        {{class_dict = full_dict[student][1]}}
+        {{i = 0}}
+        {{total_average = 0}}
+
+        {{for key in class_dict.keys():}}
+            {{temp_average = float(class_dict[key][0])}}
+            {{total_average = total_average + temp_average}}
+            {{i = i + 1}}
+        {{pass}}
+
+        {{total_average = total_average/i}}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Student Name -->
+                <h3>{{=str(full_dict[student][0])}}</h3>
+
+                {{for class_key in class_dict.keys():}}
+                <div class="row">
+                    <div class="col-sm-8">
+                        <blockquote class="blockquote blockquote-{{=get_contextual_classes(float(class_dict[class_key][0]))}}">
+                            <!-- Folder icon button. Activates toggle -->
+                            <button class="btn btn-xs btn-{{=get_contextual_classes(float(class_dict[class_key][0]))}}"
+                                    data-toggle="collapse" data-target=".{{=j}}">
+                                <span class="glyphicon glyphicon-small glyphicon-folder-close"
+                                      id ="{{=j}}" ></span>
+                            </button>
+
+                            <!-- Class name - currently a link. -->
+                            {{=class_key}} — {{=class_dict[class_key][0]}}%
+
+                            <button type="button"
+                                    class="btn btn-primary btn-xs pull-right"
+                                    onclick="window.location.href='{{=URL('parents', 'index', args=[class_dict[class_key][2], student])}}'">
+                                Class Details
+                            </button>
+                        </blockquote>
+
+                        {{standards = class_dict[class_key][1]}}
+                        {{z = 0}}
+                        {{key_list = []}}
+
+                        {{for standard in standards:}}
+                            {{z = z + 1}}
+                            {{key_list.append(standard)}}
+                        {{pass}}
+
+                        {{key_list.sort()}}
+                        {{x = 0}}
+
+                        <div class="collapse {{=j}}">
+                            <h4>Performance by standard</h4>
+
+                            <table class="table">
+                                <tbody>
+                                    {{for standard in key_list:}}
+                                    <tr>
+                                        <td>
+                                            {{=str(standards[standard][2])}} {{=str(standards[standard][3])}}
+                                        </td>
+                                        <td class="text-right">
+                                            {{=format((standards[standard][1]/standards[standard][0] * 100), '.2f')}}%
+                                        </td>
+                                    </tr>
+                                    {{pass}}
+                                </tbody>
+                            </table>
+                        </div>    
+
+                        {{j = j + 1}}
+                    </div>
+                </div>
+                {{pass}}
+            </div>
+        </div>
+    {{pass}}
 </div>
 
 {{block page_js}}

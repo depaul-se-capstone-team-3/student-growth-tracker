@@ -52,16 +52,27 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-4">
                     {{=form.custom.submit}}
+                    <button id="cancel" class="btn btn-primary">Cancel</button>
                 </div>
             </div>
-            {{=form.custom.end}}
 
+            {{=form.custom.end}}
         </div>
     </div>
 </div>
 
 {{block page_js}}
 <script src="{{=URL('static', 'js/sgt.js')}}"></script>
+
+<script>
+ $(document).ready(function() {
+     $(":button#cancel").click(function() {
+         window.location.href="{{=URL('classes', 'index', args = [class_id])}}";
+         return false;
+     });
+ });
+</script>
+
 {{end}}
