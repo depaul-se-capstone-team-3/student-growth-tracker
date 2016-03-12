@@ -2,52 +2,54 @@
 
 <div class="container-fluid well">
     <div class="row">
-        <div class="col-sm-12"><h1>Standards Overview</h1></div>
-    </div>
-
-    <div class="row">
         <div class="col-sm-12">
-
-            <table class="table">
-                {{for key in overview_data:}}
-                <tr>
-                    <td>
-                        <h3>
-                            <button class="btn btn-primary btn-xs btn-{{=key}}"
-                                    data-toggle="collapse"
-                                    data-target=".{{=str(key)}}collapsed">
-                                <span class="glyphicon glyphicon-small glyphicon-folder-close"
-                                   id ="{{=str(key)}}collapsed"></span>
-                            </button>
-                            Grade {{=key}}
-                        </h3>
-                    </td>
-                </tr>
-                {{for id in content_area_all[key]:}}
-                <tr class="collapse {{=str(key)}}collapsed">
-                    <td>{{=content_area_all[key][id]}}</td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-primary btn-xs"
-                                onclick="window.location.href='{{=URL('admin', 'detail', args = [key,id])}}'">
-                            Details
-                        </button>
-                    </td>
-                    <td>
-                        <button type="button"
-                                class="btn btn-primary btn-xs"
-                                onclick="window.location.href='{{=URL('admin', 'pdf_overview', args = [key,id])}}'">
-                            Download PDF
-                        </button>
-                    </td>
-                </tr>
-                {{pass}}
-                {{pass}}
-
-            </table>
-
+            <h1>Standards Overview</h1>
         </div>
     </div>
+
+    {{for key in overview_data:}}
+    <div class="row">
+        <div class="col-sm-8">
+            <blockquote class="blockquote blockquote-primary">
+                <!-- Folder icon button. Activates toggle -->
+                <button class="btn btn-primary btn-xs btn-{{=key}}"
+                        data-toggle="collapse" data-target=".{{=str(key)}}collapsed">
+                    <span class="glyphicon glyphicon-small glyphicon-folder-close"
+                          id ="{{=str(key)}}collapsed"></span>
+                </button>
+
+                Grade {{=key}}
+            </blockquote>
+
+            <div class="collapse {{=str(key)}}collapsed">
+                <table class="table">
+                    <tbody>
+                        {{for id in content_area_all[key]:}}
+                        <tr>
+                            <td>{{=content_area_all[key][id]}}</td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-primary btn-xs"
+                                        onclick="window.location.href='{{=URL('admin', 'detail', args = [key,id])}}'">
+                                    Details
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-primary btn-xs"
+                                        onclick="window.location.href='{{=URL('admin', 'pdf_overview', args = [key,id])}}'">
+                                    Download PDF
+                                </button>
+                            </td>
+                        </tr>
+                        {{pass}}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    {{pass}}
 </div>
 
 {{block page_js}}
