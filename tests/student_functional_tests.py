@@ -40,7 +40,7 @@ class StudentFunctionalTest(FunctionalTest):
 
         self.log_in()
 
-        math_one_link = self.browser.find_element_by_link_text('Math One')
+        math_one_link = self.browser.find_element_by_id('class-details-2')
         math_one_link.click()
 
         header = self.browser.find_element_by_tag_name('h3').text

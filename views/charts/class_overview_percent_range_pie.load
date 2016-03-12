@@ -1,43 +1,40 @@
-<div class="row">
-    <div class="col-md-6" align="right">
-        <canvas id="averageBreakdown" width="200" height="200"></canvas>
-    </div>
-    <div class="col-md-6" align="left">
-        <br><br><br>
-        <div id="js-legend" class="chart-legend"></div>
-    </div>
-</div>
+<canvas id="averageBreakdown" width="100" height="100"></canvas>
+<div id="js-legend" class="chart-legend"></div>
 
+{{block page_js}}        
 <script src="{{=URL('static', 'js/Chart.js')}}"></script>
 <script>
 
 var pieChartData = [
     {
         value: {{=pie_data[90]}},
-        color: "#d2eac8",
-        highlight: "#93c54b",
+        color: "#7fd25d",
+        highlight: "#d2eac8",
         label: "90% - 100% ",
     },
     {
         value: {{=pie_data[80]}},
-        color:"#faf3d1",
-        highlight: "#f0ad4e",
+        color: "#eecb3d",
+        highlight: "#faf3d1",
         label: "70% - 89% "
     },
     {
         value: {{=pie_data[70]}},
-        color:"#f1dada",
-        highlight: "#d9534f",
+        color: "#c14747",
+        highlight: "#f1dada",
         label: "Below 70% "
     }
 ]
 
- var pieChartOptions = {animateRotate : true,
-                       legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><br><span style=\"background-color:<%=segments[i].fillColor%>\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<%if(segments[i].label){%><%=segments[i].label%><%}%><%}%></ul>"
+ var pieChartOptions = {
+     animateRotate: true,
+     segmentStrokeColor: "#ccc",
+     legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><br><span style=\"background-color:<%=segments[i].fillColor%>\">&nbsp;&nbsp;&nbsp;&nbsp;</span>&nbsp;&nbsp;<%if(segments[i].label){%><%=segments[i].label%><%}%><%}%></ul>"
+ };
 
-};
  var averageBreakdownContext = $("#averageBreakdown").get(0).getContext("2d");
  var myPieChart = new Chart(averageBreakdownContext).Pie(pieChartData, pieChartOptions);
  document.getElementById('js-legend').innerHTML = myPieChart.generateLegend();
 
 </script>
+{{end}}

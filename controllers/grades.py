@@ -9,14 +9,6 @@ def index():
                        db.grade.grade_type,db.grade.score, db.grade.isPassFail)
     return dict(grid=grid)
 
-@auth.requires_login()
-def query():
-    gname = request.vars['gname']
-    assignment = db.student_grade.grade_id==gname
-    c1 = (db.student.user_id== db.auth_user.id)& (db.student.id == db.student_grade.student_id)
-    grade_query = db(assignment).select(db.auth_user.id, db.auth_user.first_name, db.auth_user.last_name, db.student_grade.student_score, left=db.student_grade.on(c1))
-    return dict(grade_query=grade_query)
-
 @auth.requires(auth.has_membership(role='Teacher'), requires_login=True)
 def create():
     # Generating form for creating a new assignment.
@@ -83,7 +75,7 @@ def create():
 
         redirect(URL('classes', 'index', args=[class_id]))
 
-    return dict(form=form, standards=standards_menu)
+    return dict(form=form, standards=standards_menu, class_id=class_id)
 
 @auth.requires_login()
 def edit():

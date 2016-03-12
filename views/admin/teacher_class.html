@@ -1,26 +1,33 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12"><h1>Teacher - Class Relation</h1></div>
+    </div>
+
     <div class="row">
         <div class="col-sm-12">
-            <h1>Teacher - Class Relation</h1>
             <table id='teacher_class_table' class="table table-striped table-condensed">
-                <tr>
-                    <td><h3>Teacher</h3></td>
-                    <td><h3>Grade</h3></td>
-                    <td><h3>Teaching</h3></td>
-                </tr>
-                {{for key in view_data.keys():}}
+                <thead>
+                    <tr>
+                        <th>Teacher</th>
+                        <th>Grade</th>
+                        <th>Teaching</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{for key in view_data.keys():}}
                     <tr>
                         <td>{{=view_data[key][0] + " " + view_data[key][1]}}</td>
                         <td>{{=view_data[key][2]}}</td>
-                        <td align="left">
-                        {{for i in view_data[key][3]:}}
-                        {{=i}}</br>
-                        {{pass}}
+                        <td>
+                            {{for i in view_data[key][3]:}}
+                            {{=i}}</br>
+                            {{pass}}
                         </td>
                     </tr>
-                {{pass}}
+                    {{pass}}
+                </tbody>
             </table>
         </div>
     </div>

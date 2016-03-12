@@ -144,8 +144,6 @@ def student_create():
     else:
         redirect(URL('default','index'))
 
-    form = SQLFORM.factory(db.auth_user, db.student)
-
     # begin handle upload csv
     upload_folder = os.path.join(request.folder, 'uploads')
 
@@ -186,6 +184,9 @@ def student_create():
     # end handle upload csv
 
     # begin handle single insert
+    form = SQLFORM.factory(db.auth_user, db.student,
+                           submit_button='Add Student')
+
     if form.process(formname='student_insert').accepted:
         uid = db.auth_user.insert(first_name=form.vars.first_name,
                                   last_name=form.vars.last_name,
@@ -298,29 +299,42 @@ def assign_student_to_class():
 
     student_query = ((db.student.id > 0)&
                     (db.student.user_id == db.auth_user.id))
-    students = db(student_query).select(db.student.id, db.student.school_id_number, db.auth_user.first_name, db.auth_user.last_name)
+    students = db(student_query).select(db.student.id,
+                                        db.student.school_id_number,
+                                        db.auth_user.first_name,
+                                        db.auth_user.last_name)
 
     options = []
     for row in students:
-        text = '%s %s  -  %s' % (row.auth_user.first_name, row.auth_user.last_name, row.student.school_id_number)
+        text = '%s %s  -  %s' % (row.auth_user.first_name,
+                                 row.auth_user.last_name,
+                                 row.student.school_id_number)
         options.append(OPTION(text, _value=row.student.id))
 
-    name_id = SELECT(options, _name='students',
-                            _class='generic-widget form-control')
+    name_id = SELECT(options,
+                     _id='students',
+                     _name='students',
+                     _class='generic-widget form-control')
 
     class_query = ((db.classes.id > 0))
-    class_field = Field("Class",  requires=IS_IN_DB(db(class_query), "classes.id", '%(name)s', zero = None))
+    class_field = Field("Class",
+                        requires=IS_IN_DB(db(class_query),
+                                          "classes.id",
+                                          '%(name)s',
+                                          zero = None))
 
     form = SQLFORM.factory(class_field, submit_button='Assign To Class')
     form.insert(-1, name_id)
 
 
     if form.process().accepted:
-        row = db.student_classes(student_id = form.vars.students, class_id = form.vars.Class)
+        row = db.student_classes(student_id=form.vars.students,
+                                 class_id=form.vars.Class)
         if not row:
-            db.student_classes.insert(student_id = form.vars.students, class_id = form.vars.Class)
+            db.student_classes.insert(student_id=form.vars.students,
+                                      class_id=form.vars.Class)
         else:
-            response.flash = "Student already in that class !"
+            response.flash = "Student already in that class!"
             pass
 
     return dict(form=form, name_id=name_id)
@@ -422,43 +436,64 @@ def standard_overview():
 
     grade_query = ((db.classes.grade_level))
     grade = db(grade_query).select(db.classes.grade_level)
+
     grade_list = []
+
     for row in grade:
         grade_list.append(row.grade_level)
+
     grade_list = list(set(grade_list))
+
     content_ids={}
     content_names={}
     overview_data = {}
     content_area_all = {}
+
     for grade in grade_list:
-        standard_query = ((db.classes.grade_level == grade)&
-                          (db.classes.id == db.student_classes.class_id)&
-                          (db.student.id == db.student_classes.student_id)&
-                          (db.student.id == db.student_grade.student_id)&
-                          (db.grade.id == db.student_grade.grade_id)&
-                          (db.grade.id == db.grade_standard.grade_id)&
-                          (db.standard.id == db.grade_standard.standard_id)&
-                          (db.classes.id == db.class_grade.class_id)&
-                          (db.grade.id == db.class_grade.grade_id)&
+        standard_query = ((db.classes.grade_level == grade) &
+                          (db.classes.id == db.student_classes.class_id) &
+                          (db.student.id == db.student_classes.student_id) &
+                          (db.student.id == db.student_grade.student_id) &
+                          (db.grade.id == db.student_grade.grade_id) &
+                          (db.grade.id == db.grade_standard.grade_id) &
+                          (db.standard.id == db.grade_standard.standard_id) &
+                          (db.classes.id == db.class_grade.class_id) &
+                          (db.grade.id == db.class_grade.grade_id) &
                           (db.standard.content_area == db.contentarea.id))
 
-        standard_list = db(standard_query).select(db.standard.id, db.standard.short_name, db.standard.reference_number,db.student_grade.student_score, db.grade.score, db.contentarea.id, db.contentarea.name)
+        standard_list = db(standard_query).select(
+            db.standard.id,
+            db.standard.short_name,
+            db.standard.reference_number,
+            db.student_grade.student_score,
+            db.grade.score,
+            db.contentarea.id,
+            db.contentarea.name)
+
         content_area = {}
         standard_dict = {}
+
         for row in standard_list:
             if row.standard.id in standard_dict.keys():
                 if((row.grade.score != 0.0) | (row.student_grade.student_score != 0.0)):
                     max_score = standard_dict[row.standard.id][0] + row.grade.score
                     student_score = standard_dict[row.standard.id][1] + row.student_grade.student_score
-                    standard_dict[row.standard.id] = [max_score, student_score, row.standard.reference_number, row.standard.short_name]
+                    standard_dict[row.standard.id] = [max_score,
+                                                      student_score,
+                                                      row.standard.reference_number,
+                                                      row.standard.short_name]
             else:
                 content_area[row.contentarea.id]= row.contentarea.name
-                standard_dict[row.standard.id] = [row.grade.score, row.student_grade.student_score, row.standard.reference_number, row.standard.short_name]
+                standard_dict[row.standard.id] = [row.grade.score,
+                                                  row.student_grade.student_score,
+                                                  row.standard.reference_number,
+                                                  row.standard.short_name]
+
         content_area_all[grade] = content_area
         overview_data[grade] = standard_dict
 
     #need content Name and contentID list
-    return dict(overview_data = overview_data, content_area_all = content_area_all)
+    return dict(overview_data=overview_data, content_area_all=content_area_all)
 
 
 def class_list():

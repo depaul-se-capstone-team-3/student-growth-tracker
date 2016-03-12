@@ -4,6 +4,7 @@
     </div>
 </div>
 
+{{block page_js}}
 <script src="{{=URL('static', 'js/Chart.js')}}"></script>
 <script>
 
@@ -35,12 +36,12 @@
                         scaleSteps: 10,
                         scaleStepWidth: 5,
                         scaleStartValue: 50,
-                        barValueSpacing:70,
-                        barDatasetSpacing:20,
+                        barValueSpacing: 30,
+                        barDatasetSpacing: 20,
                        };
 
  var barChartContext = $("#admin_standard_overview_bar{{=key}}").get(0).getContext("2d");
  var myBarChart{{=key}} = new Chart(barChartContext).Bar(barChartData, barChartOptions);
 
-
 </script>
+{{end}}

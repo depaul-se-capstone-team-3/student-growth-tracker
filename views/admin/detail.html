@@ -1,25 +1,24 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h1>Grade {{=grade_level}}</h1>
-            <h1>{{=content_name[0].name}}</h1>
-            <table class="table">
-                {{for key in detail_data.keys():}}
-                    <tr class="{{=get_contextual_classes(detail_data[key][2])}}">
-                        <td>{{=detail_data[key][0]}} {{=detail_data[key][1]}}</td>
-                        <td>{{=detail_data[key][2]}} %</td>
-                    </tr>
-
-                {{pass}}
-            </table>
-
-            <div class="col-sm-12">
-                    {{=LOAD('charts', 'admin_standard_overview_detail_bar.load', args=[grade_level,content_id])}}
-            </div>
-
-
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <h3>{{=content_name[0].name}}</h3>
+
+            {{for key in detail_data.keys():}}
+            <blockquote class="blockquote blockquote-{{=get_contextual_classes(detail_data[key][2])}}">
+                {{=detail_data[key][0]}} {{=detail_data[key][1]}} — {{=detail_data[key][2]}}%
+            </blockquote>
+            {{pass}}
+        </div>
+    </div>
+
+    {{=LOAD('charts', 'admin_standard_overview_detail_bar.load', args=[grade_level,content_id])}}
+
 </div>

@@ -1,8 +1,17 @@
 {{extend 'layout.html'}}
+
+{{block head}}
+<link rel="stylesheet" media="screen" href="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.css">
+{{end}}
+
 <h1>Current Assignments</h1>
-<script src="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.js"></script>
+
 <div id="grade_table">
 </div>
+
+{{block page_js}}
+<script src="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.js"></script>
+
 <script type="text/javascript">
         gradeTableData = {{=XML(grid.json())}},
         container = document.getElementById('grade_table'),
@@ -31,28 +40,4 @@
             editor:false,
             contextMenu:true});
 </script>
-
-
-<link rel="stylesheet" media="screen" href="http://handsontable.com/bower_components/handsontable/dist/handsontable.full.css">
-
-<!--
-<table class="table">
-    <tr>
-        <td>Assignment Name </td>
-        <td>Date Assigned   </td>
-        <td>Due Date        </td>
-        <td>Grade Type      </td>
-        <td>Total Score     </td>
-        <td>Pass/Fail       </td>
-    </tr>
-    <tr>
-        {{for row in grid:}}
-        <td>{{=A(row.name, _href=URL('grades','query',vars=dict(gname=row.id)))}}</td>
-        <td>{{=row.date_assigned}}</td>
-        <td>{{=row.due_date}}</td>
-        <td>{{=row.grade_type}}</td>
-        <td>{{=row.score}}</td>
-        <td>{{=row.isPassFail}}</td>
-    </tr>
-    {{pass}}
-</table>-->
+{{end}}

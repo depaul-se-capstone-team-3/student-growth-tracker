@@ -6,51 +6,49 @@
 <link rel="stylesheet" media="screen" href="{{=URL('static', 'js/dist/handsontable.full.css')}}">
 {{end}}
 
-<div class="row">
-    <div class="col-sm-12">
-        <h1 class="class-name">{{=class_name}}</h1>
-    </div>
-</div>
-
-<div class="row options-row">
-    
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12"><h3>Filter by standard:</h3></div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-8">
-                <form>
-                    <select id="standards-menu" class="generic-widget form-control">
-                        <option value="-1">All</option>
-                        {{for standard in standards:}}
-                        <option value="{{=standard.id}}">
-                            {{=standard.short_name}}: {{=standard.reference_number}}
-                        </option>
-                        {{pass}}
-                    </select>
-                </form>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="btn-group btn-group-justified" role="group">
-
-                    <a href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}"
-                       id="new-assignment" class="btn btn-default">New Assignment</a>
-
-                </div>
-            </div>
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 class="class-name">{{=class_name}}</h1>
         </div>
     </div>
 
-</div>
+    <div class="row">
+        <div class="col-sm-12"><h3>Filter by standard:</h3></div>
+    </div>
 
-<div class="row">
+    <div class="row form-group">
+        <div class="col-sm-8">
 
-    <div class="col-sm-12">
-        <!-- This needs to refresh when the window resizes. -->
-        <div id="student_grades" class="dataTable hot-scrollable"></div>
+            <form>
+                <select id="standards-menu" class="generic-widget form-control">
+                    <option value="-1">All</option>
+                    {{for standard in standards:}}
+                    <option value="{{=standard.id}}">
+                        {{=standard.short_name}}: {{=standard.reference_number}}
+                    </option>
+                    {{pass}}
+                </select>
+            </form>
+
+        </div>
+
+        <div class="col-sm-4">
+            <div class="btn-group btn-group-justified" role="group">
+
+                <a href="{{=URL('grades', 'create', args = [class_id,auth.user_id])}}"
+                   id="new-assignment" class="btn btn-primary">New Assignment</a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+            <!-- This needs to refresh when the window resizes. -->
+            <div id="student_grades" class="dataTable hot-scrollable"></div>
+        </div>
     </div>
 
 </div>
@@ -67,24 +65,21 @@
 
  var testRenderer = function(instance, td, row, col, prop, value, cellProperties) {
      Handsontable.renderers.NumericRenderer.apply(this, arguments);
+
      if ((col > 0)) {
-         delta = 0.001;
          new_value = parseFloat(value);
          max_score = parseFloat(max_scores[col]);
          student_score = parseFloat(value);
          percent_score = student_score / max_score;
          
-         if ((percent_score - delta) < 0.0) {
-             td.style.backgroundColor = '#cceeff'
-         }
-         else if (percent_score >= 0.90) {
-             td.style.backgroundColor = '#ccffcc' // These can probably be changed to use a css class.
+         if (percent_score >= 0.90) {
+             td.className = td.className + " success";
          }
          else if ((percent_score < 0.90) && (percent_score >= 0.70)) {
-             td.style.backgroundColor = '#ffffcc' // These can probably be changed to use a css class.
+             td.className = td.className + " warning";
          }
          else if (percent_score < 0.70) {
-             td.style.backgroundColor = '#ff9999' // These can probably be changed to use a css class.
+             td.className = td.className + " danger";
          }
      }
  };

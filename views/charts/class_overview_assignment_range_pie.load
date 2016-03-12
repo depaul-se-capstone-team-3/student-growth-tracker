@@ -4,6 +4,7 @@
     </div>
 </div>
 
+{{block page_js}}
 <script src="{{=URL('static', 'js/Chart.js')}}"></script>
 <script>
 
@@ -45,3 +46,4 @@ var pieChartData = [
  var myPieChart = new Chart(assignmentBreakdownContext).Pie(pieChartData, pieChartOptions);
 
 </script>
+{{end}}
