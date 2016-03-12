@@ -1,82 +1,105 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h1>{{=parent_name}} Student Overview</h1>
+        </div>
+    </div>
 
-            <table class="table">
-                {{j = 0}}
-                {{for student in full_dict.keys():}}
-                    {{class_dict = full_dict[student][1]}}
-                            {{i = 0}}
-                            {{total_average = 0}}
-                            {{for key in class_dict.keys():}}
-                                {{temp_average = float(class_dict[key][0])}}
-                                {{total_average = total_average + temp_average}}
-                                {{i = i + 1}}
-                            {{pass}}
-                        {{total_average = total_average/i}}
-                        {{#code below figures out colors based on input values}}
-                   <tr class="collapse-group">
-                        <td><h3>{{=str(full_dict[student][0])}}</h3></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {{for class_key in class_dict.keys():}}
-                         <tr class="{{=get_contextual_classes(float(class_dict[class_key][0]))}}">
-                            <td>
-                                {{#code below figures out the button color based on input values}}
-                            <button class="btn btn-xs btn-{{=get_contextual_classes(float(class_dict[class_key][0]))}}" data-toggle="collapse"  data-target=".{{=j}}">
-                                <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=j}}" ></i></button>&nbsp&nbsp
-                            <span class="h3">{{=A(class_key, _href=URL('parents', 'index', args=[class_dict[class_key][2], student]))}}</span>
-                            </td>
-                            <td></td>
-                            <td><span class="h3">{{=class_dict[class_key][0]}} %</span></td>
-                        </tr>
+    {{j = 0}}
+
+    {{for student in full_dict.keys():}}
+        {{class_dict = full_dict[student][1]}}
+        {{i = 0}}
+        {{total_average = 0}}
+
+        {{for key in class_dict.keys():}}
+            {{temp_average = float(class_dict[key][0])}}
+            {{total_average = total_average + temp_average}}
+            {{i = i + 1}}
+        {{pass}}
+
+        {{total_average = total_average/i}}
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- Student Name -->
+                <h3>{{=str(full_dict[student][0])}}</h3>
+
+                {{for class_key in class_dict.keys():}}
+                <div class="row">
+                    <div class="col-sm-8">
+                        <blockquote class="blockquote blockquote-{{=get_contextual_classes(float(class_dict[class_key][0]))}}">
+                            <!-- Folder icon button. Activates toggle -->
+                            <button class="btn btn-xs btn-{{=get_contextual_classes(float(class_dict[class_key][0]))}}"
+                                    data-toggle="collapse" data-target=".{{=j}}">
+                                <span class="glyphicon glyphicon-small glyphicon-folder-close"
+                                      id ="{{=j}}" ></span>
+                            </button>
+
+                            {{=class_key}} — {{=class_dict[class_key][0]}}%
+
+                            <button id="class-{{=j}}" type="button"
+                                    class="btn btn-primary btn-xs pull-right"
+                                    onclick="window.location.href='{{=URL('parents', 'index', args=[class_dict[class_key][2], student])}}'">
+                                Class Details
+                            </button>
+                        </blockquote>
+
                         {{standards = class_dict[class_key][1]}}
                         {{z = 0}}
                         {{key_list = []}}
+
                         {{for standard in standards:}}
                             {{z = z + 1}}
                             {{key_list.append(standard)}}
-                            {{pass}}
+                        {{pass}}
+
                         {{key_list.sort()}}
                         {{x = 0}}
-                        {{for standard in key_list:}}
-                        <tr class="collapse {{=j}}">
 
+                        <div class="collapse {{=j}}">
+                            <h4>Performance by standard</h4>
 
+                            <table class="table">
+                                <tbody>
+                                    {{for standard in key_list:}}
+                                    <tr>
+                                        <td>
+                                            {{=str(standards[standard][2])}} {{=str(standards[standard][3])}}
+                                        </td>
+                                        <td class="text-right">
+                                            {{=format((standards[standard][1]/standards[standard][0] * 100), '.2f')}}%
+                                        </td>
+                                    </tr>
+                                    {{pass}}
+                                </tbody>
+                            </table>
+                        </div>    
 
-                            <td>{{=str(standards[standard][2])}} {{=str(standards[standard][3])}}</td>
-
-                            <td>{{=format((standards[standard][1]/standards[standard][0] * 100), '.2f')}} %</td>
-                        </tr>
-                        {{pass}}
                         {{j = j + 1}}
-                    {{pass}}
-                    <script>
-                        <!--code below handles opening the folder icon -->
-                        $('.{{=j}}').on('shown.bs.collapse', function () {$("#{{=j}}").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
-                        <!--code below handles closing the folder icon -->
-                        $('.{{=j}}').on('hidden.bs.collapse', function () {$("#{{=j}}").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
-                    </script>
+                    </div>
+                </div>
                 {{pass}}
-
-                </table>
             </div>
         </div>
-    </div>
-<style>
-    .btn{border:none;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase}
-    .btn-xs,.btn-group-xs>.btn{padding:1px 5px;font-size:18px;border-radius:3px}
-    
-    .btn-success {  color: #fff;  background-color: #94d194;  border-color: #4cae4c;}
-    .btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.open > .dropdown-toggle.btn-success {  color: #fff;  background-color: #449d44;  border-color: #398439;}
-    
-    .btn-warning { color: #fff; background-color: #f3bd72; border-color: #eea236;}
-    .btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.open > .dropdown-toggle.btn-warning { color: #fff; background-color: #ec971f; border-color: #d58512;}
-    
-    .btn-danger { color: #fff; background-color: #e48481; border-color: #d43f3a;}
-    .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger { color: #fff; background-color: #c9302c; border-color: #ac2925;}
-</style>
+    {{pass}}
+</div>
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+<script>
+
+ <!--code below handles opening the folder icon -->
+ $('.{{=j}}').on('shown.bs.collapse', function () {
+     $("#{{=j}}").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");
+ });
+
+ <!--code below handles closing the folder icon -->
+ $('.{{=j}}').on('hidden.bs.collapse', function () {
+     $("#{{=j}}").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");
+ });
+
+</script>
+{{end}}

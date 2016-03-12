@@ -20,19 +20,24 @@ def detect_trends_scheduler():
         count_j = 0
         count_k = 0
         assignment_dict = {}
+        
         for single_class in classes:
             class_count += 1
             assignments = assignments = get_student_assignment_list(student.id, single_class.id)
             student_score= 0
             student_possible = 0
             student_missing_assignments = 0
+            missing_assignment_list=[]
+            individual_assignment_count=0
             for assignment in assignments:
-                assignment_count += 1
-                student_score += assignment.student_grade.student_score
+                assignment_count +=1
+                individual_assignment_count += 1
+                student_score = assignment.student_grade.student_score
                 student_possible += assignment.grade.score
                 grade_info = [assignment.grade.name, assignment.student_grade.student_score, assignment.grade.score]
                 assignment_list.append(grade_info)
                 if (student_score == 0):
+                    missing_assignment_list.append(assignment.grade.due_date)
                     student_missing_assignments += 1
             average_values = [student.id, single_class.id, student_score, student_possible]
             student_average_values_list.append(average_values)
@@ -47,6 +52,32 @@ def detect_trends_scheduler():
                                         class_id=single_class.id,
                                         date=datetime.datetime.today().date(),
                                         warning_text=("Student is missing excessive grades."))
+            if(len(missing_assignment_list)>2):
+                miss_list = sorted(missing_assignment_list)
+                i = -1
+                j = 0
+                miss_total = 0
+                for miss in miss_list:
+                    if i == -1:
+                        i+=1
+                        j+=1
+                        continue
+                    times = miss_list[i] - miss_list[j]
+                    if times.days >= -1 & times.days < 0:
+                        miss_total +=1
+                    elif miss_total < 2:
+                        miss_total = 0
+                    elif miss_total >= 2:
+                        break
+                    i+=1
+                    j+=1
+
+                if(miss_total > 0):
+                    db.notifications.insert(student_id=student.id,
+                                        class_id=single_class.id,
+                                        date=datetime.datetime.today().date(),
+                                        warning_text=("two or more consecutive missing assignments ("+str(miss_total+1)+")"))
+            
     session.flash="Trend Database Populated with New Warnings."
     #returns are largely still for testing purposes
 #    return dict(student_count=student_count,

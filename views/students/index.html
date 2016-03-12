@@ -1,37 +1,58 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h2>{{=name}}</h2>
-            <h3>{{=class_name}}</h3>
-            <table class="table">
-                <tr>
-                    <td><button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('students', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">Download Student Report</button></td>
-                </tr>
-                <tr>
-                    <td><b>Assignment Name</b></td>
-                    <td></td>
-                    <td><div class="text-center"><b>Score</b></div></td>
-                    <td></td>
-                    <td><div class="text-center"><b>Due</b></div></td>
-                </tr>
-            {{for row in assignment_data:}}
-                <tr>
-                    <td>{{=row[0]}}</td>
-                    <td></td>
-                    <td class="{{=get_contextual_classes(row[3])}}"><div class="text-center">{{=row[1]}} / {{=row[2]}}</div></td>
-                    <td></td>
-                    <td class="{{=row[5]}}"><div class="text-center">{{=row[4]}}</div></td>
-                </tr>
-            {{pass}}
-            </table>
-            <br>
-            <h3>Student Scores vs. Class Averages</h3>
-            <br>
-            <div class="col-sm-12">
-                    {{=LOAD('charts', 'student_index_line.load', args=[class_id,student_id])}}
-            </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>{{=class_name}}</h3>
+        </div>
+
+        <div class="col-sm-6 text-right">
+            <h3>
+                <button type="button" class="btn btn-primary btn-xs"
+                        onclick="window.location.href='{{=URL('students', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">
+                    Download Student Report
+                </button>
+            </h3>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-padded-cols">
+                <tr>
+                    <th>Assignment Name</th>
+                    <th class="text-center">Score</th>
+                    <th class="text-center">Due</th>
+                </tr>
+
+                {{for row in assignment_data:}}
+                <tr>
+                    <td>{{=row[0]}}</td>
+                    <td class="{{=get_contextual_classes(row[3])}} text-center">
+                        {{=row[1]}} / {{=row[2]}}
+                    </td>
+                    <td class="{{=row[5]}} text-center">{{=row[4]}}</td>
+                </tr>
+                {{pass}}
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <h3>Student Scores vs. Class Averages</h3>
+
+            {{=LOAD('charts', 'student_index_line.load', args=[class_id,student_id])}}
+        </div>
+    </div>
+
 </div>
+
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>

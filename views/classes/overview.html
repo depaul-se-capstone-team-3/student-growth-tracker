@@ -1,36 +1,52 @@
 {{extend 'layout.html'}}
 
-
-<div class="container">
-
-    <div class="row"> <!-- class average -->
-        <div class="col-md-4">
-            <h1>{{=class_name}}</h1>
-            <button id="assignments" type="button" class="btn btn-success btn-xs" onclick="window.location.href='{{=URL('classes', 'index', args = [class_id])}}'">Assignments</button>
-            <button type="button" class="btn btn-default btn-xs" onclick="window.location.href='{{=URL('classes', 'pdf_overview', args = [class_id])}}'">Download PDF</button>
-            <button type="button" class="btn btn-danger btn-xs" onclick="window.location.href='{{=URL('classes', 'detail_notifications', args = [class_id])}}'">Detail Notifications</button>
-        </div>
-    </div>
-    <br>
+<div class="container-fluid well">
     <div class="row">
-        <div class="col-md-6" align="center">
-            <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_pie.load', args=2)}}</div>  -->
-            <div class="row">{{=LOAD('charts', 'class_overview_percent_range_pie.load', args=class_id)}}</div>
-            <!--  <div class="col-md-4" align="center">{{=LOAD('charts', 'class_overview_assignment_range_pie.load', args=2)}}</div> -->
+        <div class="col-sm-8">
+            <h1>{{=class_name}}</h1>
+
+            <button id="assignments" type="button"
+                    class="btn btn-primary btn-xs"
+                    onclick="window.location.href='{{=URL('classes', 'index', args = [class_id])}}'">
+                Assignments
+            </button>
+            <button type="button"
+                    class="btn btn-primary btn-xs"
+                    onclick="window.location.href='{{=URL('classes', 'pdf_overview', args = [class_id])}}'">
+                Download PDF
+            </button>
+            <button type="button"
+                    class="btn btn-primary btn-xs"
+                    onclick="window.location.href='{{=URL('classes', 'detail_notifications', args = [class_id])}}'">
+                Detail Notifications
+            </button>
         </div>
 
-        <div class="col-md-6" align="center"> <!-- average  breakdown -->
-            <div class="row"><h3>Class Average: &nbsp{{=average}} %</h3></div>
-            <div class="row"><h3>Total Students: &nbsp{{=total_students}}</h3></div>
-            <div class="row"><h3>Total Assignments: &nbsp{{=total_grades}}</h3></div>
+        <div class="col-sm-4">
+            <blockquote class="blockquote blockquote-sm blockquote-{{=get_contextual_classes(float(average))}}">
+                <table>
+                    <tr>
+                        <td>Class Average:</td>
+                        <td class="text-right">{{=average}}%</td>
+                    </tr>
+                    <tr>
+                        <td>Total Students:</td>
+                        <td class="text-right">{{=total_students}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Assignments:</td>
+                        <td class="text-right">{{=total_grades}}</td>
+                    </tr>
+                </table>
+            </blockquote>
         </div>
-
     </div>
 
     <div class="row"> <!-- tables (standards performance and assignments due soon) -->
+        <div class="col-sm-6"> <!-- standards performance -->
 
-        <div class="col-md-6"> <!-- standards performance -->
             <h2>Standards</h2>
+
             <table class="table">
                 {{for row in standard_dict:}}
                 <tr class="{{=get_contextual_classes(standard_dict[row][1]/standard_dict[row][0]*100)}}">
@@ -40,58 +56,72 @@
                 </tr>
                 {{pass}}
             </table>
+
         </div>
 
-        <div class="col-md-6"> <!-- due soon -->
-            <h2>Due Soon</h2>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>Class Performance</h2>
+                    <div id="pie-chart-holder">
+                        {{=LOAD('charts', 'class_overview_percent_range_pie.load', args=class_id)}}
+                    </div>
+                </div>
+            </div>
 
-            <table class="table">
-                {{if (due_soon_amount != 0):}}
-                {{for row in due_soon:}}
-                <tr>
-                    <td>{{=row.name}}</td>
-                    <td>{{=row.due_date.strftime(DISPLAY_DATE_FORMAT)}}</td>
-                </tr>
-                {{pass}}
-                {{else:}}
-                <tr>
-                    <td>NO UPCOMING ASSIGNMENTS</td>
-                    <td></td>
-                </tr>
-                {{pass}}
-            </table>
+            <div class="row">
+                <div class="col-sm-12"> <!-- due soon -->
+                    <h2>Due Soon</h2>
+
+                    {{if (due_soon_amount != 0):}}
+                    <table class="table">
+                        {{for row in due_soon:}}
+                        <tr>
+                            <td>{{=row.name}}</td>
+                            <td>{{=row.due_date.strftime(DISPLAY_DATE_FORMAT)}}</td>
+                        </tr>
+                        {{pass}}
+                    </table>
+
+                    {{else:}}
+                    <h4>No upcoming assignments</h4>
+                    {{pass}}
+
+                </div>
+            </div>
         </div>
+    </div>    
 
-    </div>
     <!-- charts -->
     {{=LOAD('charts', 'class_overview_standard_bar.load', args=class_id)}}
 
-    <br>
-    <br>
-    <br>
-    <h1>Notifications</h1>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <tr>
-                        <td><b>Name</b></td>
-                        <td><b>School ID</b></td>
-                        <td><b>Warning</b></td>
-                    </tr>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Notifications</h2>
+
+            {{if notifi:}}
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>School ID</th>
+                    <th>Warning</th>
+                </tr>
                 {{for row in notifi:}}
-                    <tr class="danger">
-                        <td>{{=row.auth_user.first_name}} {{=row.auth_user.last_name}}</td>
-                        <td>{{=row.student.school_id_number}}</td>
-                        <td>{{=row.notifications.warning_text}}</td>
-                    </tr>
+                <tr class="danger">
+                    <td>{{=row.auth_user.first_name}} {{=row.auth_user.last_name}}</td>
+                    <td>{{=row.student.school_id_number}}</td>
+                    <td>{{=row.notifications.warning_text}}</td>
+                </tr>
                 {{pass}}
-                </table>
-            </div>
+            </table>
+            {{else:}}
+            <h4>No notifications.</h4>
+            {{pass}}
+
         </div>
     </div>
-
-
-
-
 </div>
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+{{end}}

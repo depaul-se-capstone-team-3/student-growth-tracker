@@ -1,81 +1,81 @@
 {{extend 'layout.html'}}
 
-<h1>{{=date_header}} Attendance</h1>
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1>{{=date_header}} Attendance</h1>
+        </div>
 
-<div class="row">
-    <div class="col-sm-3">
-        <select id="attendance_month" class="generic-widget form-control">
-            {{for month in menu_months:}}
-            <option value="{{=month[0]}}"
-                    {{if month[1] == date_header:}}selected{{pass}}>{{=month[1]}}</option>
-            {{pass}}
-        </select>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-12">
-
-        <table id="attendance-table" class="table table-striped">
-
-            <thead>
-                <tr>
-                    <th></th>
-
-                    {{for date in sorted(class_days.keys()):}}
-
-                    <th>
-                        {{=date.day}}<br>
-                        {{=class_days[date][0]}}
-                    </th>
-
-                    {{pass}}
-
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td>Select All</td>
-
-                    {{for i in range(len(class_days.keys())):}}
-                    <td>
-                        <input type="checkbox" id="sa_{{=i}}" name="sa_{{=i}}"
-                               data-checkbox-name="{{=i}}" class="selectall" />
-                    </td>
-                    {{pass}}
-                </tr>
-
-                {{ordered_class_day_list = sorted(class_days.keys())}}
-
-                {{for student in sorted(class_list.keys()):}}
-                {{student_id = class_list[student]}}
-                <tr>
-
-                    <td>
-                        {{=student}}
-                    </td>
-
-                    {{i = 0}}
-                    {{for class_day in ordered_class_day_list:}}
-                    {{attendance_record_id, student_present = attendance[student_id][class_day]}}
-                    <td>
-                        <input type="checkbox" name="{{=i}}" class="attendance-checkbox"
-                               value="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
-                               data-select-all="sa_{{=i}}"
-                               {{ if student_present:}}
-                               checked="checked"
-                               {{pass}}
-                        />
-                    </td>
-                    {{i += 1}}
-                    {{pass}}
-
-                </tr>
+        <div class="col-sm-3">
+            <select id="attendance_month" class="generic-widget form-control">
+                {{for month in menu_months:}}
+                <option value="{{=month[0]}}"
+                        {{if month[1] == date_header:}}selected{{pass}}>{{=month[1]}}</option>
                 {{pass}}
-            </tbody>
+            </select>
+        </div>
+    </div>
 
-        </table>
+    <div class="row">
+        <div class="col-sm-12">
+
+            <table id="attendance-table" class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>&nbsp;</th> <!-- No header for this column. -->
+
+                        {{for date in sorted(class_days.keys()):}}
+                        <th class="text-right">
+                            {{=date.day}}<br>
+                            {{=class_days[date][0]}}
+                        </th>
+                        {{pass}}
+
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Select All</td>
+
+                        {{for i in range(len(class_days.keys())):}}
+                        <td>
+                            <input type="checkbox" id="sa_{{=i}}" name="sa_{{=i}}"
+                                   data-checkbox-name="{{=i}}" class="selectall" />
+                        </td>
+                        {{pass}}
+                    </tr>
+
+                    {{ordered_class_day_list = sorted(class_days.keys())}}
+
+                    {{for student in sorted(class_list.keys()):}}
+                    {{student_id = class_list[student]}}
+                    <tr>
+
+                        <td>{{=student}}</td>
+
+                        {{i = 0}}
+                        {{for class_day in ordered_class_day_list:}}
+                        {{attendance_record_id, student_present = attendance[student_id][class_day]}}
+                        <td>
+                            <input type="checkbox" name="{{=i}}" class="attendance-checkbox"
+                                   value="{{=attendance_record_id}},{{=class_day}},{{=student_id}},{{=class_id}}"
+                                   data-select-all="sa_{{=i}}"
+                                   {{ if student_present:}}
+                                   checked="checked"
+                                   {{pass}}
+                            />
+                        </td>
+                        {{i += 1}}
+                        {{pass}}
+
+                    </tr>
+                    {{pass}}
+                </tbody>
+
+            </table>
+        </div>
     </div>
 </div>
 

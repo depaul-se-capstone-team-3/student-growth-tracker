@@ -1,15 +1,15 @@
 {{extend 'layout.html'}}
-<h1>Create a Grade</h1>
 
-{{=form.custom.begin}}
+<div class="container-fluid well">
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <h1>Create a Grade</h1>
 
-<div class="row">
-    <div class="col-sm-10">
-        <div class="container-fluid well">
+            {{=form.custom.begin}}
 
             <div class="row">
                 <div class="col-sm-12">
-                    <h4>Name</h4>
+                    <label for="grade_name">Name</label>
                     {{=form.custom.widget.name}}
                 </div>
             </div>
@@ -17,18 +17,18 @@
             <div class="row">
 
                 <div class="col-sm-4">
-                    <h4>Display Date</h4>
+                    <label for="grade_display_date">Display Date</label>
                     {{=form.custom.widget.display_date}}
                 </div>
 
                 <div class="col-sm-4">
-                    <h4>Date Assigned</h4>
+                    <label for="grade_date_assigned">Date Assigned</label>
                     {{=form.custom.widget.date_assigned}}
                 </div>
 
 
                 <div class="col-sm-4">
-                    <h4>Date Due</h4>
+                    <label for="grade_due_date">Date Due</label>
                     {{=form.custom.widget.due_date}}
                 </div>
 
@@ -36,32 +36,43 @@
 
             <div class="row">
                 <div class="col-sm-4">
-                    <h4>Score</h4>
+                    <label for="grade_score">Score</label>
                     {{=form.custom.widget.score}}
                 </div>
+
                 <div class="col-sm-4">
-                    <h4>Grade Type</h4>
+                    <label for="grade_grade_type">Grade Type</label>
                     {{=form.custom.widget.grade_type}}
                 </div>
 
                 <div class="col-sm-4">
-                    <h4>Standards</h4>
+                    <label for="standards">Standards</label>
                     {{=standards}}
                 </div>
             </div>
 
             <div class="row">
-            </div>
-
-            <div class="row">
-                <div class="col-sm-2">
-                    <h4>&nbsp;</h4>
+                <div class="col-sm-4">
                     {{=form.custom.submit}}
+                    <button id="cancel" class="btn btn-primary">Cancel</button>
                 </div>
             </div>
 
+            {{=form.custom.end}}
         </div>
     </div>
-    <div class="col-sm-2"></div>
 </div>
-{{=form.custom.end}}
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>
+
+<script>
+ $(document).ready(function() {
+     $(":button#cancel").click(function() {
+         window.location.href="{{=URL('classes', 'index', args = [class_id])}}";
+         return false;
+     });
+ });
+</script>
+
+{{end}}

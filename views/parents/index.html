@@ -1,42 +1,57 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h1>{{=parent_name}}</h1>
             <h2>Student: {{=name}}</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
             <h3>{{=class_name}}</h3>
-            <div>
-                <button type="button" class="btn btn-default btn-xs"
+        </div>
+
+        <div class="col-sm-6 text-right">
+            <h3> <!-- The h3 is a hack. Fix it. -->
+                <button type="button" class="btn btn-primary btn-xs"
                         onclick="window.location.href='{{=URL('parents', 'pdf_overview', args = [student_id,class_id, assignment_count])}}'">
                     Download Student Report
                 </button>
-            </div>
-            <table id="student_grade_table" class="table">
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="student_grade_table" class="table table-padded-cols">
                 <tr>
-                    <td><b>Assignment Name</b></td>
-                    <td></td>
-                    <td><div class="text-center"><b>Score</b></div></td>
-                    <td></td>
-                    <td><div class="text-center"><b>Due</b></div></td>
+                    <th>Assignment Name</th>
+                    <th class="text-center">Score</th>
+                    <th class="text-center">Due</th>
                 </tr>
-            {{for row in assignment_data:}}
+                {{for row in assignment_data:}}
                 <tr>
                     <td>{{=row[0]}}</td>
-                    <td></td>
-                    <td class="{{=get_contextual_classes(row[3])}}"><div class="text-center">{{=row[1]}} / {{=row[2]}}</div></td>
-                    <td></td>
-                    <td class="{{=row[5]}}"><div class="text-center">{{=row[4]}}</div></td>
+                    <td class="{{=get_contextual_classes(row[3])}} text-center">
+                        {{=row[1]}} / {{=row[2]}}
+                    </td>
+                    <td class="{{=row[5]}} text-center">{{=row[4]}}</td>
                 </tr>
             {{pass}}
 
             </table>
-            <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
             <h3>Student Scores vs. Class Averages</h3>
-            <br>
-            <div class="col-sm-12">
-                    {{=LOAD('charts', 'parent_index_line.load', args=[class_id,student_id])}}
-            </div>
+
+            {{=LOAD('charts', 'parent_index_line.load', args=[class_id,student_id])}}
         </div>
     </div>
 </div>
+
+<script src="{{=URL('static', 'js/sgt.js')}}"></script>

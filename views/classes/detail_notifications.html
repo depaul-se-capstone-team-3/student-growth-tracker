@@ -1,15 +1,17 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h1>Detail Notifications</h1>
+
+            {{if notifi_query:}}
             <table id='student_list_table' class="table table-striped table-condensed">
                 <tr>
-                    <td><h3><b>Student Name</b></h3></td>
-                    <td><h3><b>School ID</b></h3></td>
-                    <td><h3><b>Date</b></h3></td>
-                    <td><h3><b>Warning</b></h3></td>
+                    <th>Student Name</th>
+                    <th>School ID</th>
+                    <th>Date</th>
+                    <th>Warning</th>
                 </tr>
                 {{for row in notifi_query:}}
                     <tr>
@@ -20,6 +22,11 @@
                     </tr>
                 {{pass}}
             </table>
+
+            {{else:}}
+            <h4>No Notifications</h4>
+            {{pass}}
+
         </div>
     </div>
 </div>

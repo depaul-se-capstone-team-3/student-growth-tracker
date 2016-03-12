@@ -1,55 +1,64 @@
 {{extend 'layout.html'}}
 
-<div class="container">
+<div class="container-fluid well">
     <div class="row">
         <div class="col-sm-12">
             <h1>{{=name}}</h1>
-
-            <table class="table">
-                {{for key in overview_data.keys():}}
-
-                    <tr class="{{=get_contextual_classes(float(overview_data[key][1]))}}">
-                        <td>
-                        <button class="btn btn-xs btn-{{=get_contextual_classes(float(overview_data[key][1]))}}" data-toggle="collapse"  data-target=".{{=str(key)}}collapsed">
-                            <i class="glyphicon glyphicon-small glyphicon-folder-close" id ="{{=str(key)}}collapsed" ></i></button>&nbsp&nbsp
-                        <span class="h3">{{=A(overview_data[key][0], _href=URL('students', 'index', args=[key]))}}</span>
-                        </td>
-                        <td></td>
-                        <td><span class="h3">{{=overview_data[key][1]}} %</span></td>
-                    </tr>
-                    <tr class="collapse {{=str(key)}}collapsed">
-                        <td><h3>Due Soon</h3></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {{for due in overview_data[key][2]:}}
-                        <tr class="collapse {{=str(key)}}collapsed">
-                            <td>{{=due.name}}</td>
-                            <td>{{="{:%b %d, %Y}".format(due.due_date)}}</td>
-                            <td>{{=format(due.score, '.2f')}}</td>
-                        </tr>
-                    {{pass}}
-                <script>
-                        $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");});
-                        $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {$("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");});
-                </script>
-
-                {{pass}}
-
-            </table>
         </div>
     </div>
+
+    {{for key in overview_data.keys():}}
+    <div class="row">
+        <div class="col-sm-8">
+            <blockquote class="blockquote blockquote-{{=get_contextual_classes(float(overview_data[key][1]))}}">
+                <!-- Folder icon button. Activates toggle -->
+                <button class="btn btn-xs btn-{{=get_contextual_classes(float(overview_data[key][1]))}}"
+                        data-toggle="collapse" data-target=".{{=str(key)}}collapsed">
+                    <span class="glyphicon glyphicon-small glyphicon-folder-close"
+                          id ="{{=str(key)}}collapsed"></span>
+                </button>
+
+                <!-- Class name - currently a link. -->
+                {{=overview_data[key][0]}} — Grade: {{=overview_data[key][1]}}%
+
+                <button id="class-details-{{=key}}" type="button"
+                        class="btn btn-primary btn-xs pull-right"
+                        onclick="window.location.href='{{=URL('students', 'index', args=[key])}}'">
+                    Class Details
+                </button>
+            </blockquote>
+
+            <div class="collapse {{=str(key)}}collapsed">
+                <h3>Due Soon</h3>
+                
+                <table class="table">
+                    {{for due in overview_data[key][2]:}}
+                    <tr class="collapse {{=str(key)}}collapsed">
+                        <td>{{=due.name}}</td>
+                        <td>{{="{:%b %d, %Y}".format(due.due_date)}}</td>
+                        <td>{{=format(due.score, '.2f')}}</td>
+                    </tr>
+                    {{pass}}
+                </table>
+
+            </div>
+        </div>
+    </div>
+    {{pass}}
 </div>
-<style>
-    .btn{border:none;font-size:18px;line-height:22px;font-weight:500;text-transform:uppercase}
-    .btn-xs,.btn-group-xs>.btn{padding:1px 5px;font-size:18px;border-radius:3px}
-    
-    .btn-success {  color: #fff;  background-color: #94d194;  border-color: #4cae4c;}
-    .btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.open > .dropdown-toggle.btn-success {  color: #fff;  background-color: #449d44;  border-color: #398439;}
-    
-    .btn-warning { color: #fff; background-color: #f3bd72; border-color: #eea236;}
-    .btn-warning:hover,.btn-warning:focus,.btn-warning:active,.btn-warning.active,.open > .dropdown-toggle.btn-warning { color: #fff; background-color: #ec971f; border-color: #d58512;}
-    
-    .btn-danger { color: #fff; background-color: #e48481; border-color: #d43f3a;}
-    .btn-danger:hover, .btn-danger:focus, .btn-danger:active, .btn-danger.active, .open > .dropdown-toggle.btn-danger { color: #fff; background-color: #c9302c; border-color: #ac2925;}
-</style>
+
+{{block page_js}}
+<script src="{{=URL('static', 'js/sgt.js')}}"
+<script>
+
+ $('.{{=str(key)}}collapsed').on('shown.bs.collapse', function () {
+     $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");
+ });
+
+ $('.{{=str(key)}}collapsed').on('hidden.bs.collapse', function () {
+     $("#{{=str(key)}}collapsed").removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");
+ });
+
+</script>
+
+{{end}}

@@ -46,7 +46,7 @@ class ParentFunctionalTest(unittest.TestCase):
 
         self.log_in()
 
-        math_one_link = self.browser.find_element_by_link_text('Math One')
+        math_one_link = self.browser.find_element_by_id('class-1')
         math_one_link.click()
 
         header = self.browser.find_element_by_tag_name('h3').text
@@ -61,7 +61,7 @@ class ParentFunctionalTest(unittest.TestCase):
         self.assertIn('Parent One Student Overview', header)
         
         #go to detail view for first class
-        self.browser.find_element_by_link_text('Language Arts One').click()
+        self.browser.find_element_by_id('class-0').click()
         
         #check to make sure Parent, Student, and Class are as expected
         header = self.browser.find_element_by_tag_name('h1').text
@@ -80,13 +80,13 @@ class ParentFunctionalTest(unittest.TestCase):
         #check a few elements of the table to see if they're correct
         row_list = table_rows[1].find_elements_by_tag_name('td')
         self.assertEqual(row_list[0].text, "LA Assignment One")
-        self.assertEqual(row_list[2].text, "5.0 / 10.0")
-        self.assertEqual(row_list[4].text, "Dec 08, 2015")
+        self.assertEqual(row_list[1].text, "5.0 / 10.0")
+        self.assertEqual(row_list[2].text, "Dec 08, 2015")
         row_list = table_rows[2].find_elements_by_tag_name('td')
         self.assertEqual(row_list[0].text, "LA Assignment Two")
-        self.assertEqual(row_list[2].text, "10.0 / 10.0")
-        self.assertEqual(row_list[4].text, "Dec 09, 2015")
+        self.assertEqual(row_list[1].text, "10.0 / 10.0")
+        self.assertEqual(row_list[2].text, "Dec 09, 2015")
         row_list = table_rows[6].find_elements_by_tag_name('td')
         self.assertEqual(row_list[0].text, "LA Assignment Six")
-        self.assertEqual(row_list[2].text, "10.0 / 10.0")
-        self.assertEqual(row_list[4].text, "Dec 15, 2015")
+        self.assertEqual(row_list[1].text, "10.0 / 10.0")
+        self.assertEqual(row_list[2].text, "Dec 15, 2015")
